@@ -1,0 +1,23 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "ruang",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["--prefix", "ruang", "run", "dev", "--", "--port", "5173", "--strictPort"],
+      "port": 5173
+    },
+    {
+      "name": "ruang-preview",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["--prefix", "ruang", "run", "preview", "--", "--port", "4173", "--strictPort"],
+      "port": 4173
+    },
+    {
+      "name": "irsyads-site",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["--prefix", "C:/Users/T6N0CV02S35823C/Github/irsyads", "run", "dev:site"],
+      "port": 4321
+    }
+  ]
+}

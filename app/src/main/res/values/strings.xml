@@ -1,0 +1,118 @@
+<!--
+  ~ Copyright (C)  2017-2018 Tran Le Duy
+  ~
+  ~  This program is free software: you can redistribute it and/or modify
+  ~  it under the terms of the GNU General Public License as published by
+  ~  the Free Software Foundation, either version 3 of the License, or
+  ~  (at your option) any later version.
+  ~
+  ~  This program is distributed in the hope that it will be useful,
+  ~  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~  GNU General Public License for more details.
+  ~
+  ~  You should have received a copy of the GNU General Public License
+  ~  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<resources>
+    <string name="app_name">Codec</string>
+    <string name="choose_method">Choose method</string>
+    <string name="encode">Encode</string>
+    <string name="decode">Decode</string>
+    <string name="decoded">Decoded</string>
+    <string name="using_camera">Camera</string>
+
+    <string name="message_copied">Copied</string>
+    <string name="message_out_of_memory">Out of memory</string>
+    <string name="message_read_permission">Please granted read storage permission</string>
+    <string name="message_cannot_decode">Can not decode this image</string>
+    <string name="message_saved_in">Saved in</string>
+
+
+    <string name="floating_notification_description">Tap to open</string>
+    <string name="remove_ads">Get pro version</string>
+    <string name="chance_remaining">This feature fully only available in PRO version. Click here to upgrade. You have %o chance remaining. You can hide this menu in setting.</string>
+    <string name="please_upgrade">Please upgrade to pro version</string>
+    <string name="recommend_application">Recommend application</string>
+
+    <string name="pro_version">Pro version</string>
+    <string name="pro_feature_remove_ads">Remove ads</string>
+    <string name="pro_feature_floating_codec">Floating codec, small window over any app</string>
+    <string name="pro_feature_floating_stylish">Floating stylish, small window over any app</string>
+    <string name="pro_feature_encode_decode_menu">Encode/Decode menu (Android M and above)</string>
+    <string name="pro_feature_codec_text_file">You can encode/decode a text file</string>
+    <string name="pro_feature_codec_all">You can encode all and decode all with one click</string>
+    <string name="pro_feature_theme">More theme (7 themes)</string>
+
+    <string name="action_rate">Rate this app</string>
+    <string name="action_setting">Setting</string>
+    <string name="action_upgrade">Upgrade to pro version</string>
+    <string name="action_open_floating_codec">Floating codec (Pro)</string>
+    <string name="action_floating_stylish">Floating stylish (Pro)</string>
+    <string name="action_share_app">Share this app</string>
+    <string name="action_help">How to use</string>
+    <string name="action_save">Save</string>
+    <string name="action_paste">Paste</string>
+    <string name="action_copy">Copy</string>
+    <string name="action_share_text">Share</string>
+    <string name="action_clear_all">Clear all</string>
+
+    <string name="pref_title_theme">Theme</string>
+    <string name="pref_title_user_interface">User interface</string>
+    <string name="pref_title_process_text">Process text menu</string>
+    <string name="pref_title_floating_window">Floating window</string>
+    <string name="pref_title_notification">Notification</string>
+    <string name="pref_title_encode_notifi">Encode notification</string>
+    <string name="pref_title_decode_notifi">Decode notification</string>
+    <string name="pref_title_menu_text">Menu text (Android M and above)</string>
+    <string name="pref_desc_open_codec">Click to open floating codec</string>
+    <string name="pref_desc_show_process_text_menu">Show menu when select text</string>
+    <string name="pref_desc_open_floating_stylish">Click to open floating stylish</string>
+
+    <string name="hint_decimal">Decimal (0–9)</string>
+    <string name="hint_octal">Octal (0–8)</string>
+    <string name="hint_binary">Binary (0–1)</string>
+    <string name="hint_hex">Hex (0–9A–F)</string>
+    <string name="hint_output_here">Enter here for decode…</string>
+    <string name="hint_encode_here">Enter here for encode…</string>
+    <string name="hint_input">Input…</string>
+    <string name="hint_type_something">Type something</string>
+
+    <string name="process_text_title_encode_it">Encode It!</string>
+    <string name="process_text_title_encode_pro">Encode (Pro)</string>
+    <string name="process_text_title_decode_pro">Decode (Pro)</string>
+    <string name="process_text_title_stylish_it">Stylish it (Pro)</string>
+
+    <string name="tab_title_codec">Codec</string>
+    <string name="tab_title_ads">Ads</string>
+    <string name="tab_title_stylish">Stylish</string>
+    <string name="tab_title_decorate">Decorate</string>
+    <string name="tab_title_barcode">Barcode</string>
+    <string name="tab_title_hash_function">Hash</string>
+    <string name="tab_title_file">File (Pro)</string>
+    <string name="tab_title_base">Base converter</string>
+
+    <string name="title_menu_more_app">More app</string>
+    <string name="title_menu_text_editor">Text editor</string>
+    <string name="title_menu_ascii_art">Ascii art</string>
+    <string name="title_menu_cipher">Cipher</string>
+    <string name="title_menu_caesar_cipher">Caesar cipher</string>
+    <string name="title_select_image">Select Image</string>
+    <string name="title_frequency_analysis">Frequency Analysis</string>
+    <string name="title_vigenere_cipher">Vigenère Cipher</string>
+
+    <string name="message_select_text_file">Please select text file</string>
+
+    <string name="desc_close_drawer">Close drawer</string>
+    <string name="desc_open_drawer">Open drawer</string>
+    <string name="desc_decode_all">Decode with all methods</string>
+    <string name="desc_encode_all">Encode with all methods</string>
+
+    <string name="button_encrypt">Encrypt</string>
+    <string name="button_decrypt">Decrypt</string>
+    <string name="character_offset">Character Offset</string>
+    <string name="hint_key">Key</string>
+
+
+</resources>

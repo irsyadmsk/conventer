@@ -1,0 +1,25 @@
+{
+  // Ruang di-deploy sebagai Cloudflare Worker yang hanya menyajikan aset
+  // statis (hasil `vite build` di ./dist) — pola yang sama dengan
+  // academy.irsyads.com dan wallet.irsyads.com.
+  "name": "ruang",
+  "compatibility_date": "2026-09-24",
+
+  "assets": {
+    "directory": "./dist",
+    // Rute React Router (/kalkulator, /modul-ajar/…) harus tetap memuat index.html.
+    "not_found_handling": "single-page-application"
+  },
+
+  // Wrangler membuat catatan DNS sendiri saat deploy pertama.
+  "routes": [
+    {
+      "pattern": "app.irsyads.com",
+      "custom_domain": true
+    }
+  ],
+
+  "observability": {
+    "enabled": true
+  }
+}

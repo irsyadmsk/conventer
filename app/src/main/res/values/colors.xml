@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (C)  2017-2018 Tran Le Duy
+  ~
+  ~  This program is free software: you can redistribute it and/or modify
+  ~  it under the terms of the GNU General Public License as published by
+  ~  the Free Software Foundation, either version 3 of the License, or
+  ~  (at your option) any later version.
+  ~
+  ~  This program is distributed in the hope that it will be useful,
+  ~  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~  GNU General Public License for more details.
+  ~
+  ~  You should have received a copy of the GNU General Public License
+  ~  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<resources>
+    <color name="colorPrimary">#263238</color>
+    <color name="colorPrimaryDark">#37474f</color>
+    <color name="colorAccent">#55d7c6</color>
+    <color name="colorBackground">#2a3434</color>
+
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
+    <color name="black_20">#33000000</color>
+
+    <color name="light.colorPrimary">#3a3f47</color>
+    <color name="light.colorPrimaryDark">#242a32</color>
+    <color name="light.colorAccent">#ff5824</color>
+    <color name="light.windowBackgroundColor">#eeeeee</color>
+
+    <color name="themeLight1.colorPrimary">#222831</color>
+    <color name="themeLight1.colorPrimaryDark">#393E46</color>
+    <color name="themeLight1.colorAccent">#00ADB5</color>
+    <color name="themeLight1.windowBackgroundColor">#EEEEEE</color>
+
+    <color name="themeLight2.colorPrimary">#4D12EE</color>
+    <color name="themeLight2.colorPrimaryDark">#2F24C1</color>
+    <color name="themeLight2.colorAccent">#26a69a</color>
+    <color name="themeLight2.windowBackgroundColor">#F8F6F6</color>
+
+    <color name="themeLight3.colorPrimary">#118DF0</color>
+    <color name="themeLight3.colorPrimaryDark">#0E2F56</color>
+    <color name="themeLight3.colorAccent">#FF304F</color>
+    <color name="themeLight3.windowBackgroundColor">#ECECDA</color>
+
+    <color name="themeLight4.colorPrimary">#7A08FA</color>
+    <color name="themeLight4.colorPrimaryDark">#A82FFC</color>
+    <color name="themeLight4.colorAccent">#C264FE</color>
+    <color name="themeLight4.windowBackgroundColor">#F8ECFD</color>
+
+    <color name="themeLight5.colorPrimary">#303841</color>
+    <color name="themeLight5.colorPrimaryDark">#3A4750</color>
+    <color name="themeLight5.colorAccent">#D72323</color>
+    <color name="themeLight5.windowBackgroundColor">#EEEEEE</color>
+
+    <color name="themeLight6.colorPrimary">#253B6E</color>
+    <color name="themeLight6.colorPrimaryDark">#1F5F8B</color>
+    <color name="themeLight6.colorAccent">#00838f</color>
+    <color name="themeLight6.windowBackgroundColor">#e1f5fe</color>
+
+</resources>
