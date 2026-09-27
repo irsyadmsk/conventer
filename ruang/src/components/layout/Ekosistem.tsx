@@ -17,6 +17,8 @@ import idT from '@/assets/sublogo/id_light.svg?raw'
 import idG from '@/assets/sublogo/id_dark.svg?raw'
 import verifyT from '@/assets/sublogo/verify_light.svg?raw'
 import verifyG from '@/assets/sublogo/verify_dark.svg?raw'
+import lettersT from '@/assets/sublogo/letters_light.svg?raw'
+import lettersG from '@/assets/sublogo/letters_dark.svg?raw'
 import studioT from '@/assets/sublogo/studio_light.svg?raw'
 import studioG from '@/assets/sublogo/studio_dark.svg?raw'
 
@@ -51,6 +53,7 @@ const KELOMPOK: { label: string; entri: Entri[] }[] = [
     entri: [
       { id: 'id', nama: 'Irsyads ID', ket: 'Satu akun untuk semua ruang', href: 'https://id.irsyads.com', logo: [idT, idG] },
       { id: 'verify', nama: 'Verify', ket: 'Keaslian dokumen, ijazah digital & stempel TTD', href: 'https://verify.irsyads.com', logo: [verifyT, verifyG] },
+      { id: 'letters', nama: 'Letters', ket: 'Ajukan surat resmi bertanda tangan elektronik, tanpa akun', href: 'https://letters.irsyads.com', logo: [lettersT, lettersG] },
     ],
   },
 ]
