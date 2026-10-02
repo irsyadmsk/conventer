@@ -1,3 +1,4 @@
+import { sharedAppearance, publishAppearance, mergeAccountAppearance } from './appearance'
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
 import { MotionConfig } from 'framer-motion'
 import { supabase } from './supabase'
@@ -21,12 +22,12 @@ export type Prefs = {
 }
 
 export const PALET: { id: Palet; nama: string; warna: string }[] = [
-  { id: 'krem', nama: 'Krem', warna: '#c8503a' },
+  { id: 'krem', nama: 'Irsyads', warna: '#66d6bf' },
   { id: 'hutan', nama: 'Hutan', warna: '#2c7a52' },
-  { id: 'samudra', nama: 'Samudra', warna: '#2168a8' },
-  { id: 'senja', nama: 'Senja', warna: '#7446b8' },
-  { id: 'aurora', nama: 'Aurora', warna: '#0d7f74' },
-  { id: 'tanah', nama: 'Tanah', warna: '#9e5427' },
+  { id: 'samudra', nama: 'Samudra', warna: '#3d9bd4' },
+  { id: 'senja', nama: 'Senja', warna: '#a97fd6' },
+  { id: 'aurora', nama: 'Aurora', warna: '#2aa396' },
+  { id: 'tanah', nama: 'Tanah', warna: '#c8794a' },
 ]
 
 const BAWAAN: Prefs = { theme: 'system', palette: 'krem', sound: false, motion: 'system', autoSave: false, weeklyAi: true }
@@ -37,9 +38,9 @@ const Ctx = createContext<Nilai | null>(null)
 
 function bacaLokal(): Prefs {
   try {
-    return { ...BAWAAN, ...JSON.parse(localStorage.getItem(KUNCI) || '{}') }
+    return sharedAppearance({ ...BAWAAN, ...JSON.parse(localStorage.getItem(KUNCI) || '{}') })
   } catch {
-    return BAWAAN
+    return sharedAppearance(BAWAAN)
   }
 }
 
@@ -67,20 +68,27 @@ export function PrefsProvider({ children }: { children: ReactNode }) {
       .eq('user_id', user.id)
       .maybeSingle()
       .then(({ data }) => {
-        if (data?.prefs) setPrefs((p) => ({ ...p, ...(data.prefs as Partial<Prefs>) }))
+        if (data?.prefs) setPrefs((p) => mergeAccountAppearance(p, data.prefs as Partial<Prefs>))
         siapSimpan.current = true
       })
   }, [user])
+
+  useEffect(() => {
+    const sync = () => setPrefs(p => sharedAppearance(p))
+    window.addEventListener('focus', sync)
+    window.addEventListener('pageshow', sync)
+    window.addEventListener('storage', sync)
+    return () => { window.removeEventListener('focus', sync); window.removeEventListener('pageshow', sync); window.removeEventListener('storage', sync) }
+  }, [])
 
   const gelap = prefs.theme === 'dark' || (prefs.theme === 'system' && sistemGelap)
 
   useEffect(() => {
     const el = document.documentElement
-    el.dataset.theme = gelap ? 'dark' : 'light'
-    el.dataset.palette = prefs.palette
+    publishAppearance(prefs)
     if (prefs.motion === 'reduce') el.dataset.motion = 'reduce'
     else delete el.dataset.motion
-    document.querySelectorAll('meta[name="theme-color"]').forEach((m) => m.setAttribute('content', gelap ? '#0d1024' : '#f6f1e8'))
+    document.querySelectorAll('meta[name="theme-color"]').forEach((m) => m.setAttribute('content', getComputedStyle(el).getPropertyValue('--bg').trim() || (gelap ? '#141414' : '#f7f8fa')))
     setSuaraAktif(prefs.sound)
     try {
       localStorage.setItem(KUNCI, JSON.stringify(prefs))
@@ -91,6 +99,7 @@ export function PrefsProvider({ children }: { children: ReactNode }) {
 
   const set = useCallback(
     (p: Partial<Prefs>) => {
+      if (p.theme || p.palette) window.__irsyadsHadAppearance = true
       setPrefs((lama) => {
         const baru = { ...lama, ...p }
         if (user && siapSimpan.current) {

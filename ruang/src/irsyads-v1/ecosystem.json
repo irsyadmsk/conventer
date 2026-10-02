@@ -1,0 +1,228 @@
+{
+  "version": "1.0.0",
+  "tokenSha256": "047df195de6cb06ca21f5ff6da4744053833a85c25c14aef1f4115fffd5e475b",
+  "locales": [
+    "id",
+    "en",
+    "ar"
+  ],
+  "theme": [
+    "system",
+    "light",
+    "dark"
+  ],
+  "palettes": [
+    "krem",
+    "forest",
+    "ocean",
+    "royal",
+    "aurora",
+    "earth"
+  ],
+  "groups": {
+    "karya": {
+      "id": "Karya & belajar",
+      "en": "Work & learning",
+      "ar": "الأعمال والتعلّم"
+    },
+    "aplikasi": {
+      "id": "Aplikasi",
+      "en": "Apps",
+      "ar": "التطبيقات"
+    },
+    "akun": {
+      "id": "Akun & keaslian",
+      "en": "Account & trust",
+      "ar": "الحساب والتوثيق"
+    },
+    "pengelola": {
+      "id": "Pengelola",
+      "en": "Admin",
+      "ar": "الإدارة"
+    }
+  },
+  "apps": [
+    {
+      "id": "site",
+      "name": "Irsyads",
+      "url": "https://irsyads.com",
+      "status": "aktif",
+      "languages": [
+        "id",
+        "en",
+        "ar"
+      ],
+      "group": "karya",
+      "description": {
+        "id": "Karya, riset sosiologi, pemikiran, dan agenda",
+        "en": "Works, sociology research, ideas, and schedule",
+        "ar": "أعمال وبحوث سوسيولوجية وأفكار وأجندة"
+      },
+      "launcher": true
+    },
+    {
+      "id": "id",
+      "name": "Irsyads ID",
+      "url": "https://id.irsyads.com",
+      "status": "aktif",
+      "languages": [
+        "id"
+      ],
+      "group": "akun",
+      "description": {
+        "id": "Pusat identitas, akses universal (SSO) & keamanan akun",
+        "en": "Universal identity, SSO access & account security",
+        "ar": "الهوية الموحدة، تسجيل الدخول الموحد وأمان الحساب"
+      },
+      "launcher": true
+    },
+    {
+      "id": "academy",
+      "name": "Academy",
+      "url": "https://academy.irsyads.com",
+      "status": "aktif",
+      "languages": [
+        "id"
+      ],
+      "group": "karya",
+      "description": {
+        "id": "Kelas interaktif, modul Kurikulum Merdeka, dan CBT",
+        "en": "Interactive classes, curriculum modules, and CBT",
+        "ar": "الدروس التفاعلية ومسارات التعلم والاختبارات"
+      },
+      "launcher": true
+    },
+    {
+      "id": "studio",
+      "name": "Studio HQ",
+      "url": "https://studio.irsyads.com",
+      "status": "aktif",
+      "languages": [
+        "id"
+      ],
+      "group": "pengelola",
+      "description": {
+        "id": "Pusat komando ekosistem, manajemen KBM, dan analitik",
+        "en": "Ecosystem command center, learning & analytics",
+        "ar": "مركز قيادة المنظومة، إدارة المحتوى والتحليلات"
+      },
+      "launcher": true
+    },
+    {
+      "id": "ruang",
+      "name": "Ruang",
+      "url": "https://app.irsyads.com",
+      "status": "aktif",
+      "languages": [
+        "id"
+      ],
+      "group": "aplikasi",
+      "description": {
+        "id": "Ruang kerja keluarga: aksara Sunda, sandi, kalkulator & modul ajar AI",
+        "en": "Family workspace: Sundanese script, ciphers, calculators & AI lesson plans",
+        "ar": "مساحة عمل للعائلة: الخط السونداني والشيفرات والحاسبات وخطط الدروس بالذكاء الاصطناعي"
+      },
+      "launcher": true
+    },
+    {
+      "id": "wallet",
+      "name": "Wallet",
+      "url": "https://wallet.irsyads.com",
+      "status": "aktif",
+      "languages": [
+        "id"
+      ],
+      "group": "aplikasi",
+      "description": {
+        "id": "Manajemen finansial pribadi, arus kas & tabungan",
+        "en": "Personal finance, cashflow & savings manager",
+        "ar": "الإدارة المالية الشخصية وتدفق السيولة والمدخرات"
+      },
+      "launcher": true
+    },
+    {
+      "id": "verify",
+      "name": "Verify",
+      "url": "https://verify.irsyads.com",
+      "status": "aktif",
+      "languages": [
+        "id",
+        "en",
+        "ar"
+      ],
+      "group": "akun",
+      "description": {
+        "id": "Validasi keaslian dokumen, ijazah digital & stempel TTD",
+        "en": "Document authenticity, digital certificate & signatures",
+        "ar": "التحقق من صحة الوثائق والشهادات الرقمية والأختام"
+      },
+      "launcher": true
+    },
+    {
+      "id": "letters",
+      "name": "Letters",
+      "url": "https://letters.irsyads.com",
+      "status": "aktif",
+      "languages": [
+        "id",
+        "en"
+      ],
+      "group": "akun",
+      "description": {
+        "id": "Ajukan surat resmi bertanda tangan elektronik, tanpa akun",
+        "en": "Request official e-signed letters, no account needed",
+        "ar": "اطلب خطابات رسمية موقّعة إلكترونيًا دون حساب"
+      },
+      "launcher": true
+    },
+    {
+      "id": "cbt",
+      "name": "CBT",
+      "url": "https://cbt.irsyads.com",
+      "status": "beta",
+      "languages": [
+        "id"
+      ],
+      "group": "aplikasi",
+      "description": {
+        "id": "Ujian resmi berbasis komputer dengan kartu ujian",
+        "en": "Official computer-based exams with exam cards",
+        "ar": "اختبارات رسمية حاسوبية ببطاقة الاختبار"
+      },
+      "launcher": false
+    },
+    {
+      "id": "curriculum",
+      "name": "Curriculum",
+      "url": "https://curriculum.irsyads.com",
+      "status": "aktif",
+      "languages": [
+        "id"
+      ],
+      "group": "karya",
+      "description": {
+        "id": "Manajemen kurikulum madrasah, silabus & jadwal KBM",
+        "en": "Madrasah curriculum management, syllabus & schedule",
+        "ar": "إدارة مناهج المدرسة والخطة الدراسية والجدول"
+      },
+      "launcher": true
+    },
+    {
+      "id": "masjidku-tv",
+      "name": "MasjidKU TV",
+      "url": "https://mosque.irsyads.com",
+      "status": "beta",
+      "languages": [
+        "id"
+      ],
+      "group": "aplikasi",
+      "description": {
+        "id": "Layar informasi masjid untuk TV, dikelola lewat HP lokal",
+        "en": "Mosque information on TV, managed on a local phone",
+        "ar": "شاشة معلومات المسجد للتلفاز، تُدار بهاتف على الشبكة المحلية"
+      },
+      "launcher": true
+    }
+  ],
+  "auth": "No authentication data. UI preferences only."
+}

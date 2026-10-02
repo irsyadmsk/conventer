@@ -1,0 +1,370 @@
+/* Generated from design-tokens; run npm run design:export. */
+/* Shared Irsyads visual language. See design-system/irsyads/MASTER.md.
+   Existing visitor-selected palettes remain available below. */
+
+:root {
+  --irsyads-color-bg: #f7f8fa;
+  --irsyads-color-bg-2: #edf2f3;
+  --irsyads-color-surface: #ffffff;
+  --irsyads-color-surface-2: #f0f4f5;
+  --irsyads-color-ink: #192a40;
+  --irsyads-color-ink-2: #43556a;
+  --irsyads-color-muted: #5c6d7d;
+  --irsyads-color-line: rgba(20, 24, 62, 0.1);
+  --irsyads-color-line-2: rgba(20, 24, 62, 0.18);
+  --irsyads-color-accent: #66d6bf;
+  --irsyads-color-accent-2: #4dc1aa;
+  --irsyads-color-gold: #f6c76b;
+  --irsyads-color-gold-2: #edb650;
+  --irsyads-color-lilac: #b7a4e5;
+  /* Teks/ikon di atas accent/gold/lilac: ketiganya sama-sama terang di
+     mode terang MAUPUN gelap (lihat override [data-theme="dark"] di
+     bawah), jadi butuh tinta gelap yang TIDAK ikut membalik tema —
+     var(--irsyads-color-ink) akan jadi putih di dark mode dan gagal kontras.
+     Nilai konstan ini diverifikasi >4.5:1 pada ketiga warna, kedua tema. */
+  --irsyads-color-on-brand: #1a1512;
+
+  /* Aksen untuk TEKS di atas latar terang. Satu warna tidak bisa
+     memenuhi dua syarat sekaligus: cukup terang agar tinta gelap
+     (--irsyads-color-on-brand) terbaca DI ATASNYA pada tombol, sekaligus cukup
+     gelap agar dirinya terbaca sebagai teks kecil DI ATAS permukaan
+     putih. Jadi --irsyads-color-accent/-gold tetap untuk bidang isian, dan
+     pasangan *-ink ini untuk teks/ikon kecil. Di mode gelap keduanya
+     kembali sama dengan aksen terang (lihat blok dark). */
+  --irsyads-color-accent-ink: #126a5a;
+  --irsyads-color-gold-ink: #7d5f00;
+
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-glass: 24px;
+
+  --shadow-1: 0 1px 3px rgba(20, 24, 62, 0.06);
+  --shadow-2: 0 6px 24px -6px rgba(20, 24, 62, 0.16);
+
+  --irsyads-font-sans: "Manrope", "Noto Sans Arabic", system-ui, -apple-system, sans-serif;
+  --irsyads-font-serif: "Bricolage Grotesque", "Noto Sans Arabic", system-ui, sans-serif;
+  --irsyads-font-mono: "DM Mono", monospace;
+
+  /* Huruf mushaf resmi LPMQ Kemenag. Dua-duanya naskh, dan bedanya nyata:
+     Isep Misbah untuk teks Arab dan ayat pada umumnya, ISYARAT dipakai
+     ketika naskahnya perlu tanda waqaf dan isyarat yang lebih tegas.
+     Fallback ke Amiri/Traditional Arabic supaya huruf Arab tetap terbaca
+     rapi selama woff2-nya belum sampai. */
+  --irsyads-font-quran: "LPMQ Isep Misbah", "Amiri Quran", "Amiri", "Traditional Arabic", "Segoe UI", serif;
+  --irsyads-font-quran-isyarat: "LPMQ MSI ISYARAT", "LPMQ Isep Misbah", "Amiri", serif;
+  --irsyads-font-hadits: "Amiri", "Scheherazade New", "LPMQ Isep Misbah", "Traditional Arabic", serif;
+  --irsyads-font-arabic-body: "Noto Sans Arabic", "Amiri", system-ui, -apple-system, sans-serif;
+
+  /* Motion timing per design-system/irsyads/MASTER.md: entry 280-420ms,
+     exit 160-240ms, list stagger 35-45ms. Utility mid-points; components
+     needing the extremes reach for the raw ms value (framer-motion). */
+  --ease-entry: cubic-bezier(0.22, 0.8, 0.3, 1);
+  --duration-entry: 350ms;
+  --duration-exit: 200ms;
+  --duration-stagger: 40ms;
+}
+
+/* Lebar kontainer situs (max-w-6xl, dipakai hampir semua section) —
+   72rem/1152px pas untuk laptop, tapi di monitor besar (1536px+) sisa
+   ruang kosong di kanan-kiri jadi berlebihan dan konten terlihat kecil
+   terisolasi di tengah. Diperlebar bertahap di layar besar; paragraf
+   di dalamnya tetap punya max-w sendiri (mis. max-w-xl) jadi baris
+   teksnya tidak ikut memanjang berlebihan — yang tumbuh cuma ruang
+   gerak layout (grid dua kolom, ukuran potret, dsb). */
+@media (min-width: 1536px) {
+  :root {
+    --container-6xl: 84rem; /* 1344px */
+  }
+}
+@media (min-width: 1920px) {
+  :root {
+    --container-6xl: 96rem; /* 1536px */
+  }
+}
+
+/* Glassmorphism surface tokens — not part of Tailwind's @theme color
+   namespace since they're translucency/blur values, consumed directly as
+   CSS custom properties (var(--liquid-glass), etc.) by glass components. */
+:root {
+  --aqua-soft: rgba(223, 105, 81, 0.1);
+  --liquid-glass: rgba(255, 255, 255, 0.7);
+  --liquid-glass-strong: rgba(255, 255, 255, 0.86);
+  --liquid-border: rgba(20, 24, 62, 0.08);
+  --liquid-shadow: 0 18px 54px rgba(20, 24, 62, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  --aqua-mesh: linear-gradient(135deg, #fbeedc 0%, #f7e6d4 42%, #f3ecf7 72%, #eef1fb 100%);
+}
+
+[data-theme="dark"] {
+  /* Revision 3: revision 2's warm brown-charcoal background still read as
+     "colored" rather than dark — a tinted canvas competes with the accent
+     colors instead of setting them off. Background/surface are now
+     genuinely neutral (near-zero saturation, true dark gray/black) —
+     "dark", not "brown" — while text keeps a faint warmth for comfortable
+     reading and the accents (coral/gold/lilac) stay exactly as vivid, so
+     they read as deliberate pops of color against a neutral canvas
+     instead of one more hue in an all-brown scene. */
+  --irsyads-color-bg: #141414;
+  --irsyads-color-bg-2: #1a1a1a;
+  --irsyads-color-surface: #1f1f1f;
+  --irsyads-color-surface-2: #272727;
+  --irsyads-color-ink: #f5f3f0;
+  --irsyads-color-ink-2: #c7c2ba;
+  --irsyads-color-muted: #9a958c;
+  --irsyads-color-line: rgba(255, 255, 255, 0.08);
+  --irsyads-color-line-2: rgba(255, 255, 255, 0.14);
+  --irsyads-color-accent: #7ddfc9;
+  --irsyads-color-accent-2: #66d6bf;
+  --irsyads-color-gold: #ffb703;
+  --irsyads-color-gold-2: #f1a501;
+  --irsyads-color-lilac: #ab97f2;
+  --irsyads-color-accent-ink: #7ddfc9;
+  --irsyads-color-gold-ink: #ffb703;
+
+  --shadow-1: 0 1px 3px rgba(0, 0, 0, 0.4);
+  --shadow-2: 0 6px 24px -6px rgba(0, 0, 0, 0.6);
+
+  --aqua-soft: rgba(255, 122, 92, 0.13);
+  --liquid-glass: rgba(31, 31, 31, 0.7);
+  --liquid-glass-strong: rgba(39, 39, 39, 0.86);
+  --liquid-border: rgba(255, 255, 255, 0.1);
+  --liquid-shadow: 0 22px 64px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+/* ══ Palet pilihan pengunjung (kontrol di jam mengambang) ═════════════
+ *
+ * Palet SENGAJA hanya mengganti keluarga warna aksen (accent/gold/lilac),
+ * rona latar terang, dan --irsyads-color-on-brand — BUKAN sistem netral
+ * (surface/ink/line/muted). Alasannya: kontras teks di sistem netral itu
+ * sudah diaudit sekali (lihat catatan --irsyads-color-on-brand di atas), dan
+ * membiarkan tiap palet menulis ulang semuanya berarti mengaudit ulang
+ * 6 palet × 2 tema × belasan pasangan warna — sumber bug kontras yang
+ * tidak sepadan dengan hasilnya. Dengan pola ini tiap palet tetap terasa
+ * beda jelas, tapi keterbacaan tidak pernah berubah.
+ *
+ * --irsyads-color-on-brand = tinta di ATAS bidang accent/gold/lilac. Nilainya
+ * konstan per palet (tidak ikut membalik saat dark mode) karena ketiga
+ * warna itu sama-sama terang di kedua tema. Tiap palet di bawah dipilih
+ * agar aksen terangnya tetap >=4.5:1 terhadap on-brand-nya.
+ *
+ * Blok terang memakai :not([data-theme="dark"]) — WAJIB. Selektor
+ * :root[data-palette="x"] punya spesifisitas (0,2,0), lebih tinggi dari
+ * [data-theme="dark"] (0,1,0), jadi tanpa penjaga itu rona latar terang
+ * akan menimpa latar gelap dan mode gelap tampil terang saat palet
+ * non-bawaan dipilih.
+ *
+ * Latar GELAP sengaja tetap netral di semua palet — lihat catatan di
+ * blok [data-theme="dark"]: kanvas yang ikut berwarna justru bersaing
+ * dengan aksennya sendiri. Yang berubah di dark mode cuma aksennya.
+ */
+
+/* ── Hutan — hijau, identitas asli situs ── */
+:root[data-palette="forest"]:not([data-theme="dark"]) {
+  --irsyads-color-bg: #eff6f2;
+  --irsyads-color-bg-2: #e2efe8;
+  --irsyads-color-accent: #4c9a72;
+  --irsyads-color-accent-2: #3a7f5c;
+  --irsyads-color-gold: #d9a441;
+  --irsyads-color-gold-2: #b98a2f;
+  --irsyads-color-lilac: #7fb99b;
+  --irsyads-color-on-brand: #0f2419;
+  --aqua-soft: rgba(76, 154, 114, 0.1);
+  --aqua-mesh: linear-gradient(135deg, #eff6f2 0%, #e6f2eb 42%, #eaf3f0 72%, #eef5f2 100%);
+}
+[data-theme="dark"][data-palette="forest"] {
+  --irsyads-color-accent: #6cc79a;
+  --irsyads-color-accent-2: #4c9a72;
+  --irsyads-color-gold: #edc063;
+  --irsyads-color-gold-2: #d9a441;
+  --irsyads-color-lilac: #93d4b6;
+  --aqua-soft: rgba(108, 199, 154, 0.13);
+  --irsyads-color-accent-ink: #6cc79a;
+  --irsyads-color-gold-ink: #edc063;
+}
+
+/* ── Samudra — biru ── */
+:root[data-palette="ocean"]:not([data-theme="dark"]) {
+  --irsyads-color-bg: #eef6fc;
+  --irsyads-color-bg-2: #dfeef9;
+  --irsyads-color-accent: #3d9bd4;
+  --irsyads-color-accent-2: #2b80b5;
+  --irsyads-color-gold: #f0a63c;
+  --irsyads-color-gold-2: #d4881f;
+  --irsyads-color-lilac: #7d9fe0;
+  --irsyads-color-on-brand: #0a2233;
+  --aqua-soft: rgba(61, 155, 212, 0.1);
+  --aqua-mesh: linear-gradient(135deg, #eef6fc 0%, #e4f1fa 42%, #eaeff9 72%, #eef1fb 100%);
+}
+[data-theme="dark"][data-palette="ocean"] {
+  --irsyads-color-accent: #5fb6e8;
+  --irsyads-color-accent-2: #3d9bd4;
+  --irsyads-color-gold: #ffbc5a;
+  --irsyads-color-gold-2: #f0a63c;
+  --irsyads-color-lilac: #9db8ec;
+  --aqua-soft: rgba(95, 182, 232, 0.13);
+  --irsyads-color-accent-ink: #5fb6e8;
+  --irsyads-color-gold-ink: #ffbc5a;
+}
+
+/* ── Senja — ungu ── */
+:root[data-palette="royal"]:not([data-theme="dark"]) {
+  --irsyads-color-bg: #f6f2fb;
+  --irsyads-color-bg-2: #ebe2f7;
+  --irsyads-color-accent: #a97fd6;
+  --irsyads-color-accent-2: #8e63bd;
+  --irsyads-color-gold: #f2b544;
+  --irsyads-color-gold-2: #d69726;
+  --irsyads-color-lilac: #c9a8ec;
+  --irsyads-color-on-brand: #1f0d3a;
+  --aqua-soft: rgba(169, 127, 214, 0.11);
+  --aqua-mesh: linear-gradient(135deg, #f6f2fb 0%, #f0e8f9 42%, #f4ecf8 72%, #eef1fb 100%);
+}
+[data-theme="dark"][data-palette="royal"] {
+  --irsyads-color-accent: #c39ceb;
+  --irsyads-color-accent-2: #a97fd6;
+  --irsyads-color-gold: #ffcb63;
+  --irsyads-color-gold-2: #f2b544;
+  --irsyads-color-lilac: #d9bef5;
+  --aqua-soft: rgba(195, 156, 235, 0.13);
+  --irsyads-color-accent-ink: #c39ceb;
+  --irsyads-color-gold-ink: #ffcb63;
+}
+
+/* ── Aurora — tosca ── */
+:root[data-palette="aurora"]:not([data-theme="dark"]) {
+  --irsyads-color-bg: #eef9f7;
+  --irsyads-color-bg-2: #ddf1ed;
+  --irsyads-color-accent: #2aa396;
+  --irsyads-color-accent-2: #1a8b80;
+  --irsyads-color-gold: #f5b93f;
+  --irsyads-color-gold-2: #d99a20;
+  --irsyads-color-lilac: #6fc9c0;
+  --irsyads-color-on-brand: #072522;
+  --aqua-soft: rgba(42, 163, 150, 0.1);
+  --aqua-mesh: linear-gradient(135deg, #eef9f7 0%, #e3f4f1 42%, #e9f5f4 72%, #eef3fb 100%);
+}
+[data-theme="dark"][data-palette="aurora"] {
+  --irsyads-color-accent: #4fd1c0;
+  --irsyads-color-accent-2: #35b3a5;
+  --irsyads-color-gold: #ffcd63;
+  --irsyads-color-gold-2: #f5b93f;
+  --irsyads-color-lilac: #8ee0d7;
+  --aqua-soft: rgba(79, 209, 192, 0.13);
+  --irsyads-color-accent-ink: #4fd1c0;
+  --irsyads-color-gold-ink: #ffcd63;
+}
+
+/* ── Tanah — terakota ── */
+:root[data-palette="earth"]:not([data-theme="dark"]) {
+  --irsyads-color-bg: #fbf5ee;
+  --irsyads-color-bg-2: #f2e5d5;
+  --irsyads-color-accent: #c8794a;
+  --irsyads-color-accent-2: #ab6039;
+  --irsyads-color-gold: #e0a53c;
+  --irsyads-color-gold-2: #c1861f;
+  --irsyads-color-lilac: #b08d72;
+  --irsyads-color-on-brand: #241610;
+  --aqua-soft: rgba(200, 121, 74, 0.1);
+  --aqua-mesh: linear-gradient(135deg, #fbf5ee 0%, #f6ebdd 42%, #f4ece6 72%, #f2eef4 100%);
+}
+[data-theme="dark"][data-palette="earth"] {
+  --irsyads-color-accent: #e19468;
+  --irsyads-color-accent-2: #c8794a;
+  --irsyads-color-gold: #f5bd5c;
+  --irsyads-color-gold-2: #e0a53c;
+  --irsyads-color-lilac: #c8a68c;
+  --aqua-soft: rgba(225, 148, 104, 0.13);
+  --irsyads-color-accent-ink: #e19468;
+  --irsyads-color-gold-ink: #f5bd5c;
+}
+
+
+/* ---------------------------------------------------------------------
+   Huruf Arab.
+
+   Berkasnya ada di /assets/font/ pada situs DAN pada Academy, jadi jalur
+   yang sama berlaku di kedua tempat. font-display: swap dipilih sadar:
+   teks Arab lebih baik muncul dengan huruf cadangan daripada tidak muncul
+   sama sekali selama 200 KB masih di jalan.
+   --------------------------------------------------------------------- */
+@font-face {
+  font-family: "LPMQ Isep Misbah";
+  src: url("/assets/font/lpmq-isep-misbah.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+  /* Hanya blok Arab yang memicu unduhan. Halaman berbahasa Indonesia dan
+     Inggris tidak perlu membayar 75 KB untuk huruf yang tak dipakainya. */
+  unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
+}
+
+@font-face {
+  font-family: "LPMQ MSI ISYARAT";
+  src: url("/assets/font/lpmq-msi-isyarat.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
+}
+
+/* ---------------------------------------------------------------------
+   Tipografi Khusus Naskah Arab & Kaligrafi Mushaf / Hadits
+   --------------------------------------------------------------------- */
+.teks-arab,
+.font-arab {
+  font-family: var(--irsyads-font-arabic-body);
+  direction: rtl;
+  text-align: right;
+  font-feature-settings: "cv01", "ss01", "kern", "liga", "calt";
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+.teks-quran,
+.quran {
+  font-family: var(--irsyads-font-quran);
+  font-size: 1.55em;
+  line-height: 2.25;
+  direction: rtl;
+  text-align: right;
+  font-weight: 400;
+  word-spacing: 0.12em;
+  font-feature-settings: "cv01", "ss01", "kern", "liga", "calt";
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+.teks-hadits,
+.hadits {
+  font-family: var(--irsyads-font-hadits);
+  font-size: 1.35em;
+  line-height: 2.1;
+  direction: rtl;
+  text-align: right;
+  font-weight: 400;
+  word-spacing: 0.08em;
+  font-feature-settings: "kern", "liga", "calt";
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ─── Gerak masuk layar — standar seluruh ekosistem (26 Sep 2026) ──────
+   Setiap layar/tab/panel yang terbuka: muncul 0 → penuh dalam 300 ms
+   sambil naik dari 10 px dalam 360 ms, ease-out kubik, sekali saja.
+   Opasitas dan gerak sengaja dua animasi terpisah (properti `translate`,
+   bukan `transform`) supaya durasinya berbeda dan tidak menimpa transform
+   lain milik komponen. Dipakai Studio (.studio-panel), Academy
+   (.academy-main), dan Ruang (nilai yang sama di framer-motion). */
+:root {
+  --ease-masuk: cubic-bezier(0.215, 0.61, 0.355, 1);
+  --durasi-muncul: 300ms;
+  --durasi-naik: 360ms;
+}
+@keyframes irsyads-muncul { from { opacity: 0; } }
+@keyframes irsyads-naik { from { translate: 0 10px; } }
+.masuk-layar {
+  animation: irsyads-muncul var(--durasi-muncul) var(--ease-masuk) backwards,
+    irsyads-naik var(--durasi-naik) var(--ease-masuk) backwards;
+}
+@media (prefers-reduced-motion: reduce) {
+  .masuk-layar { animation: none; }
+}

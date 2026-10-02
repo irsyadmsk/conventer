@@ -2,8 +2,10 @@ import { lazy, Suspense, useRef, type ReactNode } from 'react'
 import { motion } from 'framer-motion'
 import gsap from 'gsap'
 import { useGSAP } from '@gsap/react'
-import { ArrowLeft, BarChart3, GraduationCap, Languages, Users } from 'lucide-react'
+import { ArrowLeft, BarChart3, GraduationCap, Languages, Users, Moon, Sun } from 'lucide-react'
 import { Logo } from '@/components/layout/Logo'
+import { usePrefs } from '@/lib/prefs'
+import { ecosystemUrl } from '@/lib/appearance'
 import { Ekosistem } from '@/components/layout/Ekosistem'
 
 gsap.registerPlugin(useGSAP)
@@ -17,8 +19,14 @@ const FITUR = [
   { ikon: BarChart3, teks: 'Laporan mingguan otomatis dengan ringkasan cerdas' },
 ]
 
+function ThemeButton() {
+  const { gelap, set } = usePrefs()
+  return <button type="button" className="grid size-11 shrink-0 place-items-center rounded-full border border-line text-ink hover:bg-surface-2" aria-label={gelap ? 'Mode terang' : 'Mode gelap'} onClick={() => set({theme:gelap?'light':'dark'})}>{gelap ? <Sun size={17} /> : <Moon size={17} />}</button>
+}
+
 export function AuthLayout({ judul, sub, children, kaki }: { judul: string; sub: ReactNode; children: ReactNode; kaki?: ReactNode }) {
   const panel = useRef<HTMLDivElement>(null)
+  const language = window.IrsyadsLanguage?.preferredLanguage() || 'id'
 
   useGSAP(
     () => {
@@ -42,7 +50,7 @@ export function AuthLayout({ judul, sub, children, kaki }: { judul: string; sub:
         </Suspense>
         <div className="relative flex items-center justify-between">
           <Logo />
-          <Ekosistem />
+          <div className="flex items-center gap-2"><ThemeButton /><Ekosistem /></div>
         </div>
         <div className="relative max-w-lg">
           <h2 className="font-display text-[46px] leading-[1.05] font-semibold tracking-[-0.02em] xl:text-[56px]">
@@ -65,26 +73,27 @@ export function AuthLayout({ judul, sub, children, kaki }: { judul: string; sub:
         </div>
         <p className="relative text-[13px] text-ink-3">
           Dikembangkan oleh Muhammad Irsyad Sirojul Khoeir ·{' '}
-          <a href="https://irsyads.com" className="font-semibold text-ink-2 underline-offset-4 hover:underline">
+          <a href={ecosystemUrl('site','https://irsyads.com',['id','en','ar'])} className="font-semibold text-ink-2 underline-offset-4 hover:underline">
             irsyads.com
           </a>
         </p>
       </div>
 
       <div className="flex flex-col px-5 py-6 sm:px-10">
-        <div className="flex items-center justify-between pb-3">
+        <div className="flex flex-wrap items-center justify-between gap-3 pb-3">
           <a
-            href="https://irsyads.com"
+            href={ecosystemUrl('site','https://irsyads.com',['id','en','ar'])}
             className="inline-flex items-center gap-1.5 text-xs font-semibold text-ink-3 hover:text-ink transition-colors py-1.5 px-3 rounded-xl border border-line bg-surface/80"
             title="Kembali ke portal utama irsyads.com"
           >
             <ArrowLeft className="size-3.5" />
             <span>irsyads.com</span>
           </a>
-          <div className="flex items-center gap-3">
+          <div className="ms-auto flex items-center gap-2">
             <div className="lg:hidden">
               <Logo />
             </div>
+            <ThemeButton />
             <Ekosistem />
           </div>
         </div>
@@ -97,13 +106,14 @@ export function AuthLayout({ judul, sub, children, kaki }: { judul: string; sub:
           >
             <h1 className="font-display text-[32px] leading-tight font-semibold tracking-tight">{judul}</h1>
             <p className="mt-2 text-[15px] text-ink-2">{sub}</p>
+            {language !== 'id' && <p className="mt-3 text-xs text-ink-2" lang={language} dir={language==='ar'?'rtl':'ltr'}>{language==='en'?'Ruang currently uses Indonesian. Your ecosystem language preference is kept.':'واجهة Ruang متاحة حاليًا بالإندونيسية. يبقى تفضيل لغتك محفوظًا في المنظومة.'}</p>}
             <div className="mt-8">{children}</div>
             {kaki && <div className="mt-8 text-center text-sm text-ink-2">{kaki}</div>}
           </motion.div>
         </div>
         <p className="text-center text-xs text-ink-3">
           Akun Ruang sama dengan akun{' '}
-          <a href="https://irsyads.com" className="font-semibold hover:underline">
+          <a href={ecosystemUrl('site','https://irsyads.com',['id','en','ar'])} className="font-semibold hover:underline">
             irsyads.com
           </a>{' '}
           — satu akun untuk semuanya.

@@ -1,4 +1,5 @@
 @import 'tailwindcss';
+@import './irsyads-v1/tokens.namespaced.css';
 
 @custom-variant dark (&:where([data-theme='dark'], [data-theme='dark'] *));
 
@@ -8,82 +9,21 @@
   font-display: swap;
 }
 
-/* ------------------------------------------------------------------
-   Token warna. Palet hanya mengganti aksen; permukaan & tinta tetap
-   hangat (krem) di terang dan navy tinta di gelap — identitas irsyads.
-   ------------------------------------------------------------------ */
+/* Semantic aliases to the versioned Irsyads source. Status colors stay native. */
 :root {
-  --bg: #f6f1e8;
-  --bg-2: #efe7da;
-  --surface: #fffdf9;
-  --surface-2: #f4eee4;
-  --surface-3: #ebe3d5;
-  --ink: #14183e;
-  --ink-2: #474b6b;
-  --ink-3: #6f7290;
-  --line: #e3d9c8;
-  --line-2: #d3c7b2;
-  --shadow: 20 24 62;
-
-  --accent: #c8503a;
-  --accent-hover: #b4452f;
-  --accent-ink: #ffffff;
-  --accent-soft: #f7e0d7;
-  --accent-text: #a8412c;
-
-  --success: #1f7a4d;
-  --success-soft: #dcf1e5;
-  --warning: #9a6200;
-  --warning-soft: #fbecc9;
-  --danger: #c0352b;
-  --danger-soft: #fbe0dc;
-  --info: #2b62b0;
-  --info-soft: #dfe9f8;
-
-  color-scheme: light;
+ --bg:var(--irsyads-color-bg); --bg-2:var(--irsyads-color-bg-2);
+ --surface:var(--irsyads-color-surface); --surface-2:var(--irsyads-color-surface-2); --surface-3:var(--irsyads-color-surface-2);
+ --ink:var(--irsyads-color-ink); --ink-2:var(--irsyads-color-ink-2); --ink-3:var(--irsyads-color-muted);
+ --line:var(--irsyads-color-line); --line-2:var(--irsyads-color-line-2); --shadow:20 24 62;
+ --accent:var(--irsyads-color-accent); --accent-hover:var(--irsyads-color-accent-2); --accent-ink:var(--irsyads-color-on-brand);
+ --accent-soft:color-mix(in srgb,var(--accent) 14%,var(--surface)); --accent-text:var(--irsyads-color-accent-ink);
+ --success:#1f7a4d; --success-soft:#dcf1e5; --warning:#9a6200; --warning-soft:#fbecc9;
+ --danger:#c0352b; --danger-soft:#fbe0dc; --info:#2b62b0; --info-soft:#dfe9f8; color-scheme:light;
 }
-
-[data-palette='hutan'] { --accent: #2c7a52; --accent-hover: #236643; --accent-soft: #d9efe2; --accent-text: #22693f; }
-[data-palette='samudra'] { --accent: #2168a8; --accent-hover: #1a5790; --accent-soft: #dbe9f7; --accent-text: #1b5a94; }
-[data-palette='senja'] { --accent: #7446b8; --accent-hover: #633aa0; --accent-soft: #ebe1f8; --accent-text: #6538a8; }
-[data-palette='aurora'] { --accent: #0d7f74; --accent-hover: #0a6a61; --accent-soft: #d3f0ec; --accent-text: #0a6c62; }
-[data-palette='tanah'] { --accent: #9e5427; --accent-hover: #87461f; --accent-soft: #f5e3d6; --accent-text: #8c4a22; }
-
 [data-theme='dark'] {
-  --bg: #0d1024;
-  --bg-2: #11152d;
-  --surface: #151a35;
-  --surface-2: #1b2142;
-  --surface-3: #232a52;
-  --ink: #f4efe7;
-  --ink-2: #bdbbd0;
-  --ink-3: #9291ad;
-  --line: #262d55;
-  --line-2: #343c6c;
-  --shadow: 0 0 0;
-
-  --accent: #f07e66;
-  --accent-hover: #f5957f;
-  --accent-ink: #1b0e0a;
-  --accent-soft: #3a2230;
-  --accent-text: #f79c87;
-
-  --success: #5fd49a;
-  --success-soft: #16332a;
-  --warning: #f2c05c;
-  --warning-soft: #37301b;
-  --danger: #ff8a7d;
-  --danger-soft: #3d1f27;
-  --info: #7fb2ff;
-  --info-soft: #1b2a4d;
-
-  color-scheme: dark;
+ --shadow:0 0 0; --success:#5fd49a; --success-soft:#16332a; --warning:#f2c05c; --warning-soft:#37301b;
+ --danger:#ff8a7d; --danger-soft:#3d1f27; --info:#7fb2ff; --info-soft:#1b2a4d; color-scheme:dark;
 }
-[data-theme='dark'][data-palette='hutan'] { --accent: #62c792; --accent-hover: #7fd5a8; --accent-soft: #173427; --accent-text: #7fd5a8; --accent-ink: #06170e; }
-[data-theme='dark'][data-palette='samudra'] { --accent: #63aef0; --accent-hover: #82bff4; --accent-soft: #172a45; --accent-text: #8cc4f5; --accent-ink: #06121f; }
-[data-theme='dark'][data-palette='senja'] { --accent: #b592f3; --accent-hover: #c6aaf6; --accent-soft: #2a2148; --accent-text: #c6aaf6; --accent-ink: #140a26; }
-[data-theme='dark'][data-palette='aurora'] { --accent: #45c9b8; --accent-hover: #69d6c8; --accent-soft: #123532; --accent-text: #69d6c8; --accent-ink: #041614; }
-[data-theme='dark'][data-palette='tanah'] { --accent: #e39c6a; --accent-hover: #ebb18a; --accent-soft: #38261d; --accent-text: #ebb18a; --accent-ink: #1c0f07; }
 
 @theme inline {
   --color-bg: var(--bg);
@@ -110,10 +50,10 @@
   --color-info: var(--info);
   --color-info-soft: var(--info-soft);
 
-  --font-sans: 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif;
-  --font-display: 'Volkhov', Georgia, 'Times New Roman', serif;
-  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
-  --font-sunda: 'Noto Sans Sundanese', 'Plus Jakarta Sans', sans-serif;
+  --font-sans: var(--irsyads-font-sans);
+  --font-display: var(--irsyads-font-serif);
+  --font-mono: var(--irsyads-font-mono);
+  --font-sunda: 'Noto Sans Sundanese', 'Manrope', sans-serif;
 
   --radius-xl: 14px;
   --radius-2xl: 16px;

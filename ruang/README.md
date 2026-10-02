@@ -41,3 +41,11 @@ Mode pratinjau desain (hanya `npm run dev`, dibuang dari build): jalankan `local
 3. Supabase → Authentication → URL Configuration: tambahkan `https://app.irsyads.com/**` ke **Redirect URLs** (untuk konfirmasi email, reset sandi, dan Google).
 4. (Opsional) Aktifkan provider Google di Supabase Auth bila tombol Google ingin dipakai.
 5. (Disarankan) Aktifkan *Leaked password protection* di Supabase Auth.
+
+## Fondasi Irsyads v1 — kandidat lokal 2 Oktober 2026
+
+Token berasal dari `irsyads/packages/design-tokens/standalone/v1`. Salin ulang setelah `npm run design:export` di repo pusat; jangan menyunting hasil CSS/JSON terpisah. CSS bernamespace menghindari siklus alias Tailwind. Runtime publik ada di `public/irsyads-v1`; CSS dan registry build ada di `src/irsyads-v1`.
+
+Tema/palet berbagi preferensi nonrahasia lintas subdomain; Supabase `studio_preferences` dan pengaturan keluarga/APMA tetap memakai alur lama. Pilihan bersama eksplisit menang terhadap respons akun, sementara akun tetap fallback tanpa pilihan bersama. Bahasa isi Ruang masih Indonesia; tautan kembali mengikuti bahasa pusat. Tidak ada perubahan schema/auth dan belum deploy.
+
+Verifikasi: `npm run build`; `node --experimental-strip-types --test tests/appearance.test.mjs`. Build dan delapan uji adapter lulus; halaman masuk diperiksa pada 24 kombinasi tema/palet/lebar. Login akun nyata/APMA/perangkat belum diuji.

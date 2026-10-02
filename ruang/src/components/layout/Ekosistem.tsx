@@ -1,3 +1,5 @@
+import registry from '@/irsyads-v1/ecosystem.json'
+import { ecosystemUrl } from '@/lib/appearance'
 import { useEffect, useRef, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { Grid2x2 } from 'lucide-react'
@@ -19,6 +21,8 @@ import verifyT from '@/assets/sublogo/verify_light.svg?raw'
 import verifyG from '@/assets/sublogo/verify_dark.svg?raw'
 import lettersT from '@/assets/sublogo/letters_light.svg?raw'
 import lettersG from '@/assets/sublogo/letters_dark.svg?raw'
+import mosqueT from '@/assets/sublogo/masjidku_light.svg?raw'
+import mosqueG from '@/assets/sublogo/masjidku_dark.svg?raw'
 import studioT from '@/assets/sublogo/studio_light.svg?raw'
 import studioG from '@/assets/sublogo/studio_dark.svg?raw'
 
@@ -32,31 +36,12 @@ import studioG from '@/assets/sublogo/studio_dark.svg?raw'
  */
 type Entri = { id: string; nama: string; ket: string; href: string; logo: [string, string] }
 
-const KELOMPOK: { label: string; entri: Entri[] }[] = [
-  {
-    label: 'Karya & belajar',
-    entri: [
-      { id: 'site', nama: 'Irsyads', ket: 'Karya, riset sosiologi, pemikiran, dan agenda', href: 'https://irsyads.com', logo: [siteT, siteG] },
-      { id: 'academy', nama: 'Academy', ket: 'Kelas interaktif, modul Kurikulum Merdeka, dan CBT', href: 'https://academy.irsyads.com', logo: [academyT, academyG] },
-    ],
-  },
-  {
-    label: 'Aplikasi',
-    entri: [
-      { id: 'ruang', nama: 'Ruang', ket: 'Ruang kerja keluarga: aksara Sunda, sandi, kalkulator & modul ajar AI', href: '/', logo: [ruangT, ruangG] },
-      { id: 'wallet', nama: 'Wallet', ket: 'Buku kas pribadi & keluarga', href: 'https://wallet.irsyads.com', logo: [walletT, walletG] },
-      { id: 'curriculum', nama: 'Curriculum', ket: 'Kurikulum madrasah, silabus & jadwal KBM', href: 'https://curriculum.irsyads.com', logo: [curriculumT, curriculumG] },
-    ],
-  },
-  {
-    label: 'Akun & keaslian',
-    entri: [
-      { id: 'id', nama: 'Irsyads ID', ket: 'Satu akun untuk semua ruang', href: 'https://id.irsyads.com', logo: [idT, idG] },
-      { id: 'verify', nama: 'Verify', ket: 'Keaslian dokumen, ijazah digital & stempel TTD', href: 'https://verify.irsyads.com', logo: [verifyT, verifyG] },
-      { id: 'letters', nama: 'Letters', ket: 'Ajukan surat resmi bertanda tangan elektronik, tanpa akun', href: 'https://letters.irsyads.com', logo: [lettersT, lettersG] },
-    ],
-  },
-]
+const LOGOS: Record<string, [string, string]> = { site:[siteT,siteG], academy:[academyT,academyG], ruang:[ruangT,ruangG], wallet:[walletT,walletG], curriculum:[curriculumT,curriculumG], id:[idT,idG], verify:[verifyT,verifyG], letters:[lettersT,lettersG], 'masjidku-tv':[mosqueT,mosqueG] }
+const DEFAULT_CHOICES=registry.apps.filter(app=>app.launcher&&app.group!=='pengelola').slice(0,9).map(app=>({id:app.id,group:app.group}))
+const groupChoices = (choices:{id:string;group:string}[]): { label: string; entri: Entri[] }[] => ['karya','aplikasi','akun'].map(group => ({
+  label: registry.groups[group as keyof typeof registry.groups].id,
+  entri: choices.filter(choice=>choice.group===group).flatMap(choice=>{const app=registry.apps.find(app=>app.id===choice.id&&app.launcher&&app.group!=='pengelola');return app?[{id:app.id,nama:app.name,ket:app.description.id,href:app.id==='ruang'?'/':app.url,logo:LOGOS[app.id]}]:[]}),
+})).filter(group=>group.entri.length>0)
 
 function SubLogo({ logo, className }: { logo: [string, string]; className?: string }) {
   return (
@@ -69,6 +54,9 @@ function SubLogo({ logo, className }: { logo: [string, string]; className?: stri
 
 export function Ekosistem() {
   const [buka, setBuka] = useState(false)
+  const [choices,setChoices]=useState(DEFAULT_CHOICES)
+  const KELOMPOK=groupChoices(choices)
+  useEffect(()=>{if(!buka)return;let active=true;window.IrsyadsLauncher?.readLauncher().then(value=>{if(active)setChoices(value)});return()=>{active=false}},[buka])
   const wadah = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -116,7 +104,7 @@ export function Ekosistem() {
                       return (
                         <li key={e.id}>
                           <a
-                            href={e.href}
+                            href={e.id === 'ruang' ? '/' : ecosystemUrl(e.id, e.href, registry.apps.find(app => app.id === e.id)?.languages || [])}
                             title={e.ket}
                             aria-current={kini ? 'page' : undefined}
                             aria-label={`${e.nama} — ${e.ket}`}
@@ -142,7 +130,7 @@ export function Ekosistem() {
                 <SubLogo logo={[studioT, studioG]} className="size-6" />
                 Studio HQ
               </a>
-              <a href="https://irsyads.com/apps" className="inline-flex min-h-9 items-center gap-1 rounded-lg px-2 text-xs font-bold text-accent-text hover:bg-surface-2">
+              <a href={ecosystemUrl('site', 'https://irsyads.com', ['id','en','ar'], '/apps')} className="inline-flex min-h-9 items-center gap-1 rounded-lg px-2 text-xs font-bold text-accent-text hover:bg-surface-2">
                 Semua aplikasi <span aria-hidden>→</span>
               </a>
             </div>
