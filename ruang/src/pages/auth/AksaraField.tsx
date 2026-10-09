@@ -6,7 +6,9 @@ const GLYPH = ['ᮃ', 'ᮊ', 'ᮞ', 'ᮛ', 'ᮔ', 'ᮓ', 'ᮜ', 'ᮙ', 'ᮝ', '�
 function teksturGlyph(ch: string, warna: string) {
   const c = document.createElement('canvas')
   c.width = c.height = 128
-  const g = c.getContext('2d')!
+  // willReadFrequently: true memastikan canvas 2D disimpan di RAM CPU,
+  // menghindari Chromium/ANGLE GPU pipeline stall (ReadPixels) saat diunggah ke WebGL
+  const g = c.getContext('2d', { willReadFrequently: true })!
   g.font = '84px "Noto Sans Sundanese", sans-serif'
   g.textAlign = 'center'
   g.textBaseline = 'middle'
@@ -14,6 +16,8 @@ function teksturGlyph(ch: string, warna: string) {
   g.fillText(ch, 64, 70)
   const t = new THREE.CanvasTexture(c)
   t.colorSpace = THREE.SRGBColorSpace
+  t.generateMipmaps = false
+  t.minFilter = THREE.LinearFilter
   return t
 }
 
@@ -32,7 +36,12 @@ export default function AksaraField() {
     const ink = gaya.getPropertyValue('--ink').trim() || '#14183e'
     const aksen = gaya.getPropertyValue('--accent').trim() || '#c8503a'
 
-    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: 'low-power' })
+    const renderer = new THREE.WebGLRenderer({
+      antialias: true,
+      alpha: true,
+      powerPreference: 'low-power',
+      precision: 'mediump',
+    })
     renderer.setPixelRatio(Math.min(devicePixelRatio, 1.75))
     renderer.setSize(el.clientWidth, el.clientHeight)
     el.appendChild(renderer.domElement)
