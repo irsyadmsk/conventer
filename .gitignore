@@ -63,3 +63,6 @@ free/release/output.json
 pro/release/output.json
 src/main/assets/help/
 src/main/res-cipher/layout/
+
+# Local Cloudflare deployment cache
+.wrangler/
