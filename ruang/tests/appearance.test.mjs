@@ -50,3 +50,13 @@ test('return to site preserves Arabic; unsupported app destinations keep actual 
  assert.equal(ecosystemUrl('verify','https://verify.irsyads.com',['id','en','ar']),'https://verify.irsyads.com/?lang=ar')
  assert.equal(ecosystemUrl('letters','https://letters.irsyads.com',['id','en']),'https://letters.irsyads.com/')
 })
+
+test('English uses canonical root while explicit Indonesian and Arabic retain their prefixes',()=>{
+ setup();
+ for(const lang of ['en','id','ar',null]){
+  globalThis.window.IrsyadsLanguage.preferredLanguage=()=>lang;
+  const prefix=lang===null||lang==='en'?'':'/'+lang;
+  assert.equal(ecosystemUrl('site','https://irsyads.com',['id','en','ar'],'/about'),'https://irsyads.com'+prefix+'/about');
+  assert.equal(ecosystemUrl('site','https://irsyads.com',['id','en','ar']),'https://irsyads.com'+prefix+'/');
+ }
+})

@@ -35,9 +35,9 @@ export function mergeAccountAppearance(current: Prefs, account: Partial<Prefs>):
   return sharedAppearance({ ...current, ...account, theme, palette }, !!window.__irsyadsHadAppearance || changedElsewhere)
 }
 export function ecosystemUrl(id: string, url: string, languages: readonly string[], path = '') {
-  const lang = window.IrsyadsLanguage?.preferredLanguage() || 'id'
+  const lang = window.IrsyadsLanguage?.preferredLanguage() || 'en'
   const target = new URL(url)
-  if (id === 'site') target.pathname = (lang === 'id' ? '' : '/' + lang) + (path || '/')
+  if (id === 'site') target.pathname = (lang === 'en' ? '' : '/' + lang) + (path || '/')
   if ((id === 'verify' || id === 'letters') && languages.includes(lang)) target.searchParams.set('lang', lang)
   return target.toString()
 }

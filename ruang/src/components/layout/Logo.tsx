@@ -1,30 +1,14 @@
 import { motion } from 'framer-motion'
+import lightMark from '@/assets/sublogo/ruang_light.svg'
+import darkMark from '@/assets/sublogo/ruang_dark.svg'
 
-/** Tanda Ruang: sebuah pintu dengan gagang — ruang yang bisa dimasuki bersama. */
+/** The shared Irsyads nib with Ruang's functional badge. */
 export function LogoMark({ size = 36 }: { size?: number }) {
   return (
-    <motion.svg
-      width={size}
-      height={size}
-      viewBox="0 0 64 64"
-      aria-hidden
-      whileHover="buka"
-      initial="tutup"
-      className="shrink-0"
-    >
-      <rect width="64" height="64" rx="18" fill="var(--ink)" />
-      <path d="M18 46V22a4 4 0 0 1 4-4h20a4 4 0 0 1 4 4v24" fill="none" stroke="var(--bg)" strokeWidth="4.5" strokeLinecap="round" />
-      <motion.path
-        d="M22 46V22h20v24"
-        fill="var(--accent)"
-        style={{ originX: '22px', originY: '32px' }}
-        variants={{ tutup: { scaleX: 0 }, buka: { scaleX: 1 } }}
-        transition={{ type: 'spring', stiffness: 200, damping: 18 }}
-        opacity={0.35}
-      />
-      <path d="M14 46h36" stroke="var(--bg)" strokeWidth="4.5" strokeLinecap="round" />
-      <motion.circle cx="38" cy="33" r="3.4" fill="var(--accent)" variants={{ tutup: { x: 0 }, buka: { x: -3 } }} />
-    </motion.svg>
+    <motion.span aria-hidden className="inline-flex shrink-0" style={{ width: size, height: size }} whileHover={{ scale: 1.03 }}>
+      <img src={lightMark} alt="" width={size} height={size} className="size-full dark:hidden" />
+      <img src={darkMark} alt="" width={size} height={size} className="hidden size-full dark:block" />
+    </motion.span>
   )
 }
 
