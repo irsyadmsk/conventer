@@ -14,7 +14,7 @@ import { Avatar, Kbd } from '@/components/ui/Controls'
 import { IconButton } from '@/components/ui/Button'
 import { Dialog } from '@/components/ui/Dialog'
 import { CommandPalette } from './CommandPalette'
-import { Logo, LogoPena } from './Logo'
+import { LogoPena } from './Logo'
 import { SharedNavigation } from './SharedNavigation'
 import AppearancePreferences from '@/lib/appearance-preferences'
 
@@ -139,89 +139,91 @@ export function AppShell() {
   const dok = ALAT.filter((a) => a.dok)
 
   return (
-    <div className="min-h-dvh lg:grid lg:grid-cols-[272px_1fr]">
+    <div className="min-h-dvh">
       <a href="#isi" className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[90] focus:rounded-xl focus:bg-accent focus:px-4 focus:py-2 focus:text-accent-ink">
         Lewati ke konten
       </a>
 
-      {/* Bilah samping (desktop) */}
-      <aside className="sticky top-0 hidden h-dvh flex-col gap-4 border-r border-line bg-bg-2/60 px-3 py-5 lg:flex">
-        <Link to="/" className="px-2" aria-label="Irsyads Toolkit — home">
-          <Logo />
-        </Link>
-        <button
-          onClick={() => setPalet(true)}
-          className="mx-1 flex h-10 items-center gap-2 rounded-xl border border-line bg-surface px-3 text-left text-[13.5px] text-ink-3 transition-colors hover:border-line-2 hover:text-ink-2"
-        >
-          <Search className="size-4" aria-hidden />
-          <span className="flex-1">Cari…</span>
-          <Kbd>Ctrl K</Kbd>
-        </button>
-        <div className="-mr-1 min-h-0 flex-1 overflow-y-auto pr-1">
-          <NavDaftar />
-        </div>
-        <a
-          href="https://irsyads.com"
-          className="group mx-1 flex h-10 items-center gap-2 rounded-xl px-3 text-[13.5px] font-semibold text-ink-2 transition-colors hover:bg-surface-2 hover:text-ink"
-        >
-          <ArrowLeft className="size-4 transition-transform group-hover:-translate-x-0.5" aria-hidden />
-          <LogoPena height={22} />
-          Kembali ke irsyads.com
-        </a>
-        <AkunMini />
-      </aside>
-
-      <div className="flex min-w-0 flex-col">
-        {/* Bilah atas */}
-        <header className="sticky top-0 z-40 border-b border-line/70 bg-bg/80 backdrop-blur-xl">
-          <div className="mx-auto flex h-16 max-w-[1320px] items-center gap-2 px-4 sm:px-6 lg:px-10">
+      {/* Satu identitas dan pemilih layanan, sejajar dengan bilah samping. */}
+      <header className="toolkit-header sticky top-0 z-50 h-16 border-b border-line/70 bg-bg/95 backdrop-blur-xl">
+        <div className="flex h-full items-center">
+          <div className="flex h-full shrink-0 items-center pl-4 lg:w-[272px] lg:border-r lg:border-line lg:px-5">
             <SharedNavigation />
-            <div className="flex-1" />
+          </div>
+          <div className="mx-auto flex h-full min-w-0 max-w-[1320px] flex-1 items-center justify-end gap-2 pr-4 sm:px-6 lg:px-10">
             {keluarga && (
               <Link
                 to="/keluarga"
-                className="mr-1 hidden items-center gap-2 rounded-full border border-line bg-surface py-1 pr-3 pl-1 text-[13px] font-semibold text-ink-2 transition-colors hover:border-line-2 sm:flex"
+                className="mr-1 hidden min-w-0 items-center gap-2 rounded-full border border-line bg-surface py-1 pr-3 pl-1 text-[13px] font-semibold text-ink-2 transition-colors hover:border-line-2 sm:flex"
               >
-                <span className="flex -space-x-2">
+                <span className="flex shrink-0 -space-x-2">
                   {anggota.slice(0, 3).map((a) => (
                     <Avatar key={a.user_id} nama={a.display_name} ukuran={24} className="ring-2 ring-surface" />
                   ))}
                 </span>
-                {keluarga.name}
-                <span className="relative flex size-2">
+                <span className="truncate">{keluarga.name}</span>
+                <span className="relative flex size-2 shrink-0">
                   <span className="absolute inline-flex size-full animate-ping rounded-full bg-success opacity-60" />
                   <span className="relative inline-flex size-2 rounded-full bg-success" />
                 </span>
                 <span className="sr-only">tersinkron</span>
               </Link>
             )}
-            <IconButton label="Cari (Ctrl K)" onClick={() => setPalet(true)} className="lg:hidden">
+            <IconButton label="Cari (Ctrl K)" onClick={() => setPalet(true)} className="shrink-0 lg:hidden">
               <Search />
             </IconButton>
             <AppearancePreferences compact />
-            <Link to="/pengaturan" className="ml-1 rounded-full lg:hidden" aria-label="Pengaturan akun">
+            <Link to="/pengaturan" className="ml-1 grid size-11 shrink-0 place-items-center rounded-full lg:hidden" aria-label="Pengaturan akun">
               <Avatar nama={namaTampil} url={profil?.avatar_url} ukuran={34} />
             </Link>
           </div>
-        </header>
+        </div>
+      </header>
 
-        <main id="isi" className="mx-auto w-full max-w-[1320px] flex-1 px-4 pt-6 pb-28 sm:px-6 lg:px-10 lg:pt-9 lg:pb-16">
-          {/* Standar gerak ekosistem Irsyads: muncul 300 ms, naik 10 px
-              dalam 360 ms, ease-out kubik. Tanpa animasi keluar dan tanpa
-              mode="wait": dulu halaman baru menunggu yang lama selesai
-              memudar, jadi ketukan di bilah bawah terasa tertahan. */}
-          <motion.div
-            key={loc.pathname}
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{
-              opacity: { duration: 0.3, ease: [0.215, 0.61, 0.355, 1] },
-              y: { duration: 0.36, ease: [0.215, 0.61, 0.355, 1] },
-            }}
+      <div className="lg:grid lg:grid-cols-[272px_minmax(0,1fr)]">
+        {/* Bilah samping (desktop), tetap terjangkau di bawah header. */}
+        <aside className="sticky top-16 hidden h-[calc(100dvh-4rem)] flex-col gap-4 border-r border-line bg-bg-2/60 px-3 py-4 lg:flex">
+          <button
+            onClick={() => setPalet(true)}
+            className="mx-1 flex h-10 items-center gap-2 rounded-xl border border-line bg-surface px-3 text-left text-[13.5px] text-ink-3 transition-colors hover:border-line-2 hover:text-ink-2"
           >
-            {outlet}
-          </motion.div>
-        </main>
+            <Search className="size-4" aria-hidden />
+            <span className="flex-1">Cari…</span>
+            <Kbd>Ctrl K</Kbd>
+          </button>
+          <div className="-mr-1 min-h-0 flex-1 overflow-y-auto pr-1">
+            <NavDaftar />
+          </div>
+          <a
+            href="https://irsyads.com"
+            className="group mx-1 flex h-10 items-center gap-2 rounded-xl px-3 text-[13.5px] font-semibold text-ink-2 transition-colors hover:bg-surface-2 hover:text-ink"
+          >
+            <ArrowLeft className="size-4 transition-transform group-hover:-translate-x-0.5" aria-hidden />
+            <LogoPena height={22} />
+            Kembali ke irsyads.com
+          </a>
+          <AkunMini />
+        </aside>
+
+        <div className="flex min-w-0 flex-col">
+          <main id="isi" className="mx-auto w-full max-w-[1320px] flex-1 px-4 pt-6 pb-28 sm:px-6 lg:px-10 lg:pt-9 lg:pb-16">
+            {/* Standar gerak ekosistem Irsyads: muncul 300 ms, naik 10 px
+                dalam 360 ms, ease-out kubik. Tanpa animasi keluar dan tanpa
+                mode="wait": dulu halaman baru menunggu yang lama selesai
+                memudar, jadi ketukan di bilah bawah terasa tertahan. */}
+            <motion.div
+              key={loc.pathname}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{
+                opacity: { duration: 0.3, ease: [0.215, 0.61, 0.355, 1] },
+                y: { duration: 0.36, ease: [0.215, 0.61, 0.355, 1] },
+              }}
+            >
+              {outlet}
+            </motion.div>
+          </main>
+        </div>
       </div>
 
       {/* Dok bawah (ponsel & tablet) */}

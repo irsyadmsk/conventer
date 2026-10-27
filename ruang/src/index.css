@@ -75,6 +75,19 @@
   --font-serif: var(--irsyads-font-serif);
 }
 
+/* Adaptasi shell Toolkit; runtime navigasi bersama tetap berasal dari pusat. */
+.toolkit-header .irsyads-navigation-panel,
+.toolkit-header .irsyads-appearance-panel {
+  max-height: calc(100dvh - 88px);
+}
+#isi { scroll-margin-top: 80px; }
+@media (max-width: 600px) {
+  .toolkit-header .irsyads-navigation-name { font-size: 12px; line-height: 1.2; }
+  .toolkit-header .irsyads-navigation-app { display: block; font-size: 17px; }
+  .toolkit-header .irsyads-navigation-panel,
+  .toolkit-header .irsyads-appearance-panel { top: 72px; }
+}
+
 @layer base {
   /* Anak kisi tanpa kolom eksplisit (mis. `grid gap-4 lg:grid-cols-3`) di
      ponsel memakai lebar min-content-nya: satu judul panjang bertanda
