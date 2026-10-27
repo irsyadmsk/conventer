@@ -12,7 +12,7 @@ Penerus web **Text Converter** (`../web`) dan **APMA**, dibangun ulang dengan Re
 | Kode & Sandi | Morse Studio (audio, osiloskop, senter kamera, strobo, kunci telegraf), Codec (deteksi format otomatis), Caesar/Vigenère + pemecah otomatis, Hash teks & berkas |
 | Kalkulator | Ilmiah (pengurai aman tanpa `eval`), Programmer (bit, BigInt), Satuan (termasuk tumbak/bata/ons/kuintal), Persen & diskon bertingkat, Tanggal (usia, weton, Hijriah), Nilai rapor & statistik kelas, Keuangan (cicilan anuitas/flat, zakat, bagi tagihan, target tabungan) |
 | Teks | Gaya teks Unicode, Analisis naskah + durasi bicara + teleprompter, QR/Barcode (buat & pindai) |
-| Modul Ajar (APMA) | Wizard 2 langkah → AI menyusun modul lengkap; editor blok (seret urut), Copilot, Audit AI + perbaikan istilah regulasi, desain dokumen, kop sekolah, riwayat versi, ekspor PDF/Word/HTML/Markdown, bisa dibagikan ke keluarga |
+| Modul Ajar (APMA) | Wizard 2 langkah → modul disusun dari templat lokal (`src/features/apma/lesson-template.ts`); akses diatur admin lewat Studio; editor blok (seret urut), Copilot, Audit AI + perbaikan istilah regulasi, desain dokumen, kop sekolah, riwayat versi, ekspor PDF/Word/HTML/Markdown, bisa dibagikan ke keluarga |
 | Koleksi | Semua hasil tersimpan, sematkan, bagikan ke keluarga, ekspor JSON |
 | Otomatisasi | Resep berantai (seret urut, pratinjau tiap langkah), proses massal per baris + CSV, templat, simpan otomatis |
 | Laporan | KPI vs periode lalu, grafik harian, alat terpakai, peta jam, kontribusi anggota, wawasan otomatis, ringkasan AI, arsip mingguan otomatis (cron Senin 00.10 WIB), cetak/CSV |
@@ -20,7 +20,8 @@ Penerus web **Text Converter** (`../web`) dan **APMA**, dibangun ulang dengan Re
 ## Backend (proyek Supabase `irsyads`)
 
 - Migrasi: `supabase/migrations/20260924000001_ruang_core.sql` (tabel `studio_*`, RLS, RPC keluarga, ringkasan laporan, cron).
-- Edge Function: `supabase/functions/ruang-ai` — memakai secret yang sama dengan `ai-bantu` (`GEMINI_API_KEY`, `AI_API_KEY`), kuota harian per akun `RUANG_KUOTA_HARIAN` (bawaan 30). Kunci AI tidak pernah sampai ke peramban.
+- Migrasi akses APMA: `supabase/migrations/20260924000002_ruang_akses_apma.sql`. Hak akses dibaca `src/lib/akses.ts` (terikat UID akun, gagal tertutup saat galat baca).
+- Edge Function: `supabase/functions/ruang-ai` — memakai secret yang sama dengan `ai-bantu` (`GEMINI_API_KEY`, `AI_API_KEY`), kuota harian per akun `RUANG_KUOTA_HARIAN` (bawaan 30). Kunci AI tidak pernah sampai ke peramban. **Saat ini dijeda:** `src/lib/ai.ts` (`panggilAI`) tidak memanggil cloud karena kuota gratis/tagihan belum terverifikasi. Jangan mengaktifkannya tanpa persetujuan pemilik.
 - Pelacakan aktivitas hanya menyimpan nama alat, aksi, dan jumlah karakter — **bukan isi teks**.
 
 ## Menjalankan
@@ -36,11 +37,25 @@ Mode pratinjau desain (hanya `npm run dev`, dibuang dari build): jalankan `local
 
 ## Rilis ke app.irsyads.com
 
-1. `npm run build` → unggah `dist/` ke hosting statis (Cloudflare Pages / Netlify / Vercel). `public/_redirects` sudah menangani rute SPA.
-2. Arahkan DNS `app.irsyads.com` ke hosting tersebut.
-3. Supabase → Authentication → URL Configuration: tambahkan `https://app.irsyads.com/**` ke **Redirect URLs** (untuk konfirmasi email, reset sandi, dan Google).
-4. (Opsional) Aktifkan provider Google di Supabase Auth bila tombol Google ingin dipakai.
-5. (Disarankan) Aktifkan *Leaked password protection* di Supabase Auth.
+Ruang ditayangkan sebagai Cloudflare Worker `ruang` dengan Static Assets (`wrangler.jsonc`: aset `./dist`, `not_found_handling: single-page-application`, custom domain `app.irsyads.com`). Tidak ada workflow GitHub Actions; rilis = `npm run build` lalu `npx wrangler deploy`, **hanya setelah pemilik menyetujui rilis itu**. (Petunjuk lama tentang Pages/Netlify dan `public/_redirects` sudah tidak berlaku.)
+
+Pengaturan Supabase Auth yang dibutuhkan: `https://app.irsyads.com/**` di Redirect URLs. Masuk dilakukan lewat id.irsyads.com (`src/lib/sso.ts`, `sso-follow.ts`).
+
+## Peta kode (untuk AI/pengembang)
+
+| Lokasi | Isi |
+|---|---|
+| `src/App.tsx`, `src/tools.tsx` | Rute dan daftar alat |
+| `src/pages/` | Halaman: `Beranda`, `Keluarga`, `Koleksi`, `Laporan`, `Otomatisasi`, `Pengaturan`; subfolder `aksara/`, `kalkulator/`, `sandi/`, `teks/`, `auth/` |
+| `src/features/apma/` | LessonCraft/APMA: `Wizard`, `Editor`, `KelolaAkses`, `Terkunci`, `lesson-template.ts` (**salinan identik** `irsyads/packages/isi/src/lesson-template.ts`; jangan disunting di sini) |
+| `src/features/kreasi/` | Studio Kreasi (desain di `../DESIGN-KREASI.md`), font & glyph di `vendor/` |
+| `src/legacy/` | Mesin konversi yang masih dipakai (Sunda, Morse, codec, cipher, hash, barcode, gaya teks) |
+| `src/lib/` | `supabase.ts`, `auth.tsx`, `sesi.ts`, `keluar-terikat.ts`, `akses.ts`, `family.tsx`, `activity.ts`, `prefs.tsx`, `appearance*.ts`, `ai.ts` |
+| `src/irsyads-v1/`, `public/irsyads-v1/` | Hasil ekspor design-tokens irsyads; jangan disunting manual |
+| `supabase/` | Migrasi `studio_*` dan fungsi `ruang-ai` (proyek Supabase irsyads yang sama) |
+| `tests/` | `node --experimental-strip-types --test tests/*.test.mjs` |
+
+Berkas `*_HANDOFF.md` di folder ini adalah riwayat bertanggal.
 
 ## Fondasi Irsyads v1 — kandidat lokal 2 Oktober 2026
 

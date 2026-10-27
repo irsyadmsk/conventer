@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "tokenSha256": "047df195de6cb06ca21f5ff6da4744053833a85c25c14aef1f4115fffd5e475b",
+  "tokenSha256": "837f3f3361215e7ebc24650d86133b20a2540447e4b187b244d0fead76fb6797",
   "locales": [
     "id",
     "en",
@@ -224,5 +224,6 @@
       "launcher": true
     }
   ],
-  "auth": "No authentication data. UI preferences only."
+  "auth": "No authentication data. UI preferences only.",
+  "preferenceContractVersion": 2
 }

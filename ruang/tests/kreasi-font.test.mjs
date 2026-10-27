@@ -1,0 +1,30 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import * as core from '../src/features/kreasi/core.js';
+import * as engine from '../src/features/kreasi/font.js';
+import * as ot from '../src/features/kreasi/vendor/opentype.mjs';
+test('Font Lab builds a real parsable OpenType font from drawn strokes', () => {
+
+  const p = core.createProject('Font pengujian');
+  p.font.family = 'Langit';
+  p.font.author = 'Pembuat';
+  p.glyphs = [{id:'a',source:'a',strokes:[[[20,80],[50,15],[80,80]],[[32,55],[68,55]]]}];
+  const result = engine.build(p);
+  assert.ok(result.buffer instanceof ArrayBuffer);
+  assert.equal(Buffer.from(result.buffer).toString('ascii',0,4),'OTTO');
+  const parsed = ot.parse(result.buffer);
+  assert.equal(parsed.names.fontFamily.en, 'Langit');
+  assert.ok(parsed.charToGlyph('a').path.commands.length > 10);
+  assert.notEqual(parsed.charToGlyphIndex('a'),0);
+  assert.ok(parsed.charToGlyph(' ').advanceWidth > 0);
+  assert.equal(result.mapping[0].codepoint, 97);
+  assert.equal(result.mapping[0].source, 'a');
+  assert.throws(() => engine.build({...p,glyphs:[]}), /simbol/);
+  assert.throws(() => engine.build({...p,glyphs:[{id:'ng',source:'ng',strokes:p.glyphs[0].strokes}]}), /satu karakter/);
+  p.font.mapping = 'pua';
+  p.glyphs[0].source = 'ng';
+  const privateFont = engine.build(p);
+  assert.equal(privateFont.mapping[0].codepoint, 0xe000);
+  assert.notEqual(ot.parse(privateFont.buffer).charToGlyphIndex('\ue000'),0);
+  assert.equal(engine.previewText('ng!',p.glyphs,privateFont.mapping),'\ue000!');
+});

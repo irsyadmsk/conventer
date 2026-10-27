@@ -7,6 +7,7 @@ import { ToastProvider } from '@/components/ui/Toast'
 import { AppShell } from '@/components/layout/AppShell'
 import { LogoMark } from '@/components/layout/Logo'
 import { PembaruanApp } from '@/components/layout/PembaruanApp'
+import { tujuanToolkit } from '@/lib/sso'
 
 const Masuk = lazy(() => import('@/pages/auth/Masuk'))
 const Daftar = lazy(() => import('@/pages/auth/Daftar'))
@@ -29,6 +30,7 @@ const GayaTeks = lazy(() => import('@/pages/teks/GayaTeks'))
 const Teks = lazy(() => import('@/pages/teks/Teks'))
 const QR = lazy(() => import('@/pages/teks/QR'))
 const Apma = lazy(() => import('@/features/apma/Apma'))
+const Kreasi = lazy(() => import('@/features/kreasi/Kreasi'))
 const Keluarga = lazy(() => import('@/pages/Keluarga'))
 const Pengaturan = lazy(() => import('@/pages/Pengaturan'))
 const TidakAda = lazy(() => import('@/pages/TidakAda'))
@@ -48,7 +50,7 @@ function WajibMasuk({ children }: { children: ReactNode }) {
   const { user, memuat } = useAuth()
   const loc = useLocation()
   if (memuat) return <Memuat />
-  if (!user) return <Navigate to="/masuk" replace state={{ dari: loc.pathname + loc.search }} />
+  if (!user) return <Navigate to="/masuk" replace state={{ dari: loc.pathname + loc.search + loc.hash }} />
   return <>{children}</>
 }
 
@@ -56,15 +58,21 @@ function HanyaTamu({ children }: { children: ReactNode }) {
   const { user, memuat } = useAuth()
   const loc = useLocation()
   if (memuat) return <Memuat />
-  if (user) return <Navigate to={(loc.state as { dari?: string } | null)?.dari ?? '/'} replace />
+  if (user) return <Navigate to={tujuanToolkit((loc.state as { dari?: string } | null)?.dari, window.location.origin)} replace />
   return <>{children}</>
+}
+
+/** Discard account caches, editors and pending autosave timers when identity changes. */
+function LingkupAkun({ children }: { children: ReactNode }) {
+  const { user } = useAuth()
+  return <PrefsProvider key={user?.id ?? 'tamu'}>{children}</PrefsProvider>
 }
 
 export default function App() {
   return (
     <BrowserRouter>
       <AuthProvider>
-        <PrefsProvider>
+        <LingkupAkun>
           <FamilyProvider>
             <ToastProvider>
               <PembaruanApp />
@@ -90,6 +98,7 @@ export default function App() {
                     <Route path="gaya-teks" element={<Suspense fallback={<Memuat />}><GayaTeks /></Suspense>} />
                     <Route path="teks" element={<Suspense fallback={<Memuat />}><Teks /></Suspense>} />
                     <Route path="qr" element={<Suspense fallback={<Memuat />}><QR /></Suspense>} />
+                    <Route path="kreasi" element={<Suspense fallback={<Memuat />}><Kreasi /></Suspense>} />
                     <Route path="modul-ajar/*" element={<Suspense fallback={<Memuat />}><Apma /></Suspense>} />
                     <Route path="keluarga" element={<Suspense fallback={<Memuat />}><Keluarga /></Suspense>} />
                     <Route path="pengaturan" element={<Suspense fallback={<Memuat />}><Pengaturan /></Suspense>} />
@@ -99,7 +108,7 @@ export default function App() {
               </Suspense>
             </ToastProvider>
           </FamilyProvider>
-        </PrefsProvider>
+        </LingkupAkun>
       </AuthProvider>
     </BrowserRouter>
   )

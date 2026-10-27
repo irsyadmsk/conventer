@@ -20,7 +20,7 @@ import {
   Grid3x3,
 } from 'lucide-react'
 
-export type Grup = 'utama' | 'aksara' | 'sandi' | 'hitung' | 'teks' | 'pendidikan' | 'akun'
+export type Grup = 'utama' | 'aksara' | 'sandi' | 'hitung' | 'teks' | 'pendidikan' | 'kreasi' | 'akun'
 
 export type Alat = {
   id: string
@@ -35,16 +35,18 @@ export type Alat = {
 }
 
 export const GRUP: Record<Grup, string> = {
-  utama: 'Ruang',
+  utama: 'Toolkit',
   aksara: 'Aksara Sunda',
   sandi: 'Kode & Sandi',
   hitung: 'Hitung',
   teks: 'Teks & Visual',
   pendidikan: 'Pendidikan',
+  kreasi: 'Kreasi',
   akun: 'Akun',
 }
 
 export const ALAT: Alat[] = [
+  { id: 'kreasi', nama: 'Studio Kreasi', path: '/kreasi', ikon: Sparkles, grup: 'kreasi', ringkas: 'Rancang sandi, aksara & font sendiri', kata: 'sandi aksara font glyph studio kreasi otf' },
   { id: 'beranda', nama: 'Beranda', path: '/', ikon: LayoutDashboard, grup: 'utama', ringkas: 'Ringkasan hari ini & akses cepat', dok: true },
   { id: 'laporan', nama: 'Laporan', path: '/laporan', ikon: BarChart3, grup: 'utama', ringkas: 'Laporan cerdas pribadi & keluarga', kata: 'statistik insight analitik', dok: true },
   { id: 'koleksi', nama: 'Koleksi', path: '/koleksi', ikon: Library, grup: 'utama', ringkas: 'Semua hasil tersimpan & dibagikan', kata: 'simpan arsip favorit' },
@@ -65,7 +67,7 @@ export const ALAT: Alat[] = [
   { id: 'teks', nama: 'Analisis & Prompter', path: '/teks', ikon: Type, grup: 'teks', ringkas: 'Statistik, format kasus & teleprompter', kata: 'camelcase snake kata durasi bicara teleprompter' },
   { id: 'qr', nama: 'QR & Barcode', path: '/qr', ikon: QrCode, grup: 'teks', ringkas: 'Buat & pindai kode', kata: 'qrcode barcode scan pindai' },
 
-  { id: 'apma', nama: 'Modul Ajar (APMA)', path: '/modul-ajar', ikon: GraduationCap, grup: 'pendidikan', ringkas: 'Modul ajar Kurikulum Merdeka & KBC dengan AI', kata: 'rpp modul ajar kurikulum merdeka kbc guru lkpd asesmen' },
+  { id: 'apma', nama: 'Irsyads LessonCraft', path: '/modul-ajar', ikon: GraduationCap, grup: 'pendidikan', ringkas: 'Modul ajar Kurikulum Merdeka & KBC dengan AI', kata: 'rpp modul ajar kurikulum merdeka kbc guru lkpd asesmen' },
 
   { id: 'keluarga', nama: 'Keluarga', path: '/keluarga', ikon: Users, grup: 'akun', ringkas: 'Anggota, peran & kode undangan', kata: 'family anggota undang' },
   { id: 'pengaturan', nama: 'Pengaturan', path: '/pengaturan', ikon: Settings, grup: 'akun', ringkas: 'Profil, tema, suara & data', kata: 'tema gelap palet akun sandi' },

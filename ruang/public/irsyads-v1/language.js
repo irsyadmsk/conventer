@@ -28,12 +28,14 @@ var IrsyadsLanguage = (() => {
     saveLanguage: () => saveLanguage
   });
   var LANGUAGE_KEY = "irsyads-language";
-  var LANGUAGES = ["id", "en", "ar"];
+  var LANGUAGES = ["id", "en", "ar", "zh"];
   function isLanguage(value) {
     return LANGUAGES.includes(value);
   }
   function preferredLanguage() {
     if (typeof document === "undefined") return null;
+    const value = window.IrsyadsPreferences?.get().language;
+    if (isLanguage(value)) return value;
     try {
       const cookie = document.cookie.split(/;\s*/).find((item) => item.startsWith(`${LANGUAGE_KEY}=`))?.slice(LANGUAGE_KEY.length + 1);
       if (isLanguage(cookie)) return cookie;
@@ -48,6 +50,10 @@ var IrsyadsLanguage = (() => {
   }
   function saveLanguage(language) {
     if (!isLanguage(language) || typeof document === "undefined") return;
+    if (window.IrsyadsPreferences) {
+      window.IrsyadsPreferences.set({ language });
+      return;
+    }
     try {
       localStorage.setItem(LANGUAGE_KEY, language);
     } catch {
@@ -60,14 +66,15 @@ var IrsyadsLanguage = (() => {
     window.dispatchEvent(new CustomEvent("irsyads-language-change", { detail: language }));
   }
   function resolveLanguage(supported, fallback, legacyKey) {
+    const didukung = (nilai) => isLanguage(nilai) && supported.includes(nilai);
     if (typeof location === "undefined") return fallback;
     const explicit = new URLSearchParams(location.search).get("lang");
-    if (isLanguage(explicit) && supported.includes(explicit)) return explicit;
+    if (didukung(explicit)) return explicit;
     const shared = preferredLanguage();
-    if (shared) return supported.includes(shared) ? shared : fallback;
+    if (shared) return didukung(shared) ? shared : fallback;
     try {
       const legacy = legacyKey ? localStorage.getItem(legacyKey) : null;
-      if (isLanguage(legacy) && supported.includes(legacy)) return legacy;
+      if (didukung(legacy)) return legacy;
     } catch {
     }
     return fallback;

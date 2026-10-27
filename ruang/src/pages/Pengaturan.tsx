@@ -13,7 +13,7 @@ import { Input } from '@/components/ui/Field'
 import { useToast } from '@/components/ui/Toast'
 
 export default function Pengaturan() {
-  const { user, profil, namaTampil, perbaruiNama, gantiSandi, keluar } = useAuth()
+  const { user, profil, namaTampil, perbaruiNama, gantiSandi, keluar, keluarSibuk } = useAuth()
   const { prefs, set } = usePrefs()
   const toast = useToast()
   const [nama, setNama] = useState(namaTampil)
@@ -155,7 +155,7 @@ export default function Pengaturan() {
             <Button varian="outline" ikon={<Download />} memuat={memuat === 'ekspor'} onClick={() => jalan('ekspor', eksporData, 'Data diunduh')}>
               Unduh semua data saya
             </Button>
-            <Button varian="danger" ikon={<LogOut />} onClick={() => keluar()}>
+            <Button varian="danger" ikon={<LogOut />} disabled={keluarSibuk} onClick={() => keluar()}>
               Keluar
             </Button>
           </div>

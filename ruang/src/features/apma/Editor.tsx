@@ -30,6 +30,7 @@ import {
 } from 'lucide-react'
 import { supabase, pesanGalat } from '@/lib/supabase'
 import { useAuth } from '@/lib/auth'
+import { kunciDrafAkun } from '@/lib/account-scope'
 import { useFamily } from '@/lib/family'
 import { usePrefs } from '@/lib/prefs'
 import { useItemAksi, type Item } from '@/lib/items'
@@ -72,6 +73,7 @@ export default function Editor() {
   const nav = useNavigate()
   const toast = useToast()
   const { user } = useAuth()
+  const draftKey = user && id ? kunciDrafAkun(`ruang:apma:editor:${id}`, user.id) : null
   const { keluarga, peranSaya } = useFamily()
   const { prefs, set: setPrefs } = usePrefs()
   const aksi = useItemAksi()
@@ -94,22 +96,36 @@ export default function Editor() {
   const timer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined)
   const pertama = useRef(true)
 
-  const bolehSunting = !!item && (item.owner_id === user?.id || (item.family_id != null && peranSaya !== 'anak'))
+  const bolehSunting = !!item && (item.owner_id === user?.id || (item.family_id != null && item.family_id === keluarga?.id && peranSaya != null && ['owner', 'admin', 'anggota'].includes(peranSaya)))
 
   useEffect(() => {
+    let active = true
     supabase
       .from('studio_items')
       .select('*')
       .eq('id', id!)
       .maybeSingle()
       .then(({ data }) => {
+        if (!active) return
         if (!data) return setTidakAda(true)
         const it = data as Item<KontenModul>
         setItem(it)
-        setK({ ...it.content, versions: it.content.versions ?? [], design: { ...desainBawaan, ...it.content.design }, school: { ...sekolahBawaan, ...it.content.school } })
+        let content = it.content
+        try {
+          const saved = draftKey ? JSON.parse(localStorage.getItem(draftKey) || 'null') : null
+          if (saved?.base === it.updated_at && saved.content) content = saved.content
+          // A conflicting local draft stays archived; never overwrite newer server work.
+        } catch { /* A damaged local draft does not block the server copy. */ }
+        setK({ ...content, versions: content.versions ?? [], design: { ...desainBawaan, ...content.design }, school: { ...sekolahBawaan, ...content.school } })
         setPilih(it.content.blocks?.[0]?.id ?? null)
       })
-  }, [id])
+    return () => { active = false }
+  }, [id, draftKey])
+
+  useEffect(() => {
+    if (!k || !item || !draftKey || !bolehSunting) return
+    try { localStorage.setItem(draftKey, JSON.stringify({ base: item.updated_at, content: k })) } catch { /* Keep the open editor usable. */ }
+  }, [k, item, draftKey, bolehSunting])
 
   // Simpan otomatis 1,2 detik setelah berhenti mengubah.
   useEffect(() => {
@@ -280,10 +296,10 @@ export default function Editor() {
       const h = await panggilAI('apma_audit', { blocks: k!.blocks, mapel: k!.form.mapel })
       const a = h.json as AnalisisAudit
       setK((x) => x && { ...x, audit: { ...auditLokal(x.blocks), ...a } })
-      toast('Audit selesai', { isi: `Skor ${a.score}/100` })
+      toast('Audit selesai', { isi: `Structure completeness ${a.score}/100; content requires teacher review` })
     } catch (e) {
       setK((x) => x && { ...x, audit: auditLokal(x.blocks) })
-      toast('Audit AI gagal — memakai audit lokal', { nada: 'info', isi: pesanGalat(e) })
+      toast('Structure check unavailable — using local checks', { nada: 'info', isi: pesanGalat(e) })
     } finally {
       setMemuatAI(null)
     }
@@ -425,7 +441,7 @@ export default function Editor() {
                     </Select>
                     <Textarea label="Instruksi tambahan (opsional)" value={genInstruksi} onChange={(e) => setGenInstruksi(e.target.value)} placeholder="Mis. 10 soal pilihan ganda berbasis kasus di lingkungan sekolah" />
                     <Button varian="primary" ikon={<Sparkles />} memuat={memuatAI === 'blok'} onClick={copilot} disabled={!bolehSunting}>
-                      Buat dengan AI
+                      Create from template
                     </Button>
                   </div>
                 )}
@@ -433,22 +449,13 @@ export default function Editor() {
                 {tab === 'audit' && (
                   <div className="flex flex-col gap-4">
                     <div className="flex items-center gap-4 rounded-2xl bg-surface-2 p-4">
-                      <Cincin nilai={audit.score} maks={100} ukuran={76} label="Skor kualitas" />
+                      <Cincin nilai={audit.score} maks={100} ukuran={76} label="Structural completeness" />
                       <div>
-                        <p className="text-sm font-bold">Skor kualitas</p>
-                        <p className="text-xs text-ink-3">{k.audit?.scores ? 'Audit AI' : 'Pemeriksaan otomatis lokal'}</p>
+                        <p className="text-sm font-bold">Structural completeness</p>
+                        <p className="text-xs text-ink-3">{k.audit?.scores ? 'Local structure check' : 'Pemeriksaan otomatis lokal'}</p>
                       </div>
                     </div>
-                    {audit.scores && (
-                      <div className="grid grid-cols-3 gap-2">
-                        {Object.entries(audit.scores).map(([n, v]) => (
-                          <div key={n} className="rounded-xl border border-line p-2 text-center">
-                            <p className="text-[10.5px] text-ink-3 capitalize">{n}</p>
-                            <p className="font-display text-lg font-semibold">{v}</p>
-                          </div>
-                        ))}
-                      </div>
-                    )}
+                    <p className="text-xs text-ink-3">Section presence only. Curriculum, content and assessment have not been validated.</p>
                     <ul className="flex flex-col gap-1">
                       {Object.entries(audit.checklist ?? {}).map(([n, v]) => (
                         <li key={n} className={cn('flex items-center gap-2 text-sm', !v && 'text-ink-3')}>
@@ -479,7 +486,7 @@ export default function Editor() {
                     )}
                     <div className="flex flex-col gap-2">
                       <Button varian="primary" ikon={<ShieldCheck />} memuat={memuatAI === 'audit'} onClick={auditAI}>
-                        Audit dengan AI
+                        Check structure
                       </Button>
                       <Button varian="outline" ikon={<Wand2 />} onClick={perbaikiIstilah} disabled={!bolehSunting}>
                         Perbarui istilah regulasi
@@ -641,7 +648,7 @@ export default function Editor() {
                 {kelengkapan.hilang.length > 0 && `${kelengkapan.hilang.length} bagian baku belum ada: ${kelengkapan.hilang.map((h) => h.judul.replace(/^Lampiran d+ - /, '')).join(', ')}.`}
               </span>
               <Button ukuran="sm" varian="primary" ikon={<Sparkles />} memuat={memuatAI === 'lengkapi'} onClick={lengkapi}>
-                Lengkapi dengan AI
+                Add template sections
               </Button>
             </motion.div>
           )}

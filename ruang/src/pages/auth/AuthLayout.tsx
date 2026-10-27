@@ -2,11 +2,11 @@ import { lazy, Suspense, useRef, type ReactNode } from 'react'
 import { motion } from 'framer-motion'
 import gsap from 'gsap'
 import { useGSAP } from '@gsap/react'
-import { ArrowLeft, BarChart3, GraduationCap, Languages, Users, Moon, Sun } from 'lucide-react'
+import { ArrowLeft, BarChart3, GraduationCap, Languages, Users } from 'lucide-react'
 import { Logo } from '@/components/layout/Logo'
-import { usePrefs } from '@/lib/prefs'
 import { ecosystemUrl } from '@/lib/appearance'
-import { Ekosistem } from '@/components/layout/Ekosistem'
+import { SharedNavigation } from '@/components/layout/SharedNavigation'
+import AppearancePreferences from '@/lib/appearance-preferences'
 
 gsap.registerPlugin(useGSAP)
 
@@ -15,14 +15,9 @@ const AksaraField = lazy(() => import('./AksaraField'))
 const FITUR = [
   { ikon: Users, teks: 'Akun keluarga — koleksi & laporan tersinkron antaranggota' },
   { ikon: Languages, teks: 'Aksara Sunda, Morse, codec, sandi, hash, QR' },
-  { ikon: GraduationCap, teks: 'Modul ajar Kurikulum Merdeka & KBC dengan AI' },
-  { ikon: BarChart3, teks: 'Laporan mingguan otomatis dengan ringkasan cerdas' },
+  { ikon: GraduationCap, teks: 'LessonCraft — draf modul ajar dengan template lokal' },
+  { ikon: BarChart3, teks: 'Koleksi dan laporan untuk pekerjaan keluarga' },
 ]
-
-function ThemeButton() {
-  const { gelap, set } = usePrefs()
-  return <button type="button" className="grid size-11 shrink-0 place-items-center rounded-full border border-line text-ink hover:bg-surface-2" aria-label={gelap ? 'Mode terang' : 'Mode gelap'} onClick={() => set({theme:gelap?'light':'dark'})}>{gelap ? <Sun size={17} /> : <Moon size={17} />}</button>
-}
 
 export function AuthLayout({ judul, sub, children, kaki }: { judul: string; sub: ReactNode; children: ReactNode; kaki?: ReactNode }) {
   const panel = useRef<HTMLDivElement>(null)
@@ -50,7 +45,7 @@ export function AuthLayout({ judul, sub, children, kaki }: { judul: string; sub:
         </Suspense>
         <div className="relative flex items-center justify-between">
           <Logo />
-          <div className="flex items-center gap-2"><ThemeButton /><Ekosistem /></div>
+          <div className="flex items-center gap-2"><AppearancePreferences /><SharedNavigation /></div>
         </div>
         <div className="relative max-w-lg">
           <h2 className="font-display text-[46px] leading-[1.05] font-semibold tracking-[-0.02em] xl:text-[56px]">
@@ -93,8 +88,8 @@ export function AuthLayout({ judul, sub, children, kaki }: { judul: string; sub:
             <div className="lg:hidden">
               <Logo />
             </div>
-            <ThemeButton />
-            <Ekosistem />
+            <AppearancePreferences />
+            <SharedNavigation />
           </div>
         </div>
         <div className="flex flex-1 items-center justify-center py-10">
@@ -106,7 +101,7 @@ export function AuthLayout({ judul, sub, children, kaki }: { judul: string; sub:
           >
             <h1 className="font-display text-[32px] leading-tight font-semibold tracking-tight">{judul}</h1>
             <p className="mt-2 text-[15px] text-ink-2">{sub}</p>
-            {language !== 'id' && <p className="mt-3 text-xs text-ink-2" lang={language} dir={language==='ar'?'rtl':'ltr'}>{language==='en'?'Ruang currently uses Indonesian. Your ecosystem language preference is kept.':'واجهة Ruang متاحة حاليًا بالإندونيسية. يبقى تفضيل لغتك محفوظًا في المنظومة.'}</p>}
+            {language !== 'id' && <p className="mt-3 text-xs text-ink-2" lang={language} dir={language==='ar'?'rtl':'ltr'}>{language==='en'?'Toolkit currently uses Indonesian. Your ecosystem language preference is kept.':language==='zh'?'Toolkit目前使用印度尼西亚语。您在Irsyads中的语言偏好会保留。':'واجهة Toolkit متاحة حاليًا بالإندونيسية. يبقى تفضيل لغتك محفوظًا في المنظومة.'}</p>}
             <div className="mt-8">{children}</div>
             {kaki && <div className="mt-8 text-center text-sm text-ink-2">{kaki}</div>}
           </motion.div>

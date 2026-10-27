@@ -1,93 +1,46 @@
-# Text Converter & Cryptography Suite
-**Pengembang:** Muhammad Irsyad Sirojul Khoeir, S.Sos., M.Sos., C.PS.  
-**Situs Resmi:** [irsyads.com](https://irsyads.com)  
+# Irsyads Toolkit
 
-# Text Converter
-Send your friends the most special text and mysterious text (Android)
+Aplikasi utama untuk **app.irsyads.com** berada di **`ruang/`**. Gunakan direktori ini untuk pengembangan, pengujian, dan build. Frontend `web/` dan aplikasi Android lama dipensiunkan agar tidak menjadi sasaran pengembangan yang keliru.
 
-[<img src="https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png" width=300>](https://play.google.com/store/apps/details?id=duy.com.text_converter)
-## PLEASE DON'T RE UP THIS APPLICATION. USE THIS APP FOR YOUR STUDY OR RESEARCH
+## Menjalankan aplikasi utama
 
-# Features
-### Codec
-- Ascii encoder/decoder
-- Binary encoder/decoder (a -> 01100001)
-- Hex encoder/decoder
-- Octal encoder/decoder
-- Reverser text (abc def -> fed cba) encoder/decoder
-- Upper case text (abc -> ABC) encoder/decoder
-- Lower case text (ABC -> abc) encoder/decoder
-- Upside down text (hello -> oןןǝɥ)
-- Supper script ᵃᵇᶜᵈᵉᶠᵍʰⁱʲᵏˡᵐⁿᵒᵖqʳˢᵗᵘᵛʷˣʸᶻ_,;.?!/\'ᴬᴮᶜᴰᴱᶠᴳᴴᴵᴶᴷᴸᴹᴺᴼᴾQᴿˢᵀᵁⱽᵂˣʸᶻ⁰¹²³⁴⁵⁶⁷⁸⁹
-- Sub script ₐbcdₑfgₕᵢⱼₖₗₘₙₒₚqᵣₛₜᵤᵥwₓyz_,;.?!/\'ₐBCDₑFGₕᵢⱼₖₗₘₙₒₚQᵣₛₜᵤᵥWₓYZ₀₁₂₃₄₅₆₇₈₉
-- International morse code encoder/decoder
-- Zalgo Big/Normal/Mini encoder/decoder
-- Base 32 encoder/decoder
-- Base 64 encoder/decoder
-- Url encoder/decoder
-- Random case
-- Caesar
-- Atbash encoder/decoder
-- ROT-13 codec
-- Nato codec
-- Unicode encoder/decoder
-- Wingding encoder/decoder
+```sh
+cd ruang
+npm ci
+npm run dev
+```
 
-### Barcode encoder/decoder
-- AZTEC
-- CODABAR
-- CODE_39
-- CODE_128,
-- EAN_8
-- EAN_13
-- ITF
-- PDF_417,
-- QR_CODE
-- UPC_A
+Ikuti alamat yang dicetak Vite (bawaan `http://localhost:5173`). Konfigurasi akun menggunakan `.env` lokal sesuai `ruang/.env.example` (`VITE_SUPABASE_URL`, `VITE_SUPABASE_PUBLISHABLE_KEY`, proyek Supabase irsyads); jangan memasukkan rahasia ke Git.
 
-### Stylish text & decorate text generator
-- More than 200 style
+## Build dan pengujian
 
-### Hash
-- MD5
-- SHA-1
-- SHA-256
-- SHA-384
-- SHA-512
+```sh
+cd ruang
+npm run build
+node --experimental-strip-types --test tests/*.test.mjs
+```
 
-### Base converter
-Convert from base to other base (Hex, decmial, octal, binary)
+Hasil build berada di `ruang/dist/`. Konfigurasi Worker dan domain produksi tetap di `ruang/wrangler.jsonc`. Build lokal bukan deployment; publikasi produksi dilakukan terpisah dengan persetujuan pemilik.
 
-### Cipher
-- Caesar
-- Vignere
+## Struktur utama
 
-### More feature
-- Frequency analysis
+- `ruang/src/components/`: shell, navigasi, dan komponen UI Toolkit.
+- `ruang/src/pages/`: dashboard dan perkakas yang sudah ada.
+- `ruang/src/features/`: fitur aplikasi, termasuk LessonCraft dan Studio Kreasi.
+- `ruang/src/legacy/`: mesin konversi yang **masih digunakan** oleh aplikasi utama; bukan frontend lama.
+- `ruang/public/`: aset aplikasi dan runtime identitas bersama.
+- `ruang/supabase/`: backend dan migrasi yang sudah ada.
+- `ruang/tests/`: pengujian aplikasi.
 
-## GNU GPL 3.0 License
+Panduan aplikasi utama: [ruang/README.md](ruang/README.md). Lisensi proyek tetap dipertahankan dalam `LICENSE`; lisensi dependensi font disertakan bersama vendornya.
 
-    Copyright (C) 2017-2018 Muhammad Irsyad Sirojul Khoeir
+## Untuk AI dan pengembang
 
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-## Some Image
-
-![](art/screenshot/Screenshot_20170710-144003.png)
-![](art/screenshot/Screenshot_20170710-144006.png)
-![](art/screenshot/Screenshot_20170710-144011.png)
-![](art/screenshot/Screenshot_20170710-144013.png)
-![](art/screenshot/Screenshot_20170710-144015.png)
-
-
+- Nama repo dan folder `conventer` dipakai apa adanya oleh remote dan rujukan dokumen; jangan diganti.
+- Semua kerja di `ruang/`. Folder `web/` sudah dipindah ke `../_AMAN-HAPUS`; jangan dibuat ulang.
+- Akun dibagi dengan irsyads.com (Supabase proyek irsyads). Login lewat id.irsyads.com. Perubahan skema Ruang tetap migrasi di `ruang/supabase/migrations/` dan butuh persetujuan pemilik sebelum diterapkan.
+- Salinan dari monorepo irsyads yang tidak boleh disunting di sini: `ruang/src/features/apma/lesson-template.ts`, `ruang/src/irsyads-v1/`, `ruang/public/irsyads-v1/`.
+- AI cloud (`ruang-ai`) dijeda; hanya kuota gratis yang boleh dipakai.
+- `policy.md` adalah kebijakan privasi aplikasi Android lama (kamera untuk barcode, penyimpanan untuk berbagi gambar).
+- `PERAPIAN-2026-10-09.md` dan berkas `ruang/*_HANDOFF.md` adalah riwayat; cocokkan dengan kode.
+- Branch saat ini `codex/approved-service-brand-20261010` dengan banyak perubahan lokal belum di-commit (termasuk penghapusan `.idea/`). Jangan dibersihkan tanpa izin.

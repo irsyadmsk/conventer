@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { supabase } from './supabase'
 import { useAuth } from './auth'
 
@@ -18,25 +18,47 @@ const KOSONG: StatusAkses = { admin: false, boleh: false, status: null }
  */
 export function useAkses(fitur: 'apma' = 'apma') {
   const { user } = useAuth()
-  const [akses, setAkses] = useState<StatusAkses | null>(null)
+  const uid = user?.id ?? null
+  const owner = useRef(uid)
+  owner.current = uid
+  const generation = useRef(0)
+  const [hasil, setHasil] = useState<{ owner: string | null; akses: StatusAkses } | null>(null)
+  const akses = hasil?.owner === uid ? hasil.akses : null
 
   const muat = useCallback(async () => {
-    if (!user) return setAkses(KOSONG)
-    const { data, error } = await supabase.rpc('studio_status_akses', { p_fitur: fitur })
-    setAkses(error ? KOSONG : { ...KOSONG, ...(data as StatusAkses) })
-  }, [user, fitur])
+    const request = ++generation.current
+    if (!uid) { setHasil({ owner: null, akses: KOSONG }); return }
+    try {
+      const { data, error } = await supabase.rpc('studio_status_akses', { p_fitur: fitur })
+      if (request !== generation.current || owner.current !== uid) return
+      // A failed refresh must close the UI, never retain an earlier approval.
+      const valid = !error && data && typeof data.boleh === 'boolean' && typeof data.admin === 'boolean'
+      setHasil({ owner: uid, akses: valid ? { ...KOSONG, ...(data as StatusAkses) } : KOSONG })
+    } catch {
+      if (request === generation.current && owner.current === uid) setHasil({ owner: uid, akses: KOSONG })
+    }
+  }, [uid, fitur])
 
   useEffect(() => {
-    muat()
+    void muat()
+    const refresh = () => { if (!document.hidden) void muat() }
+    addEventListener('focus', refresh)
+    document.addEventListener('visibilitychange', refresh)
+    return () => {
+      generation.current++
+      removeEventListener('focus', refresh)
+      document.removeEventListener('visibilitychange', refresh)
+    }
   }, [muat])
 
   const ajukan = useCallback(
     async (alasan: string) => {
+      if (!uid || owner.current !== uid) throw new Error('Sesi berubah. Masuk kembali.')
       const { error } = await supabase.rpc('studio_ajukan_akses', { p_fitur: fitur, p_alasan: alasan })
       if (error) throw error
-      await muat()
+      if (owner.current === uid) await muat()
     },
-    [fitur, muat],
+    [fitur, muat, uid],
   )
 
   return { akses, memuat: akses === null, muatUlang: muat, ajukan }

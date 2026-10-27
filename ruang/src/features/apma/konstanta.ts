@@ -1,3 +1,4 @@
+import { lessonMinutes } from './lesson-template'
 import type { AnalisisAudit } from './model'
 import type { AppFormData, DocumentDesign, ModuleBlock, SchoolProfile } from './types'
 
@@ -100,7 +101,7 @@ export const desainBawaan: DocumentDesign = {
   fontFamily: 'sans-serif',
   marginSize: 'normal',
   headerText: 'MODUL AJAR',
-  footerText: 'Disusun dengan Ruang · irsyads.com',
+  footerText: 'Created with Irsyads LessonCraft · irsyads.com',
   showCover: true,
   useIcons: true,
   showPageNumbers: true,
@@ -119,7 +120,7 @@ export type KontenModul = {
 
 /** Durasi per sesi mengikuti aturan APMA asli. */
 export function hitungDurasi(f: AppFormData): AppFormData {
-  const menit = parseInt(f.lamaWaktu.replace(/(\d+)\s*x\s*(\d+)/i, (_, a, b) => String(Number(a) * Number(b))).replace(/\D/g, ''), 10) || 0
+  const menit = lessonMinutes(f.lamaWaktu)
   const total = f.jumlahPertemuan * menit
   let pendahuluan = 0
   let penutup = 0

@@ -66,6 +66,15 @@
   --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
 }
 
+/* Shared controls use canonical text ink; Toolkit's accent-ink utility is
+   intentionally the foreground ON an accent button. Keep that utility intact. */
+.irsyads-navigation, .irsyads-appearance {
+  --color-accent-ink: var(--irsyads-color-accent-ink);
+  --color-on-brand: var(--irsyads-color-on-brand);
+  --color-muted: var(--irsyads-color-muted);
+  --font-serif: var(--irsyads-font-serif);
+}
+
 @layer base {
   /* Anak kisi tanpa kolom eksplisit (mis. `grid gap-4 lg:grid-cols-3`) di
      ponsel memakai lebar min-content-nya: satu judul panjang bertanda

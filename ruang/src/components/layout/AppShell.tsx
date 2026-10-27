@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link, NavLink, useLocation, useOutlet } from 'react-router-dom'
-import { AnimatePresence, motion } from 'framer-motion'
-import { ArrowLeft, LayoutGrid, LogOut, Moon, Search, Sun, Users } from 'lucide-react'
+import { motion } from 'framer-motion'
+import { ArrowLeft, LayoutGrid, LogOut, Search, Users } from 'lucide-react'
 import { ALAT, GRUP, type Grup } from '@/tools'
 import { useAuth } from '@/lib/auth'
 import { useFamily } from '@/lib/family'
@@ -14,10 +14,11 @@ import { Avatar, Kbd } from '@/components/ui/Controls'
 import { IconButton } from '@/components/ui/Button'
 import { Dialog } from '@/components/ui/Dialog'
 import { CommandPalette } from './CommandPalette'
-import { Logo, LogoMark } from './Logo'
-import { Ekosistem } from './Ekosistem'
+import { Logo } from './Logo'
+import { SharedNavigation } from './SharedNavigation'
+import AppearancePreferences from '@/lib/appearance-preferences'
 
-const URUTAN: Grup[] = ['utama', 'aksara', 'sandi', 'hitung', 'teks', 'pendidikan', 'akun']
+const URUTAN: Grup[] = ['utama', 'aksara', 'sandi', 'hitung', 'teks', 'pendidikan', 'kreasi', 'akun']
 
 function aktifUntuk(path: string, loc: string) {
   if (path === '/') return loc === '/'
@@ -83,7 +84,7 @@ function NavDaftar({ onPilih }: { onPilih?: () => void }) {
 }
 
 function AkunMini() {
-  const { namaTampil, profil, user, keluar } = useAuth()
+  const { namaTampil, profil, user, keluar, keluarSibuk } = useAuth()
   const { keluarga } = useFamily()
   return (
     <div className="flex items-center gap-2.5 rounded-2xl border border-line bg-surface p-2.5">
@@ -92,7 +93,7 @@ function AkunMini() {
         <p className="truncate text-[13.5px] font-bold">{namaTampil}</p>
         <p className="truncate text-xs text-ink-3">{keluarga ? `Keluarga ${keluarga.name}` : user?.email}</p>
       </div>
-      <IconButton label="Keluar" ukuran="sm" onClick={() => keluar()}>
+      <IconButton label="Keluar" ukuran="sm" disabled={keluarSibuk} onClick={() => keluar()}>
         <LogOut />
       </IconButton>
     </div>
@@ -102,7 +103,7 @@ function AkunMini() {
 export function AppShell() {
   const loc = useLocation()
   const outlet = useOutlet()
-  const { prefs, set, gelap } = usePrefs()
+  const { prefs, set } = usePrefs()
   const { keluarga, anggota } = useFamily()
   const { namaTampil, profil } = useAuth()
   const [palet, setPalet] = useState(false)
@@ -123,7 +124,7 @@ export function AppShell() {
   useEffect(() => {
     const a = [...ALAT].sort((x, y) => y.path.length - x.path.length).find((x) => aktifUntuk(x.path, loc.pathname))
     if (!a) return
-    document.title = a.id === 'beranda' ? 'Ruang · Irsyads' : `${a.nama} · Ruang`
+    document.title = a.id === 'beranda' ? 'Irsyads Toolkit' : `${a.nama} · Irsyads Toolkit`
     if (['beranda', 'pengaturan'].includes(a.id)) return
     catat(a.id, 'buka')
     const r = [a.id, ...(prefs.recentTools ?? []).filter((x) => x !== a.id)].slice(0, 6)
@@ -145,7 +146,7 @@ export function AppShell() {
 
       {/* Bilah samping (desktop) */}
       <aside className="sticky top-0 hidden h-dvh flex-col gap-4 border-r border-line bg-bg-2/60 px-3 py-5 lg:flex">
-        <Link to="/" className="px-2" aria-label="Ruang — beranda">
+        <Link to="/" className="px-2" aria-label="Irsyads Toolkit — home">
           <Logo />
         </Link>
         <button
@@ -173,10 +174,7 @@ export function AppShell() {
         {/* Bilah atas */}
         <header className="sticky top-0 z-40 border-b border-line/70 bg-bg/80 backdrop-blur-xl">
           <div className="mx-auto flex h-16 max-w-[1320px] items-center gap-2 px-4 sm:px-6 lg:px-10">
-            <Link to="/" className="flex items-center gap-2 lg:hidden" aria-label="Ruang — beranda">
-              <LogoMark size={34} />
-              <span className="font-display text-lg font-semibold">Ruang</span>
-            </Link>
+            <SharedNavigation />
             <div className="flex-1" />
             {keluarga && (
               <Link
@@ -199,21 +197,7 @@ export function AppShell() {
             <IconButton label="Cari (Ctrl K)" onClick={() => setPalet(true)} className="lg:hidden">
               <Search />
             </IconButton>
-            <Ekosistem />
-            <IconButton label={gelap ? 'Mode terang' : 'Mode gelap'} onClick={() => set({ theme: gelap ? 'light' : 'dark' })}>
-              <AnimatePresence mode="wait" initial={false}>
-                <motion.span
-                  key={gelap ? 'm' : 's'}
-                  initial={{ rotate: -90, scale: 0, opacity: 0 }}
-                  animate={{ rotate: 0, scale: 1, opacity: 1 }}
-                  exit={{ rotate: 90, scale: 0, opacity: 0 }}
-                  transition={{ duration: 0.22 }}
-                  className="flex"
-                >
-                  {gelap ? <Sun /> : <Moon />}
-                </motion.span>
-              </AnimatePresence>
-            </IconButton>
+            <AppearancePreferences compact />
             <Link to="/pengaturan" className="ml-1 rounded-full lg:hidden" aria-label="Pengaturan akun">
               <Avatar nama={namaTampil} url={profil?.avatar_url} ukuran={34} />
             </Link>

@@ -15,13 +15,15 @@ import { Input, Select, Textarea } from '@/components/ui/Field'
 import { Switch } from '@/components/ui/Controls'
 import { useToast } from '@/components/ui/Toast'
 import { FASE_DESCRIPTIONS, FASE_MAPPING, JENJANG_OPTIONS, KBC_DATA, type AppFormData, type SchoolProfile } from './types'
-import { assemblePrompt, parseGeneratedBlocks, replaceRegulatoryTerms } from './utils'
+import { parseGeneratedBlocks, replaceRegulatoryTerms } from './utils'
 import { bacaBerkas } from './berkas'
 import { KURIKULUM, MODEL, PROFIL_LULUSAN, desainBawaan, formBawaan, hitungDurasi, sekolahBawaan, type KontenModul } from './konstanta'
 import { auditLokal } from './model'
+import { useAuth } from '@/lib/auth'
+import { kunciDrafAkun } from '@/lib/account-scope'
 
 const KUNCI_DRAF = 'ruang:apma:draf'
-const TAHAP = ['Membaca identitas & capaian pembelajaran', 'Merumuskan tujuan & KKTP', 'Menyusun langkah pembelajaran tiap pertemuan', 'Membuat LKPD, rubrik & soal HOTS', 'Menyusun pengayaan, remedial & glosarium', 'Memeriksa nomenklatur terbaru']
+const TAHAP = ['Membaca identitas & capaian pembelajaran', 'Merumuskan tujuan & KKTP', 'Menyusun langkah pembelajaran tiap pertemuan', 'Menyiapkan template LKPD dan rubrik', 'Menyusun pengayaan, remedial & glosarium', 'Menandai bagian yang perlu ditinjau guru']
 
 function Cek({ label, checked, onChange }: { label: string; checked: boolean; onChange: () => void }) {
   return (
@@ -33,6 +35,8 @@ function Cek({ label, checked, onChange }: { label: string; checked: boolean; on
 }
 
 export default function Wizard() {
+  const { user } = useAuth()
+  const draftKey = kunciDrafAkun(KUNCI_DRAF, user?.id)
   const nav = useNavigate()
   const toast = useToast()
   const { prefs } = usePrefs()
@@ -42,7 +46,7 @@ export default function Wizard() {
 
   const [form, setForm] = useState<AppFormData>(() => {
     try {
-      const d = localStorage.getItem(KUNCI_DRAF)
+      const d = localStorage.getItem(draftKey)
       if (d) return { ...formBawaan(school), ...JSON.parse(d), uploadedText: null, uploadedImage: null }
     } catch {
       /* abaikan */
@@ -61,11 +65,11 @@ export default function Wizard() {
       const { uploadedText: _t, uploadedImage: _i, ...simpanDraf } = form
       void _t
       void _i
-      localStorage.setItem(KUNCI_DRAF, JSON.stringify(simpanDraf))
+      localStorage.setItem(draftKey, JSON.stringify(simpanDraf))
     } catch {
       /* penuh */
     }
-  }, [form])
+  }, [form, draftKey])
 
   // Jangan tutup tab saat AI sedang menyusun.
   useEffect(() => {
@@ -115,9 +119,9 @@ export default function Wizard() {
     setProses({ tahap: 0 })
     const timer = setInterval(() => setProses((p) => (p && !p.galat ? { tahap: Math.min(p.tahap + 1, TAHAP.length - 1) } : p)), 9000)
     try {
-      const h = await panggilAI('apma_modul', { prompt: assemblePrompt(f), gambar: f.uploadedImage ?? undefined })
+      const h = await panggilAI('apma_modul', { konteks: f })
       const blocks = parseGeneratedBlocks(replaceRegulatoryTerms(h.teks ?? '')).map((b) => ({ ...b, content: replaceRegulatoryTerms(b.content) }))
-      if (!blocks.length) throw new Error('Jawaban AI tidak dapat diurai. Coba lagi.')
+      if (!blocks.length) throw new Error('Draf template tidak dapat diurai. Periksa isian.')
       const { uploadedText: _t, uploadedImage: _i, schoolProfile: _s, documentDesign: _d, ...formBersih } = f
       void _t
       void _i
@@ -128,12 +132,12 @@ export default function Wizard() {
         blocks,
         design: { ...desainBawaan, ...((prefs.apma?.design as object) ?? {}) },
         school,
-        versions: [{ id: `v-${Date.now()}`, waktu: new Date().toISOString(), label: 'Hasil AI pertama', blocks }],
+        versions: [{ id: `v-${Date.now()}`, waktu: new Date().toISOString(), label: 'Draf template lokal', blocks }],
         audit: auditLokal(blocks),
       }
       const it = await simpan({ kind: 'apma', tool: 'apma', title: `${f.mapel} — ${f.materi}`.slice(0, 200), content: konten, bagikan })
       catat('apma', 'apma_modul', (h.teks ?? '').length)
-      localStorage.removeItem(KUNCI_DRAF)
+      localStorage.removeItem(draftKey)
       if (h.terpotong) toast('Modul mungkin terpotong', { nada: 'info', isi: 'Periksa lampiran terakhir dan lengkapi dengan Copilot.' })
       nav(`/modul-ajar/${it.id}`, { replace: true })
     } catch (e) {
@@ -154,7 +158,7 @@ export default function Wizard() {
           >
             {proses.galat ? <X className="size-9" /> : <GraduationCap className="size-9" />}
           </motion.div>
-          <h1 className="mt-6 font-display text-2xl font-semibold">{proses.galat ? 'Belum berhasil' : 'AI sedang menyusun modul ajar'}</h1>
+          <h1 className="mt-6 font-display text-2xl font-semibold">{proses.galat ? 'Belum berhasil' : 'Creating a local lesson draft'}</h1>
           <p className="mt-2 text-ink-2">{proses.galat ?? `${form.mapel} · ${form.materi}. Biasanya 1–2 menit — jangan tutup halaman ini.`}</p>
           {!proses.galat && (
             <ol className="mt-8 flex flex-col gap-2 text-left">
@@ -271,7 +275,7 @@ export default function Wizard() {
             </div>
             <Input id="apma-mapel" label="Mata pelajaran" value={form.mapel} onChange={(e) => set('mapel', e.target.value)} galat={galat.mapel} placeholder="Mis. Sosiologi" />
             <Input label="Elemen (opsional)" value={form.elemen} onChange={(e) => set('elemen', e.target.value)} placeholder="Mis. Pemahaman konsep" />
-            <Textarea className="md:col-span-2" label="Capaian Pembelajaran (opsional)" value={form.cp} onChange={(e) => set('cp', e.target.value)} bantuan="Kosongkan agar AI menjabarkan CP sesuai fase." />
+            <Textarea className="md:col-span-2" label="Capaian Pembelajaran (opsional)" value={form.cp} onChange={(e) => set('cp', e.target.value)} bantuan="Paste the CP from your curriculum document. Missing CP stays marked for teacher review." />
           </motion.div>
         ) : (
           <motion.div key="2" initial={{ opacity: 0, x: 24 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -24 }} className="flex flex-col gap-4">
@@ -348,7 +352,7 @@ export default function Wizard() {
             <div className="card grid gap-4 p-5 sm:p-6 md:grid-cols-2">
               <div>
                 <p className="mb-1 font-bold">Rujukan buku (opsional)</p>
-                <p className="mb-3 text-sm text-ink-3">PDF/DOCX dibaca di perangkat Anda; foto halaman buku dikirim ke AI.</p>
+                <p className="mb-3 text-sm text-ink-3">PDF/DOCX text is read on your device. Images are not sent to cloud AI or analysed.</p>
                 <label className="flex cursor-pointer items-center gap-3 rounded-2xl border-2 border-dashed border-line-2 p-4 transition-colors hover:border-accent hover:bg-accent-soft/40">
                   {berkas?.status === 'memuat' ? <Loader2 className="size-5 animate-spin text-accent-text" /> : berkas?.status === 'ok' ? <FileText className="size-5 text-success" /> : <Upload className="size-5 text-ink-3" />}
                   <span className="min-w-0 flex-1 truncate text-sm font-semibold">{berkas ? berkas.nama : 'Pilih PDF, DOCX, JPG, atau PNG'}</span>
@@ -407,7 +411,7 @@ export default function Wizard() {
           </Button>
         ) : (
           <Button varian="primary" ikon={<Sparkles />} onClick={buat}>
-            Susun dengan AI
+            Create local draft
           </Button>
         )}
       </div>

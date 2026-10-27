@@ -2,6 +2,8 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { Delete, History, Trash2 } from 'lucide-react'
 import { catat } from '@/lib/activity'
+import { useAuth } from '@/lib/auth'
+import { kunciDrafAkun } from '@/lib/account-scope'
 import { bunyi } from '@/lib/sound'
 import { cn, waktuRelatif } from '@/lib/utils'
 import { Button, IconButton } from '@/components/ui/Button'
@@ -60,21 +62,23 @@ const ILMIAH: Tombol[] = [
   { l: 'Ans', aksi: 'ans', aria: 'Jawaban terakhir' },
 ]
 
-function bacaRiwayat(): Riwayat[] {
+function bacaRiwayat(key: string): Riwayat[] {
   try {
-    return JSON.parse(localStorage.getItem(KUNCI) || '[]')
+    return JSON.parse(localStorage.getItem(key) || '[]')
   } catch {
     return []
   }
 }
 
 export default function Umum() {
+  const { user } = useAuth()
+  const historyKey = kunciDrafAkun(KUNCI, user?.id)
   const [ekspr, setEkspr] = useState('')
   const [ilmiah, setIlmiah] = useState(() => matchMedia('(min-width: 768px)').matches)
   const [sudut, setSudut] = useState<ModeSudut>('deg')
   const [ans, setAns] = useState(0)
   const [memori, setMemori] = useState<number | null>(null)
-  const [riwayat, setRiwayat] = useState<Riwayat[]>(bacaRiwayat)
+  const [riwayat, setRiwayat] = useState<Riwayat[]>(() => bacaRiwayat(historyKey))
   const [galat, setGalat] = useState<string | null>(null)
   const [baruSelesai, setBaruSelesai] = useState(false)
   const [goyang, setGoyang] = useState(0)
@@ -82,11 +86,11 @@ export default function Umum() {
 
   useEffect(() => {
     try {
-      localStorage.setItem(KUNCI, JSON.stringify(riwayat.slice(0, 50)))
+      localStorage.setItem(historyKey, JSON.stringify(riwayat.slice(0, 50)))
     } catch {
       /* abaikan */
     }
-  }, [riwayat])
+  }, [riwayat, historyKey])
 
   // Pratinjau langsung saat mengetik.
   const pratinjau = useMemo(() => {

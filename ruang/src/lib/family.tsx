@@ -1,6 +1,7 @@
-import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from 'react'
+import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
 import { supabase } from './supabase'
 import { useAuth } from './auth'
+import { pastikanAkun } from './account-scope'
 
 export type Peran = 'owner' | 'admin' | 'anggota' | 'anak'
 export type Keluarga = { id: string; name: string; owner_id: string; invite_code: string; created_at: string }
@@ -36,6 +37,8 @@ export function FamilyProvider({ children }: { children: ReactNode }) {
   const [keluarga, setKeluarga] = useState<Keluarga | null>(null)
   const [anggota, setAnggota] = useState<Anggota[]>([])
   const [memuat, setMemuat] = useState(true)
+  const active = useRef(true)
+  useEffect(() => { active.current = true; return () => { active.current = false } }, [])
 
   const muatUlang = useCallback(async () => {
     if (!user) {
@@ -81,12 +84,13 @@ export function FamilyProvider({ children }: { children: ReactNode }) {
 
   const rpc = useCallback(
     async (fn: string, args?: Record<string, unknown>) => {
+      await pastikanAkun(supabase.auth, user?.id, () => active.current)
       const { data, error } = await supabase.rpc(fn, args)
       if (error) throw error
       await muatUlang()
       return data
     },
-    [muatUlang],
+    [muatUlang, user],
   )
 
   const nilai = useMemo<Nilai>(

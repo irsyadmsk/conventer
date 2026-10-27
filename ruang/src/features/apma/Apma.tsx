@@ -25,8 +25,8 @@ function Daftar({ admin }: { admin: boolean }) {
     <div>
       <PageHeader
         eyebrow="Pendidikan"
-        judul="Modul Ajar (APMA)"
-        deskripsi="Susun modul ajar Kurikulum Merdeka, Kurikulum Berbasis Cinta, atau kurikulum sekolah dalam hitungan menit — lengkap dengan LKPD, rubrik, asesmen, dan audit nomenklatur terbaru."
+        judul="Irsyads LessonCraft"
+        deskripsi="Create an editable lesson draft with local templates, worksheets and rubrics. Review curriculum and assessment before use."
         ikon={<GraduationCap />}
         aksi={
           <>
@@ -51,7 +51,7 @@ function Daftar({ admin }: { admin: boolean }) {
         <EmptyState
           ikon={<GraduationCap />}
           judul="Belum ada modul ajar"
-          isi="Isi identitas dan rencana pembelajaran, lalu AI menyusun modul lengkap yang bisa Anda sunting, audit, dan cetak."
+          isi="Add your lesson details to create a local draft you can edit, review and print. No cloud AI or API key is used."
           aksi={
             <Button varian="primary" ikon={<FilePlus2 />} onClick={() => nav('/modul-ajar/baru')}>
               Buat modul pertama

@@ -1,0 +1,54 @@
+/* Local DEV preview only; creates a QA project without touching production. */
+(async () => {
+  const passed = [];
+  const check = (ok, text) => { if (!ok) throw Error(text); passed.push(text); };
+  const sleep = ms => new Promise(r => setTimeout(r, ms));
+  const button = text => [...document.querySelectorAll('button')].find(n => n.textContent.trim() === text);
+  const field = text => { const label = [...document.querySelectorAll('label')].find(n => n.textContent.trim() === text); if (!label) throw Error('Missing field: '+text); return document.getElementById(label.htmlFor); };
+  const change = async (node, value) => { const proto = node instanceof HTMLSelectElement ? HTMLSelectElement.prototype : node instanceof HTMLTextAreaElement ? HTMLTextAreaElement.prototype : HTMLInputElement.prototype; Object.getOwnPropertyDescriptor(proto,'value').set.call(node,value);node.dispatchEvent(new Event(node instanceof HTMLSelectElement ? 'change':'input',{bubbles:true}));await sleep(20); };
+  const click = async text => { const node=button(text);if(!node)throw Error('Missing button: '+text);node.click();await sleep(20); };
+  const until = async fn => { for(let i=0;i<100;i++){if(fn())return;await sleep(30);}throw Error('UI timeout'); };
+  const canvas = () => document.querySelector('svg[aria-label^="Kanvas gambar"]');
+  try {
+    check(location.hostname==='127.0.0.1'||location.hostname==='localhost','QA uses local application only');
+    check(document.querySelector('aside') && document.querySelector('h1')?.textContent==='Studio Kreasi','Kreasi uses the original Toolkit shell');
+    const oldCount=field('Proyek aktif').options.length;
+    await click('Proyek baru');await change(field('Nama proyek'),'QA Toolkit');
+    check(field('Proyek aktif').options.length===oldCount+1,'New project preserves existing projects');
+    await change(field('Teks sandi'),'HALO');await click('Encode');
+    check(document.querySelector('output').textContent==='08/01/12/15','Custom cipher encodes with project rules');
+    await click('Uji roundtrip');check(document.querySelector('output').textContent==='HALO','Roundtrip restores exact text');
+    await change(field('Teks sandi'),'HALO UJI DRAF');await click('Aksara Lab');await click('Sandi Lab');
+    check(field('Teks sandi').value==='HALO UJI DRAF','Cipher draft survives lab changes');
+    const firstCode=document.querySelector('input[aria-label="Kode aturan 1"]');await change(firstCode,'02');
+    check(button('Encode').disabled && document.body.innerText.includes('bentrok'),'Collision blocks conversion with specific feedback');
+    await change(document.querySelector('input[aria-label="Kode aturan 1"]'),'01');check(!button('Encode').disabled,'Fixing collision restores conversion');
+    const projectCount=field('Proyek aktif').options.length;await click('Duplikat');
+    check(field('Proyek aktif').options.length===projectCount+1,'Duplicate creates another project');
+    await click('Hapus');check(!!document.querySelector('[role="dialog"]'),'Deletion asks for confirmation');await click('Batal');
+    check(field('Proyek aktif').options.length===projectCount+1,'Cancel preserves the duplicate');
+    await click('Hapus');await click('Hapus proyek');check(field('Proyek aktif').options.length===projectCount,'Confirmed deletion removes only the selected project');
+    const qa=[...field('Proyek aktif').options].find(o=>o.textContent==='QA Toolkit');await change(field('Proyek aktif'),qa.value);
+    await click('Aksara Lab');await change(field('Sumber / gabungan'),'a');await click('Tambah / pilih');await click('Garis');
+    check(canvas().querySelectorAll('path').length===4,'Shape button creates an editable stroke');
+    await click('Undo');check(canvas().querySelectorAll('path').length===3,'Undo restores prior geometry');
+    await click('Redo');check(canvas().querySelectorAll('path').length===4,'Redo restores the stroke');
+    const prior=canvas().querySelector('path:last-child').getAttribute('d');await click('Cermin ↔');check(canvas().querySelector('path:last-child').getAttribute('d')!==prior,'Mirror changes geometry');
+    await change(field('Teks contoh'),'aaa');check(document.querySelector('img[alt="Pratinjau teks aksara"]')?.src.startsWith('data:image/svg+xml'),'Text preview uses generated SVG');
+    await click('Unduh SVG');await click('Unduh PNG');await click('Lembar simbol SVG');
+    await click('Font Lab');await change(field('Keluarga font'),'QA Toolkit Font');await click('Bangun & muat font');await until(()=>!button('Unduh OTF').disabled);
+    check([...document.fonts].some(f=>f.family.startsWith('Kreasi-')&&f.status==='loaded'),'Real OpenType font loads through FontFace');
+    await click('Unduh OTF');await click('Unduh pemetaan');
+    await click('Aksara Lab');await change(field('Sumber / gabungan'),'ng');await click('Tambah / pilih');await click('Kotak');await change(field('Teks contoh'),'a ng');
+    await click('Font Lab');await click('Bangun & muat font');await until(()=>document.querySelector('[role="alert"]')?.textContent.includes('satu karakter'));
+    check(button('Unduh OTF').disabled,'Latin mode rejects multi-character source');
+    await change(field('Pemetaan Unicode'),'pua');await click('Bangun & muat font');await until(()=>!button('Unduh OTF').disabled);
+    check(document.body.innerText.includes('U+E000')&&document.body.innerText.includes('U+E001'),'PUA mapping includes both drawn symbols');
+    await click('Ekspor');
+    await until(()=>[...document.querySelectorAll('[role="status"]')].some(n=>n.textContent.includes('Tersimpan di perangkat ini')));
+    const key=Object.keys(localStorage).find(k=>k.startsWith('ruang:kreasi:v1:'));
+    const saved=JSON.parse(localStorage.getItem(key)), active=saved.projects.find(p=>p.id===saved.activeId);
+    check(active.name==='QA Toolkit'&&active.glyphs.length===2&&active.sample==='a ng','Autosave reads back project geometry and sample under account scope');
+    return {passed,failed:[],key,projectId:active.id};
+  } catch(e) { return {passed,failed:[e.message],stack:e.stack}; }
+})();

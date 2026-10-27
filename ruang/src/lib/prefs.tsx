@@ -1,8 +1,9 @@
-import { sharedAppearance, publishAppearance, mergeAccountAppearance } from './appearance'
+import { sharedAppearance, SHARED_PALETTE, mergeAccountAppearance } from './appearance'
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
 import { MotionConfig } from 'framer-motion'
 import { supabase } from './supabase'
 import { useAuth } from './auth'
+import { kunciDrafAkun, pastikanAkun } from './account-scope'
 import { setSuaraAktif } from './sound'
 
 export type Palet = 'krem' | 'hutan' | 'samudra' | 'senja' | 'aurora' | 'tanah'
@@ -36,9 +37,9 @@ const KUNCI = 'ruang:prefs'
 type Nilai = { prefs: Prefs; set: (p: Partial<Prefs>) => void; gelap: boolean }
 const Ctx = createContext<Nilai | null>(null)
 
-function bacaLokal(): Prefs {
+function bacaLokal(key: string): Prefs {
   try {
-    return sharedAppearance({ ...BAWAAN, ...JSON.parse(localStorage.getItem(KUNCI) || '{}') })
+    return sharedAppearance({ ...BAWAAN, ...JSON.parse(localStorage.getItem(key) || '{}') })
   } catch {
     return sharedAppearance(BAWAAN)
   }
@@ -46,10 +47,16 @@ function bacaLokal(): Prefs {
 
 export function PrefsProvider({ children }: { children: ReactNode }) {
   const { user } = useAuth()
-  const [prefs, setPrefs] = useState<Prefs>(bacaLokal)
+  const localKey = user ? kunciDrafAkun(KUNCI, user.id) : KUNCI + ':tamu'
+  const [prefs, setPrefs] = useState<Prefs>(() => bacaLokal(localKey))
   const [sistemGelap, setSistemGelap] = useState(() => matchMedia('(prefers-color-scheme: dark)').matches)
   const siapSimpan = useRef(false)
   const timer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined)
+  const active = useRef(true)
+  useEffect(() => {
+    active.current = true
+    return () => { active.current = false; clearTimeout(timer.current) }
+  }, [])
 
   useEffect(() => {
     const mq = matchMedia('(prefers-color-scheme: dark)')
@@ -68,6 +75,7 @@ export function PrefsProvider({ children }: { children: ReactNode }) {
       .eq('user_id', user.id)
       .maybeSingle()
       .then(({ data }) => {
+        if (!active.current) return
         if (data?.prefs) setPrefs((p) => mergeAccountAppearance(p, data.prefs as Partial<Prefs>))
         siapSimpan.current = true
       })
@@ -75,37 +83,43 @@ export function PrefsProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     const sync = () => setPrefs(p => sharedAppearance(p))
+    const unsubscribe = window.IrsyadsPreferences?.subscribe(sync)
     window.addEventListener('focus', sync)
     window.addEventListener('pageshow', sync)
     window.addEventListener('storage', sync)
-    return () => { window.removeEventListener('focus', sync); window.removeEventListener('pageshow', sync); window.removeEventListener('storage', sync) }
+    return () => { unsubscribe?.(); window.removeEventListener('focus', sync); window.removeEventListener('pageshow', sync); window.removeEventListener('storage', sync) }
   }, [])
 
   const gelap = prefs.theme === 'dark' || (prefs.theme === 'system' && sistemGelap)
 
   useEffect(() => {
     const el = document.documentElement
-    publishAppearance(prefs)
-    if (prefs.motion === 'reduce') el.dataset.motion = 'reduce'
-    else delete el.dataset.motion
     document.querySelectorAll('meta[name="theme-color"]').forEach((m) => m.setAttribute('content', getComputedStyle(el).getPropertyValue('--bg').trim() || (gelap ? '#141414' : '#f7f8fa')))
     setSuaraAktif(prefs.sound)
     try {
-      localStorage.setItem(KUNCI, JSON.stringify(prefs))
+      const text = JSON.stringify(prefs)
+      if (localStorage.getItem(localKey) !== text) localStorage.setItem(localKey, text)
     } catch {
       /* penyimpanan penuh / diblokir */
     }
-  }, [prefs, gelap])
+  }, [prefs, gelap, localKey])
 
   const set = useCallback(
     (p: Partial<Prefs>) => {
       if (p.theme || p.palette) window.__irsyadsHadAppearance = true
+      if (p.theme || p.palette || p.motion) window.dispatchEvent(new CustomEvent('irsyads-appearance-change', { detail: {
+        ...(p.theme ? {theme:p.theme} : {}), ...(p.palette ? {palette:SHARED_PALETTE[p.palette]} : {}), ...(p.motion ? {motion:p.motion} : {}),
+      } }))
       setPrefs((lama) => {
         const baru = { ...lama, ...p }
+        if (JSON.stringify(baru) === JSON.stringify(lama)) return lama
         if (user && siapSimpan.current) {
           clearTimeout(timer.current)
-          timer.current = setTimeout(() => {
-            supabase.from('studio_preferences').upsert({ user_id: user.id, prefs: baru }).then()
+          timer.current = setTimeout(async () => {
+            try {
+              await pastikanAkun(supabase.auth, user.id, () => active.current)
+              await supabase.from('studio_preferences').upsert({ user_id: user.id, prefs: baru })
+            } catch { /* Preserve the local account preferences if the session changed. */ }
           }, 700)
         }
         return baru
@@ -115,7 +129,7 @@ export function PrefsProvider({ children }: { children: ReactNode }) {
   )
 
   const nilai = useMemo(() => ({ prefs, set, gelap }), [prefs, set, gelap])
-  const reducedMotion = prefs.motion === 'reduce' ? 'always' : prefs.motion === 'full' ? 'never' : 'user'
+  const reducedMotion = prefs.motion === 'reduce' ? 'always' : 'user'
   return (
     <Ctx.Provider value={nilai}>
       <MotionConfig reducedMotion={reducedMotion}>{children}</MotionConfig>

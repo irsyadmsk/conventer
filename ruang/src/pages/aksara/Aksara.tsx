@@ -5,6 +5,8 @@ import { Sunda } from '@/legacy'
 import { catat } from '@/lib/activity'
 import { cn } from '@/lib/utils'
 import { bunyi } from '@/lib/sound'
+import { useAuth } from '@/lib/auth'
+import { kunciDrafAkun } from '@/lib/account-scope'
 import { PageHeader } from '@/components/ui/Layout'
 import { Button, IconButton } from '@/components/ui/Button'
 import { CopyButton, Segmented } from '@/components/ui/Controls'
@@ -16,10 +18,12 @@ type Arah = 'l2s' | 's2l'
 const KUNCI_SIMPAN = 'ruang:aksara:draf'
 
 export default function Aksara() {
+  const { user } = useAuth()
+  const draftKey = kunciDrafAkun(KUNCI_SIMPAN, user?.id)
   const [arah, setArah] = useState<Arah>('l2s')
   const [teks, setTeks] = useState(() => {
     try {
-      return localStorage.getItem(KUNCI_SIMPAN) ?? ''
+      return localStorage.getItem(draftKey) ?? ''
     } catch {
       return ''
     }
@@ -38,12 +42,12 @@ export default function Aksara() {
 
   useEffect(() => {
     try {
-      localStorage.setItem(KUNCI_SIMPAN, teks)
+      localStorage.setItem(draftKey, teks)
     } catch {
       /* abaikan */
     }
     if (teks) catat('aksara', 'ubah', teks.length, { arah })
-  }, [teks, arah])
+  }, [teks, arah, draftKey])
 
   const latin = arah === 'l2s' ? teks : hasil
 

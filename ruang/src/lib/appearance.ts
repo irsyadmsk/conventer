@@ -1,11 +1,12 @@
 import type { Prefs, Palet } from './prefs'
+import type {} from './preference-contract'
 
 export const SHARED_PALETTE: Record<Palet, string> = { krem: 'krem', hutan: 'forest', samudra: 'ocean', senja: 'royal', aurora: 'aurora', tanah: 'earth' }
 declare global {
   interface Window {
     __irsyadsHadAppearance?: boolean
     IrsyadsLauncher?: { DEFAULT_LAUNCHER: {id:string;group:string}[]; readLauncher:()=>Promise<{id:string;group:string}[]> }
-    IrsyadsLanguage?: { preferredLanguage: () => 'id' | 'en' | 'ar' | null }
+    IrsyadsLanguage?: { preferredLanguage: () => 'id' | 'en' | 'ar' | 'zh' | null }
   }
 }
 function read(key: string, localKey: string): string | null {
@@ -18,15 +19,19 @@ function read(key: string, localKey: string): string | null {
 /** Appearance only: never copy account, APMA, sound or family settings into cookies. */
 export function sharedAppearance(prefs: Prefs, preferShared = true): Prefs {
   if (!preferShared) return prefs
-  const theme = read('irsyads-appearance-theme', 'irsyads-theme')
-  const palette = read('irsyads-appearance-palette', 'irsyads-palette')
+  const contract = window.IrsyadsPreferences?.get()
+  const theme = contract?.theme || read('irsyads-appearance-theme', 'irsyads-theme')
+  const palette = contract?.palette || read('irsyads-appearance-palette', 'irsyads-palette')
   const oldPalette = (Object.entries(SHARED_PALETTE).find(([, shared]) => shared === palette)?.[0] as Palet | undefined)
-  return { ...prefs, theme: theme === 'light' || theme === 'dark' || theme === 'system' ? theme : prefs.theme, palette: oldPalette || prefs.palette }
+  const next = { ...prefs, theme: theme === 'light' || theme === 'dark' || theme === 'system' ? theme : prefs.theme, palette: oldPalette || prefs.palette, motion: contract?.motion || prefs.motion }
+  return next.theme === prefs.theme && next.palette === prefs.palette && next.motion === prefs.motion ? prefs : next
 }
 export function publishAppearance(prefs: Prefs) {
-  window.dispatchEvent(new CustomEvent('irsyads-appearance-change', { detail: { theme: prefs.theme, palette: SHARED_PALETTE[prefs.palette] || 'krem' } }))
+  window.dispatchEvent(new CustomEvent('irsyads-appearance-change', { detail: { theme: prefs.theme, palette: SHARED_PALETTE[prefs.palette] || 'krem', motion: prefs.motion } }))
 }
 export function mergeAccountAppearance(current: Prefs, account: Partial<Prefs>): Prefs {
+  // The old Toolkit row remains private. Global appearance belongs to v2.
+  if (window.IrsyadsPreferences) return sharedAppearance({ ...current, ...account, theme: current.theme, palette: current.palette, motion: current.motion })
   const shared = sharedAppearance(current)
   const changedElsewhere = shared.theme !== current.theme || shared.palette !== current.palette
   const canonical = Object.entries(SHARED_PALETTE).find(([, value]) => value === account.palette)?.[0] as Palet | undefined

@@ -1,5 +1,7 @@
 import { createClient } from '@supabase/supabase-js'
 import { penyimpananSesi } from './sesi'
+import { bindPreferenceAccount } from './preferences-account'
+import { keluarTerikat } from './keluar-terikat'
 
 const url = import.meta.env.VITE_SUPABASE_URL as string
 const key = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY as string
@@ -18,6 +20,12 @@ export const supabase = createClient(url, key, {
   },
   realtime: { params: { eventsPerSecond: 5 } },
 })
+
+bindPreferenceAccount(supabase)
+export function keluarToolkit(expectedOwner: string) {
+  const storageKey = `sb-${new URL(url).hostname.split('.')[0]}-auth-token`
+  return keluarTerikat({ url, publicKey: key, storageKey, expectedOwner })
+}
 
 /** Pesan galat Supabase/Postgres yang ramah dibaca. */
 export function pesanGalat(e: unknown): string {

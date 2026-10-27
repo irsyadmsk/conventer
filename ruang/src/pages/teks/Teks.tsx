@@ -1,3 +1,5 @@
+import { useAuth } from '@/lib/auth'
+import { kunciDrafAkun } from '@/lib/account-scope'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { AnimatePresence, motion } from 'framer-motion'
@@ -101,9 +103,11 @@ function Teleprompter({ teks, tutup }: { teks: string; tutup: () => void }) {
 }
 
 export default function Teks() {
+  const { user } = useAuth()
+  const draftKey = kunciDrafAkun(KUNCI, user?.id)
   const [teks, setTeks] = useState(() => {
     try {
-      return localStorage.getItem(KUNCI) ?? ''
+      return localStorage.getItem(draftKey) ?? ''
     } catch {
       return ''
     }
@@ -113,12 +117,12 @@ export default function Teks() {
 
   useEffect(() => {
     try {
-      localStorage.setItem(KUNCI, teks)
+      localStorage.setItem(draftKey, teks)
     } catch {
       /* abaikan */
     }
     if (teks) catat('teks', 'ubah', teks.length)
-  }, [teks])
+  }, [teks, draftKey])
 
   const st = useMemo(() => DevCase.TextStats.analyze(teks), [teks])
   const kasus = useMemo(() => (teks.trim() ? DevCase.CaseConverter.getAllCases(teks.slice(0, 500)) : {}), [teks])

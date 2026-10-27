@@ -1,5 +1,5 @@
 import { useState, type FormEvent } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { KeyRound } from 'lucide-react'
 import { useAuth } from '@/lib/auth'
 import { pesanGalat } from '@/lib/supabase'
@@ -7,10 +7,12 @@ import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/Field'
 import { useToast } from '@/components/ui/Toast'
 import { AuthLayout } from './AuthLayout'
+import { tujuanToolkit } from '@/lib/sso'
 
 export default function AturSandi() {
   const { gantiSandi, user, memuat: memuatAuth } = useAuth()
   const nav = useNavigate()
+  const loc = useLocation()
   const toast = useToast()
   const [sandi, setSandi] = useState('')
   const [ulang, setUlang] = useState('')
@@ -26,7 +28,7 @@ export default function AturSandi() {
     try {
       await gantiSandi(sandi)
       toast('Kata sandi diperbarui')
-      nav('/', { replace: true })
+      nav(tujuanToolkit(new URLSearchParams(loc.search).get('lanjut'), window.location.origin), { replace: true })
     } catch (err) {
       setGalat(pesanGalat(err))
     } finally {

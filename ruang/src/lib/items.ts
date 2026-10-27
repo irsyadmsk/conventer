@@ -1,8 +1,9 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { supabase } from './supabase'
 import { useAuth } from './auth'
 import { useFamily } from './family'
 import { catat } from './activity'
+import { pastikanAkun } from './account-scope'
 
 export type JenisItem = 'snippet' | 'apma' | 'pipeline' | 'calc'
 
@@ -60,11 +61,17 @@ export function useItems<C = Record<string, unknown>>(opsi: Opsi = {}) {
 
 export function useItemAksi() {
   const { keluarga } = useFamily()
+  const { user } = useAuth()
+  const active = useRef(true)
+  useEffect(() => { active.current = true; return () => { active.current = false } }, [])
+  const guard = () => pastikanAkun(supabase.auth, user?.id, () => active.current)
   return {
     async simpan<C>(data: { kind: JenisItem; tool: string; title: string; content: C; bagikan?: boolean; tags?: string[] }) {
+      await guard()
       const { data: baris, error } = await supabase
         .from('studio_items')
         .insert({
+          owner_id: user!.id,
           kind: data.kind,
           tool: data.tool,
           title: data.title.slice(0, 200) || 'Tanpa judul',
@@ -79,14 +86,17 @@ export function useItemAksi() {
       return baris as Item<C>
     },
     async ubah(id: string, patch: Partial<Pick<Item, 'title' | 'content' | 'pinned' | 'tags' | 'family_id'>>) {
+      await guard()
       const { error } = await supabase.from('studio_items').update(patch).eq('id', id)
       if (error) throw error
     },
     async hapus(id: string) {
+      await guard()
       const { error } = await supabase.from('studio_items').delete().eq('id', id)
       if (error) throw error
     },
     async bagikan(id: string, ya: boolean) {
+      await guard()
       const { error } = await supabase
         .from('studio_items')
         .update({ family_id: ya && keluarga ? keluarga.id : null })

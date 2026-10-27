@@ -1,0 +1,102 @@
+.irsyads-navigation{position:relative;color:var(--color-ink);font:inherit;flex-shrink:0}
+.irsyads-navigation summary{display:flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:0 12px;border:1px solid var(--color-line);border-radius:12px;background:var(--color-surface);cursor:pointer;font-size:14px;font-weight:650;list-style:none}
+.irsyads-navigation summary::-webkit-details-marker{display:none}
+.irsyads-navigation summary:focus-visible,.irsyads-navigation a:focus-visible{outline:2px solid var(--color-accent-ink);outline-offset:3px}
+.irsyads-navigation summary:hover,.irsyads-navigation a:hover{background:var(--color-surface-2)}
+.irsyads-navigation-panel{position:absolute;inset-inline-end:0;top:calc(100% + 8px);width:280px;padding:8px;border:1px solid var(--color-line);border-radius:14px;background:var(--color-bg);z-index:90}
+.irsyads-navigation a{display:flex;align-items:center;gap:10px;min-height:48px;padding:10px 12px;border-radius:8px;font-size:14px;font-weight:600;color:var(--color-ink);text-decoration:none}
+.irsyads-navigation a svg:last-child:not(:first-child){margin-inline-start:auto}
+.irsyads-navigation-panel{width:min(560px,calc(100vw - 32px));max-height:calc(100dvh - 112px);overflow-y:auto;overscroll-behavior:contain;box-shadow:var(--shadow-2);padding:18px}
+.irsyads-navigation-heading{font-size:13px;font-weight:650;color:var(--color-muted);margin:2px 6px 14px}
+.irsyads-navigation-shortcuts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
+.irsyads-navigation-shortcuts a{align-items:flex-start;padding:12px;min-width:0;border:1px solid transparent}
+.irsyads-navigation-shortcuts a[aria-current]{border-color:var(--color-accent-ink);background:var(--color-surface-2)}
+.irsyads-navigation-shortcuts strong{display:block;font-size:13px;line-height:1.5}
+.irsyads-navigation-shortcuts small{display:block;font-size:11px;font-weight:400;line-height:1.6;color:var(--color-muted);margin-top:4px;overflow-wrap:anywhere}
+.irsyads-navigation-mark{display:grid;place-items:center;flex-shrink:0;width:28px;height:28px;border-radius:8px;background:var(--color-surface-2);color:var(--color-accent-ink);font:650 18px var(--font-serif)}
+.irsyads-navigation-shortcuts svg{flex-shrink:0;margin-top:5px}
+.irsyads-navigation-utilities{display:flex;flex-wrap:wrap;gap:4px;border-top:1px solid var(--color-line);padding-top:10px;margin-top:14px}
+.irsyads-navigation-utilities a{font-size:12px;flex:1;white-space:nowrap}
+@media(max-width:600px){.irsyads-navigation-shortcuts{grid-template-columns:1fr}.irsyads-navigation-shortcuts a{min-height:64px}.irsyads-navigation-utilities a{flex-basis:100%}}
+.irsyads-directory{width:min(100%,1000px);margin-inline:auto;padding:clamp(24px,5vw,64px) 24px;color:var(--color-ink)}
+.irsyads-directory-footer,.irsyads-service-footer{margin-top:40px;padding-top:20px;border-top:1px solid var(--color-line);font-size:12px;color:var(--color-muted);text-align:center;}
+.irsyads-directory h1{font:650 clamp(28px,4vw,46px)/1.15 var(--font-serif);letter-spacing:-.025em;max-width:24ch;text-wrap:balance;margin:0 0 18px}
+.irsyads-directory-lead{max-width:65ch;color:var(--color-ink-2);line-height:1.7;font-size:16px;margin-bottom:40px}
+.irsyads-directory-group{margin-top:32px}.irsyads-directory-group h2{font-size:18px;font-weight:650;margin-bottom:12px}
+.irsyads-directory ul{list-style:none;padding:0;margin:0}
+.irsyads-directory li{border-top:1px solid var(--color-line)}
+.irsyads-directory-row{display:grid;grid-template-columns:48px minmax(0,1fr) auto;align-items:center;gap:18px;padding:20px 0;color:inherit;text-decoration:none;min-height:88px}
+.irsyads-directory-row:hover strong{color:var(--color-accent-ink)}
+.irsyads-directory-row:focus-visible{outline:2px solid var(--color-accent-ink);outline-offset:5px}
+.irsyads-directory-mark{width:48px;height:48px;display:block}.irsyads-directory-mark svg{width:100%;height:100%}
+.irsyads-directory-row strong{font-size:17px;font-weight:650;display:block;margin-bottom:5px}
+.irsyads-directory-row p{font-size:14px;line-height:1.6;margin:0;color:var(--color-ink-2);overflow-wrap:anywhere;max-width:65ch}
+.irsyads-directory-action{font-size:14px;display:flex;gap:6px;align-items:center;color:var(--color-accent-ink)}
+.irsyads-navigation summary,.irsyads-directory-row strong{transition:background-color 160ms ease,color 160ms ease}
+@media(hover:hover) and (pointer:fine){.irsyads-directory-action svg{transition:transform 180ms cubic-bezier(.22,.8,.3,1)}.irsyads-directory-row:hover .irsyads-directory-action svg{transform:translate(2px,-2px)}:root[dir="rtl"] .irsyads-directory-row:hover .irsyads-directory-action svg{transform:translate(-2px,-2px)}}
+@keyframes irsyads-panel-enter{from{opacity:.6;transform:translateY(-6px)}to{opacity:1;transform:none}}
+@media(prefers-reduced-motion:no-preference){:root:not([data-motion="reduce"]) .irsyads-navigation[open] .irsyads-navigation-panel{animation:irsyads-panel-enter 220ms cubic-bezier(.22,.8,.3,1) both}}
+:root[data-motion="reduce"] .irsyads-directory-action svg{transform:none!important;transition:none!important}
+@media(prefers-reduced-motion:reduce){.irsyads-directory-action svg{transform:none!important;transition:none!important}}
+.irsyads-directory .sublogo-gelap{display:none}:root[data-theme="dark"] .irsyads-directory .sublogo-terang{display:none}:root[data-theme="dark"] .irsyads-directory .sublogo-gelap{display:block}
+@media(max-width:600px){.irsyads-navigation summary{width:44px;padding:0}.irsyads-navigation summary>span{display:none}.irsyads-navigation-panel{position:fixed;inset-inline:16px;top:96px;width:auto}.irsyads-directory{padding-inline:20px}.irsyads-directory-row{gap:12px;grid-template-columns:40px minmax(0,1fr) 22px}.irsyads-directory-mark{width:40px;height:40px}.irsyads-directory-action span{display:none}}
+@media print{.irsyads-navigation{display:none!important}}
+.irsyads-error{min-height:100dvh;background:var(--color-bg);color:var(--color-ink);font-family:var(--font-sans)}
+.irsyads-error header{max-width:1160px;margin:auto;padding:20px 24px;display:flex;align-items:center;justify-content:space-between;gap:20px;border-bottom:1px solid var(--color-line);flex-wrap:wrap}
+.irsyads-error-brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:inherit;font:650 20px var(--font-serif)}
+.irsyads-error-tools{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.irsyads-error main{max-width:760px;padding:clamp(64px,12vh,120px) 24px;margin:auto}
+.irsyads-error-code{font-size:16px;color:var(--color-ink-2);margin-bottom:24px}
+.irsyads-error h1{font:650 clamp(30px,5vw,52px)/1.15 var(--font-serif);letter-spacing:-.025em;text-wrap:balance;margin:0 0 20px}
+.irsyads-error main>p:not(.irsyads-error-code){line-height:1.8;max-width:60ch;color:var(--color-ink-2);font-size:16px}
+.irsyads-error-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:32px}
+.irsyads-error-actions a{display:flex;align-items:center;min-height:48px;padding:10px 18px;border:1px solid var(--color-line);border-radius:12px;color:var(--color-ink);text-decoration:none;font-weight:600}
+.irsyads-error-actions a:first-child{background:var(--color-accent);color:var(--color-on-brand);border:0}
+.irsyads-error a:focus-visible{outline:2px solid var(--color-accent-ink);outline-offset:4px}
+@media(max-width:600px){.irsyads-error-tools{width:100%;justify-content:space-between}}
+/* 20 Okt 2026 — samakan dengan header irsyads.com: logo pena + nama + panah, baris bahasa & tema. */
+.irsyads-navigation summary{gap:7px;padding:0 10px 0 8px;border-color:transparent;background:transparent}
+.irsyads-navigation summary:hover,.irsyads-navigation[open] summary{background:var(--color-surface-2);border-color:var(--color-line)}
+.irsyads-navigation-logo{--warna-logo:black;display:grid;place-items:center;width:18px;height:28px;flex-shrink:0}
+:root[data-theme="dark"] .irsyads-navigation-logo{--warna-logo:white}
+.irsyads-navigation-logo svg{width:100%;height:100%;display:block}
+.irsyads-navigation-name{font-size:15px;font-weight:700;letter-spacing:-.01em}
+.irsyads-navigation-chevron{transition:transform .2s ease;color:var(--color-muted)}
+.irsyads-navigation[open] .irsyads-navigation-chevron{transform:rotate(180deg)}
+.irsyads-navigation-prefs{display:flex;align-items:center;justify-content:space-between;gap:10px;border-top:1px solid var(--color-line);padding-top:12px;margin-top:12px}
+.irsyads-navigation-langs{display:flex;gap:4px}
+.irsyads-navigation-prefs button{min-width:40px;min-height:36px;padding:0 10px;border:1px solid var(--color-line);border-radius:100px;background:transparent;color:var(--color-ink);font:inherit;font-size:13px;font-weight:650;cursor:pointer}
+.irsyads-navigation-prefs button[aria-pressed="true"]{background:var(--color-ink);color:var(--color-bg);border-color:var(--color-ink)}
+.irsyads-navigation-prefs button:hover{background:var(--color-surface-2)}
+.irsyads-navigation-prefs button[aria-pressed="true"]:hover{background:var(--color-ink)}
+.irsyads-navigation-langs button[lang="ar"]{font-family:var(--font-arabic,'Noto Sans Arabic',sans-serif);font-size:15px;line-height:1}
+.irsyads-navigation-theme{display:grid;place-items:center;width:40px;padding:0!important}
+@media(max-width:600px){.irsyads-navigation-name{display:none}}
+
+/* Varian brand: logo + "Irsyads Academy" + panah kecil, seperti header irsyads.com (tanpa kotak). */
+.irsyads-navigation-brand summary{width:auto;min-height:44px;padding:0 6px 0 2px;border:0;background:transparent!important;gap:9px}
+.irsyads-navigation-brand summary>.irsyads-navigation-logo{display:grid}
+.irsyads-navigation-brand .irsyads-navigation-logo{width:22px;height:34px}
+.irsyads-navigation-brand .irsyads-navigation-name{font:700 19px/1.1 var(--font-serif,inherit);letter-spacing:-.02em;color:var(--color-ink);white-space:nowrap}
+.irsyads-navigation-app{font-weight:500;color:var(--color-muted)}
+.irsyads-navigation-brand .irsyads-navigation-chevron{width:15px;height:15px;margin-inline-start:-2px}
+.irsyads-navigation-brand summary:hover .irsyads-navigation-chevron{color:var(--color-accent-ink)}
+.irsyads-navigation-brand .irsyads-navigation-panel{inset-inline-end:auto;inset-inline-start:0}
+@media(max-width:600px){.irsyads-navigation-brand .irsyads-navigation-name{display:inline;font-size:17px}}
+@media(max-width:600px){.irsyads-navigation-brand .irsyads-navigation-panel{position:fixed;inset-inline:16px;width:auto;box-sizing:border-box}}
+/* Spaces = peluncur ikon (pemilik 20 Okt 2026): ikon + nama di bawah, maks 8, sisanya "Semua layanan". */
+.irsyads-navigation-panel{width:min(400px,calc(100vw - 32px))}
+.irsyads-spaces{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
+.irsyads-spaces a{display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:8px;min-height:0;padding:12px 4px 10px;border-radius:16px;font-size:12px;font-weight:600;color:var(--color-ink);text-align:center;transition:background .18s ease,transform .18s ease}
+.irsyads-spaces a:hover{background:var(--color-surface-2);transform:translateY(-2px)}
+.irsyads-spaces a[aria-current]{background:color-mix(in oklab,var(--color-accent) 12%,transparent)}
+.irsyads-space-icon{display:block;width:48px;height:48px;border-radius:14px;box-shadow:0 6px 16px -8px rgb(0 0 0 / .45);transition:transform .2s cubic-bezier(.2,.8,.2,1)}
+.irsyads-space-icon svg{width:100%;height:100%;display:block}
+.irsyads-spaces a:hover .irsyads-space-icon{transform:scale(1.06)}
+.irsyads-space-name{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;line-height:1.3}
+.irsyads-navigation .irsyads-navigation-utilities{justify-content:space-between;flex-wrap:nowrap}
+.irsyads-navigation .irsyads-navigation-utilities a{flex:0 1 auto;min-height:40px;font-size:13px}
+.irsyads-spaces-all{color:var(--color-accent-ink)!important}
+@media(max-width:600px){.irsyads-navigation .irsyads-navigation-utilities a{flex-basis:auto}.irsyads-spaces{gap:2px}}
+.irsyads-navigation .irsyads-navigation-logo-app{width:34px;height:34px}.irsyads-navigation-logo>.sublogo-terang,.irsyads-navigation-logo>.sublogo-gelap{width:100%;height:100%;display:block}.irsyads-navigation-logo>.sublogo-gelap{display:none}:is([data-theme=dark],.dark) .irsyads-navigation-logo>.sublogo-terang{display:none}:is([data-theme=dark],.dark) .irsyads-navigation-logo>.sublogo-gelap{display:block}
+.irsyads-navigation-logo>span{display:block;width:100%;height:100%}

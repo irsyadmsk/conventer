@@ -3,46 +3,54 @@
    Existing visitor-selected palettes remain available below. */
 
 :root {
-  --irsyads-color-bg: #f7f8fa;
-  --irsyads-color-bg-2: #edf2f3;
-  --irsyads-color-surface: #ffffff;
-  --irsyads-color-surface-2: #f0f4f5;
-  --irsyads-color-ink: #192a40;
-  --irsyads-color-ink-2: #43556a;
-  --irsyads-color-muted: #5c6d7d;
-  --irsyads-color-line: rgba(20, 24, 62, 0.1);
-  --irsyads-color-line-2: rgba(20, 24, 62, 0.18);
-  --irsyads-color-accent: #66d6bf;
-  --irsyads-color-accent-2: #4dc1aa;
-  --irsyads-color-gold: #f6c76b;
-  --irsyads-color-gold-2: #edb650;
-  --irsyads-color-lilac: #b7a4e5;
-  /* Teks/ikon di atas accent/gold/lilac: ketiganya sama-sama terang di
-     mode terang MAUPUN gelap (lihat override [data-theme="dark"] di
-     bawah), jadi butuh tinta gelap yang TIDAK ikut membalik tema —
-     var(--irsyads-color-ink) akan jadi putih di dark mode dan gagal kontras.
-     Nilai konstan ini diverifikasi >4.5:1 pada ketiga warna, kedua tema. */
-  --irsyads-color-on-brand: #1a1512;
+  /* Palet referensi pemilik 22 Okt 2026: measured ivory #F4EADF, ink #141720,
+     deep blue #2D3C57, paper #CFBEAF, powder blue #8BA2CE. Slate #586574
+     dipertahankan untuk teks muted/kompatibilitas; sumber pengukuran di design-system/irsyads/references/. Nama --irsyads-color-gold
+     dan --irsyads-color-lilac dipertahankan demi kompatibilitas komponen; nilainya
+     kini slate dan biru akademik yang lebih dalam. Semuanya cukup gelap
+     untuk teks --irsyads-color-on-brand (ivory). */
+  /* Fixed editorial identity for illustrated scenes, independent of visitor palettes. */
+  --brand-ivory: #f4eadf;
+  --brand-navy: #141720;
+  --brand-academic-blue: #2d3c57;
+  --brand-beige: #cfbeaf;
+  --brand-slate: #586574;
+  --brand-dusky-blue: #5b7199;
+  --brand-powder-blue: #8ba2ce;
+  --irsyads-color-bg: #f4eadf;
+  --irsyads-color-bg-2: #e8dccf;
+  --irsyads-color-surface: #fcf8f3;
+  --irsyads-color-surface-2: #eee2d6;
+  --irsyads-color-ink: #141720;
+  --irsyads-color-ink-2: #38455a;
+  --irsyads-color-muted: #586574;
+  --irsyads-color-line: rgba(20, 23, 32, 0.12);
+  --irsyads-color-line-2: rgba(20, 23, 32, 0.2);
+  --irsyads-color-beige: #cfbeaf;
+  --irsyads-color-accent: #2d3c57;
+  --irsyads-color-accent-2: #243149;
+  --irsyads-color-gold: #586574;
+  --irsyads-color-gold-2: #475361;
+  --irsyads-color-lilac: #243149;
+  /* Light actions use ivory text on deep blue/slate. Dark mode reverses
+     to dark ink on lighter accents; alternative visitor palettes set their own pair. */
+  --irsyads-color-on-brand: #f4eadf;
 
-  /* Aksen untuk TEKS di atas latar terang. Satu warna tidak bisa
-     memenuhi dua syarat sekaligus: cukup terang agar tinta gelap
-     (--irsyads-color-on-brand) terbaca DI ATASNYA pada tombol, sekaligus cukup
-     gelap agar dirinya terbaca sebagai teks kecil DI ATAS permukaan
-     putih. Jadi --irsyads-color-accent/-gold tetap untuk bidang isian, dan
-     pasangan *-ink ini untuk teks/ikon kecil. Di mode gelap keduanya
-     kembali sama dengan aksen terang (lihat blok dark). */
-  --irsyads-color-accent-ink: #126a5a;
-  --irsyads-color-gold-ink: #7d5f00;
+  /* Text/icon accents are separate from filled actions. Both combinations
+     are measured against their actual paper or dark surface. */
+  --irsyads-color-accent-ink: #243149;
+  --irsyads-color-gold-ink: #586574;
 
   --radius-md: 8px;
   --radius-lg: 12px;
   --radius-glass: 24px;
 
-  --shadow-1: 0 1px 3px rgba(20, 24, 62, 0.06);
-  --shadow-2: 0 6px 24px -6px rgba(20, 24, 62, 0.16);
+  --shadow-1: 0 1px 3px rgba(20, 23, 32, 0.07);
+  --shadow-2: 0 6px 24px -6px rgba(20, 23, 32, 0.18);
 
-  --irsyads-font-sans: "Manrope", "Noto Sans Arabic", system-ui, -apple-system, sans-serif;
-  --irsyads-font-serif: "Bricolage Grotesque", "Noto Sans Arabic", system-ui, sans-serif;
+  --irsyads-font-sans: "Plus Jakarta Sans", "Noto Sans Arabic", system-ui, -apple-system, sans-serif;
+  --irsyads-font-serif: "Playfair Display", "Noto Sans Arabic", "Noto Serif", Georgia, serif;
+  --irsyads-font-quote: "Libre Baskerville", "Noto Sans Arabic", "Noto Serif", Georgia, serif;
   --irsyads-font-mono: "DM Mono", monospace;
 
   /* Huruf mushaf resmi LPMQ Kemenag. Dua-duanya naskh, dan bedanya nyata:
@@ -86,48 +94,45 @@
    namespace since they're translucency/blur values, consumed directly as
    CSS custom properties (var(--liquid-glass), etc.) by glass components. */
 :root {
-  --aqua-soft: rgba(223, 105, 81, 0.1);
-  --liquid-glass: rgba(255, 255, 255, 0.7);
-  --liquid-glass-strong: rgba(255, 255, 255, 0.86);
-  --liquid-border: rgba(20, 24, 62, 0.08);
-  --liquid-shadow: 0 18px 54px rgba(20, 24, 62, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.9);
-  --aqua-mesh: linear-gradient(135deg, #fbeedc 0%, #f7e6d4 42%, #f3ecf7 72%, #eef1fb 100%);
+  --aqua-soft: rgba(45, 60, 87, 0.1);
+  --liquid-glass: rgba(252, 248, 243, 0.7);
+  --liquid-glass-strong: rgba(252, 248, 243, 0.88);
+  --liquid-border: rgba(20, 23, 32, 0.1);
+  --liquid-shadow: 0 18px 54px rgba(20, 23, 32, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.7);
+  --aqua-mesh: linear-gradient(135deg, #f4eadf 0%, #eee5d6 48%, #e6ddcc 78%, #e3ddd0 100%);
 }
 
 [data-theme="dark"] {
-  /* Revision 3: revision 2's warm brown-charcoal background still read as
-     "colored" rather than dark — a tinted canvas competes with the accent
-     colors instead of setting them off. Background/surface are now
-     genuinely neutral (near-zero saturation, true dark gray/black) —
-     "dark", not "brown" — while text keeps a faint warmth for comfortable
-     reading and the accents (coral/gold/lilac) stay exactly as vivid, so
-     they read as deliberate pops of color against a neutral canvas
-     instead of one more hue in an all-brown scene. */
-  --irsyads-color-bg: #141414;
-  --irsyads-color-bg-2: #1a1a1a;
-  --irsyads-color-surface: #1f1f1f;
-  --irsyads-color-surface-2: #272727;
-  --irsyads-color-ink: #f5f3f0;
-  --irsyads-color-ink-2: #c7c2ba;
-  --irsyads-color-muted: #9a958c;
-  --irsyads-color-line: rgba(255, 255, 255, 0.08);
-  --irsyads-color-line-2: rgba(255, 255, 255, 0.14);
-  --irsyads-color-accent: #7ddfc9;
-  --irsyads-color-accent-2: #66d6bf;
-  --irsyads-color-gold: #ffb703;
-  --irsyads-color-gold-2: #f1a501;
-  --irsyads-color-lilac: #ab97f2;
-  --irsyads-color-accent-ink: #7ddfc9;
-  --irsyads-color-gold-ink: #ffb703;
+  /* Mode gelap turunan palet merek: latar deep navy, teks ivory, aksen
+     academic blue yang dicerahkan agar terbaca di atas navy. Tinta di atas
+     bidang aksen kembali navy (kontras >6:1). */
+  --irsyads-color-bg: #141720;
+  --irsyads-color-bg-2: #10131c;
+  --irsyads-color-surface: #1b2331;
+  --irsyads-color-surface-2: #263144;
+  --irsyads-color-ink: #f4eadf;
+  --irsyads-color-ink-2: #cfbeaf;
+  --irsyads-color-muted: #b1bacb;
+  --irsyads-color-line: rgba(244, 234, 223, 0.1);
+  --irsyads-color-line-2: rgba(244, 234, 223, 0.18);
+  --irsyads-color-beige: #cfbeaf;
+  --irsyads-color-accent: #8ba2ce;
+  --irsyads-color-accent-2: #7390bd;
+  --irsyads-color-gold: #a3b0bd;
+  --irsyads-color-gold-2: #8e9cab;
+  --irsyads-color-lilac: #b3c4e2;
+  --irsyads-color-on-brand: #141720;
+  --irsyads-color-accent-ink: #8ba2ce;
+  --irsyads-color-gold-ink: #a3b0bd;
 
   --shadow-1: 0 1px 3px rgba(0, 0, 0, 0.4);
   --shadow-2: 0 6px 24px -6px rgba(0, 0, 0, 0.6);
 
-  --aqua-soft: rgba(255, 122, 92, 0.13);
-  --liquid-glass: rgba(31, 31, 31, 0.7);
-  --liquid-glass-strong: rgba(39, 39, 39, 0.86);
-  --liquid-border: rgba(255, 255, 255, 0.1);
-  --liquid-shadow: 0 22px 64px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  --aqua-soft: rgba(139, 162, 206, 0.13);
+  --liquid-glass: rgba(27, 35, 49, 0.7);
+  --liquid-glass-strong: rgba(38, 49, 68, 0.88);
+  --liquid-border: rgba(244, 234, 223, 0.1);
+  --liquid-shadow: 0 22px 64px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(244, 234, 223, 0.06);
 }
 
 /* ══ Palet pilihan pengunjung (kontrol di jam mengambang) ═════════════
@@ -169,6 +174,8 @@
   --irsyads-color-on-brand: #0f2419;
   --aqua-soft: rgba(76, 154, 114, 0.1);
   --aqua-mesh: linear-gradient(135deg, #eff6f2 0%, #e6f2eb 42%, #eaf3f0 72%, #eef5f2 100%);
+  --irsyads-color-accent-ink: color-mix(in oklab, var(--irsyads-color-accent-2) 72%, #0b1528);
+  --irsyads-color-gold-ink: color-mix(in oklab, var(--irsyads-color-gold-2) 70%, #1a1206);
 }
 [data-theme="dark"][data-palette="forest"] {
   --irsyads-color-accent: #6cc79a;
@@ -193,6 +200,8 @@
   --irsyads-color-on-brand: #0a2233;
   --aqua-soft: rgba(61, 155, 212, 0.1);
   --aqua-mesh: linear-gradient(135deg, #eef6fc 0%, #e4f1fa 42%, #eaeff9 72%, #eef1fb 100%);
+  --irsyads-color-accent-ink: color-mix(in oklab, var(--irsyads-color-accent-2) 72%, #0b1528);
+  --irsyads-color-gold-ink: color-mix(in oklab, var(--irsyads-color-gold-2) 70%, #1a1206);
 }
 [data-theme="dark"][data-palette="ocean"] {
   --irsyads-color-accent: #5fb6e8;
@@ -217,6 +226,8 @@
   --irsyads-color-on-brand: #1f0d3a;
   --aqua-soft: rgba(169, 127, 214, 0.11);
   --aqua-mesh: linear-gradient(135deg, #f6f2fb 0%, #f0e8f9 42%, #f4ecf8 72%, #eef1fb 100%);
+  --irsyads-color-accent-ink: color-mix(in oklab, var(--irsyads-color-accent-2) 72%, #0b1528);
+  --irsyads-color-gold-ink: color-mix(in oklab, var(--irsyads-color-gold-2) 70%, #1a1206);
 }
 [data-theme="dark"][data-palette="royal"] {
   --irsyads-color-accent: #c39ceb;
@@ -241,6 +252,8 @@
   --irsyads-color-on-brand: #072522;
   --aqua-soft: rgba(42, 163, 150, 0.1);
   --aqua-mesh: linear-gradient(135deg, #eef9f7 0%, #e3f4f1 42%, #e9f5f4 72%, #eef3fb 100%);
+  --irsyads-color-accent-ink: color-mix(in oklab, var(--irsyads-color-accent-2) 72%, #0b1528);
+  --irsyads-color-gold-ink: color-mix(in oklab, var(--irsyads-color-gold-2) 70%, #1a1206);
 }
 [data-theme="dark"][data-palette="aurora"] {
   --irsyads-color-accent: #4fd1c0;
@@ -265,6 +278,8 @@
   --irsyads-color-on-brand: #241610;
   --aqua-soft: rgba(200, 121, 74, 0.1);
   --aqua-mesh: linear-gradient(135deg, #fbf5ee 0%, #f6ebdd 42%, #f4ece6 72%, #f2eef4 100%);
+  --irsyads-color-accent-ink: color-mix(in oklab, var(--irsyads-color-accent-2) 72%, #0b1528);
+  --irsyads-color-gold-ink: color-mix(in oklab, var(--irsyads-color-gold-2) 70%, #1a1206);
 }
 [data-theme="dark"][data-palette="earth"] {
   --irsyads-color-accent: #e19468;
@@ -365,6 +380,21 @@
   animation: irsyads-muncul var(--durasi-muncul) var(--ease-masuk) backwards,
     irsyads-naik var(--durasi-naik) var(--ease-masuk) backwards;
 }
+[data-motion="reduce"] *, [data-motion="reduce"] *::before, [data-motion="reduce"] *::after {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+  scroll-behavior: auto !important;
+}
 @media (prefers-reduced-motion: reduce) {
   .masuk-layar { animation: none; }
 }
+
+/* Editorial quotations; explicit Arabic/Quran/content typography keeps priority. */
+:where(blockquote) { font-family: var(--irsyads-font-quote); }
+
+/* Warna logo (19 Okt 2026): ikut palet seperti komponen lain. Mode terang
+   memakai rona palet yang digelapkan agar logo beraksara tetap terbaca;
+   mode gelap memakai aksen palet apa adanya. */
+:root:not([data-theme="dark"]) { --warna-logo: #0b1d35; } /* logo utama datar: deep navy di mode terang */
+[data-theme="dark"] { --warna-logo: #f3ede2; } /* ivory di mode gelap */

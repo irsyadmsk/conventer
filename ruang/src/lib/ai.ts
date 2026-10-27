@@ -1,5 +1,4 @@
-import { supabase } from './supabase'
-import { catat } from './activity'
+import { lessonDraft, lessonBlock, inspectLesson, type LessonForm } from '@/features/apma/lesson-template'
 
 export type TugasAI = 'apma_modul' | 'apma_blok' | 'apma_audit' | 'laporan' | 'tulis' | 'status'
 
@@ -13,24 +12,14 @@ export type HasilAI = {
 }
 
 /**
- * Semua AI lewat Edge Function `ruang-ai`: kunci penyedia tidak pernah sampai
- * ke peramban, dan tiap akun punya kuota harian.
+ * LessonCraft uses local templates and structural checks. Cloud tasks stay
+ * paused while their free allowance and billing cannot be verified.
  */
 export async function panggilAI(tugas: TugasAI, isi: Record<string, unknown> = {}): Promise<HasilAI> {
-  const { data, error } = await supabase.functions.invoke('ruang-ai', { body: { tugas, ...isi } })
-  if (error) {
-    let pesan = error.message
-    try {
-      const ctx = (error as { context?: Response }).context
-      if (ctx && typeof ctx.json === 'function') {
-        const j = await ctx.json()
-        if (j?.error) pesan = j.error
-      }
-    } catch {
-      /* biarkan pesan bawaan */
-    }
-    throw new Error(pesan)
-  }
-  if (tugas !== 'status') catat('ai', tugas)
-  return data as HasilAI
+  const form = (isi.konteks ?? {}) as LessonForm;
+  if (tugas === 'apma_modul') return { teks: lessonDraft(form), provider: 'local', model: 'template' };
+  if (tugas === 'apma_blok') return { teks: lessonBlock(String(isi.jenis ?? 'Bagian modul'), form, String(isi.instruksi ?? '')), provider: 'local', model: 'template' };
+  if (tugas === 'apma_audit') return { json: inspectLesson((isi.blocks ?? []) as {title?:string;content?:string}[]), provider: 'local', model: 'structure-check' };
+  if (tugas === 'status') return { provider: 'local', model: 'template', sisa_hari_ini: 0 };
+  throw new Error('Cloud AI is paused until its free allowance and billing are verified. LessonCraft local templates remain available.');
 }

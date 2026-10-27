@@ -83,6 +83,14 @@ Deno.serve(async (req) => {
   const balas = (status: number, body: unknown) => new Response(JSON.stringify(body), { status, headers: { "Content-Type": "application/json", ...CORS } });
   if (req.method !== "POST") return balas(405, { error: "Metode tidak didukung." });
 
+  // Owner free-only hold: no database quota checks, providers or paid fallbacks.
+  // This candidate is local; online settings are unchanged until an approved release.
+  const cloudAiPaused = true;
+  if (cloudAiPaused) return balas(503, {
+    code: "CLOUD_AI_PAUSED", siap: false, free_only: true,
+    error: "Cloud AI is paused. Use LessonCraft local templates while free quotas and billing are being reviewed.",
+  });
+
   const jwt = (req.headers.get("Authorization") ?? "").replace(/^Bearer\s+/i, "");
   if (!jwt) return balas(401, { error: "Silakan masuk terlebih dahulu." });
   const layanan = createClient(Deno.env.get("SUPABASE_URL")!, Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!);
