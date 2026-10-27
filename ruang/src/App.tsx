@@ -8,6 +8,7 @@ import { AppShell } from '@/components/layout/AppShell'
 import { LogoPena } from '@/components/layout/Logo'
 import { PembaruanApp } from '@/components/layout/PembaruanApp'
 import { tujuanToolkit } from '@/lib/sso'
+import { ALAT } from '@/tools'
 
 const Masuk = lazy(() => import('@/pages/auth/Masuk'))
 const Daftar = lazy(() => import('@/pages/auth/Daftar'))
@@ -34,6 +35,29 @@ const Kreasi = lazy(() => import('@/features/kreasi/Kreasi'))
 const Keluarga = lazy(() => import('@/pages/Keluarga'))
 const Pengaturan = lazy(() => import('@/pages/Pengaturan'))
 const TidakAda = lazy(() => import('@/pages/TidakAda'))
+const Undian = lazy(() => import('@/features/perkakas/Undian'))
+const KlikChat = lazy(() => import('@/features/perkakas/KlikChat'))
+const Semaphore = lazy(() => import('@/features/perkakas/Belajar').then((m) => ({ default: m.Semaphore })))
+const SandiPramuka = lazy(() =>
+  import('@/features/perkakas/Belajar').then((m) => ({
+    default: m.SandiPramuka,
+  })),
+)
+const BrailleLab = lazy(() =>
+  import('@/features/perkakas/Belajar').then((m) => ({
+    default: m.BrailleLab,
+  })),
+)
+const EjaanRadio = lazy(() =>
+  import('@/features/perkakas/Belajar').then((m) => ({
+    default: m.EjaanRadio,
+  })),
+)
+const LembarLatihan = lazy(() =>
+  import('@/features/perkakas/Belajar').then((m) => ({
+    default: m.LembarLatihan,
+  })),
+)
 
 function Memuat() {
   return (
@@ -43,12 +67,13 @@ function Memuat() {
   )
 }
 
-/** Semua halaman aplikasi wajib masuk. */
+/** Halaman pribadi wajib masuk; alat publik terdaftar dapat dipakai tamu. */
 function WajibMasuk({ children }: { children: ReactNode }) {
   const { user, memuat } = useAuth()
   const loc = useLocation()
   if (memuat) return <Memuat />
-  if (!user) return <Navigate to="/masuk" replace state={{ dari: loc.pathname + loc.search + loc.hash }} />
+  if (!user && !ALAT.some((a) => a.publik && a.path === loc.pathname))
+    return <Navigate to="/masuk" replace state={{ dari: loc.pathname + loc.search + loc.hash }} />
   return <>{children}</>
 }
 
@@ -56,7 +81,10 @@ function HanyaTamu({ children }: { children: ReactNode }) {
   const { user, memuat } = useAuth()
   const loc = useLocation()
   if (memuat) return <Memuat />
-  if (user) return <Navigate to={tujuanToolkit((loc.state as { dari?: string } | null)?.dari, window.location.origin)} replace />
+  if (user)
+    return (
+      <Navigate to={tujuanToolkit((loc.state as { dari?: string } | null)?.dari, window.location.origin)} replace />
+    )
   return <>{children}</>
 }
 
@@ -76,31 +104,254 @@ export default function App() {
               <PembaruanApp />
               <Suspense fallback={<Memuat />}>
                 <Routes>
-                  <Route path="/masuk" element={<HanyaTamu><Masuk /></HanyaTamu>} />
-                  <Route path="/daftar" element={<HanyaTamu><Daftar /></HanyaTamu>} />
-                  <Route path="/lupa-sandi" element={<HanyaTamu><LupaSandi /></HanyaTamu>} />
+                  <Route
+                    path="/masuk"
+                    element={
+                      <HanyaTamu>
+                        <Masuk />
+                      </HanyaTamu>
+                    }
+                  />
+                  <Route
+                    path="/daftar"
+                    element={
+                      <HanyaTamu>
+                        <Daftar />
+                      </HanyaTamu>
+                    }
+                  />
+                  <Route
+                    path="/lupa-sandi"
+                    element={
+                      <HanyaTamu>
+                        <LupaSandi />
+                      </HanyaTamu>
+                    }
+                  />
                   <Route path="/atur-sandi" element={<AturSandi />} />
-                  <Route element={<WajibMasuk><AppShell /></WajibMasuk>}>
-                    <Route index element={<Suspense fallback={<Memuat />}><Beranda /></Suspense>} />
-                    <Route path="laporan" element={<Suspense fallback={<Memuat />}><Laporan /></Suspense>} />
-                    <Route path="koleksi" element={<Suspense fallback={<Memuat />}><Koleksi /></Suspense>} />
-                    <Route path="otomatisasi" element={<Suspense fallback={<Memuat />}><Otomatisasi /></Suspense>} />
-                    <Route path="aksara" element={<Suspense fallback={<Memuat />}><Aksara /></Suspense>} />
-                    <Route path="aksara/kamus" element={<Suspense fallback={<Memuat />}><Kamus /></Suspense>} />
-                    <Route path="aksara/pedoman" element={<Suspense fallback={<Memuat />}><Pedoman /></Suspense>} />
-                    <Route path="morse" element={<Suspense fallback={<Memuat />}><Morse /></Suspense>} />
-                    <Route path="codec" element={<Suspense fallback={<Memuat />}><Codec /></Suspense>} />
-                    <Route path="sandi" element={<Suspense fallback={<Memuat />}><Sandi /></Suspense>} />
-                    <Route path="hash" element={<Suspense fallback={<Memuat />}><HashPage /></Suspense>} />
-                    <Route path="kalkulator" element={<Suspense fallback={<Memuat />}><Kalkulator /></Suspense>} />
-                    <Route path="gaya-teks" element={<Suspense fallback={<Memuat />}><GayaTeks /></Suspense>} />
-                    <Route path="teks" element={<Suspense fallback={<Memuat />}><Teks /></Suspense>} />
-                    <Route path="qr" element={<Suspense fallback={<Memuat />}><QR /></Suspense>} />
-                    <Route path="kreasi" element={<Suspense fallback={<Memuat />}><Kreasi /></Suspense>} />
-                    <Route path="modul-ajar/*" element={<Suspense fallback={<Memuat />}><Apma /></Suspense>} />
-                    <Route path="keluarga" element={<Suspense fallback={<Memuat />}><Keluarga /></Suspense>} />
-                    <Route path="pengaturan" element={<Suspense fallback={<Memuat />}><Pengaturan /></Suspense>} />
-                    <Route path="*" element={<Suspense fallback={<Memuat />}><TidakAda /></Suspense>} />
+                  <Route
+                    element={
+                      <WajibMasuk>
+                        <AppShell />
+                      </WajibMasuk>
+                    }
+                  >
+                    <Route
+                      path="undian"
+                      element={
+                        <Suspense fallback={<Memuat />}>
+                          <Undian />
+                        </Suspense>
+                      }
+                    />
+                    <Route
+                      path="klik-chat"
+                      element={
+                        <Suspense fallback={<Memuat />}>
+                          <KlikChat />
+                        </Suspense>
+                      }
+                    />
+                    <Route
+                      path="semaphore"
+                      element={
+                        <Suspense fallback={<Memuat />}>
+                          <Semaphore />
+                        </Suspense>
+                      }
+                    />
+                    <Route
+                      path="sandi-pramuka"
+                      element={
+                        <Suspense fallback={<Memuat />}>
+                          <SandiPramuka />
+                        </Suspense>
+                      }
+                    />
+                    <Route
+                      path="braille"
+                      element={
+                        <Suspense fallback={<Memuat />}>
+                          <BrailleLab />
+                        </Suspense>
+                      }
+                    />
+                    <Route
+                      path="ejaan-radio"
+                      element={
+                        <Suspense fallback={<Memuat />}>
+                          <EjaanRadio />
+                        </Suspense>
+                      }
+                    />
+                    <Route
+                      path="lembar-latihan"
+                      element={
+                        <Suspense fallback={<Memuat />}>
+                          <LembarLatihan />
+                        </Suspense>
+                      }
+                    />
+                    <Route
+                      index
+                      element={
+                        <Suspense fallback={<Memuat />}>
+                          <Beranda />
+                        </Suspense>
+                      }
+                    />
+                    <Route
+                      path="laporan"
+                      element={
+                        <Suspense fallback={<Memuat />}>
+                          <Laporan />
+                        </Suspense>
+                      }
+                    />
+                    <Route
+                      path="koleksi"
+                      element={
+                        <Suspense fallback={<Memuat />}>
+                          <Koleksi />
+                        </Suspense>
+                      }
+                    />
+                    <Route
+                      path="otomatisasi"
+                      element={
+                        <Suspense fallback={<Memuat />}>
+                          <Otomatisasi />
+                        </Suspense>
+                      }
+                    />
+                    <Route
+                      path="aksara"
+                      element={
+                        <Suspense fallback={<Memuat />}>
+                          <Aksara />
+                        </Suspense>
+                      }
+                    />
+                    <Route
+                      path="aksara/kamus"
+                      element={
+                        <Suspense fallback={<Memuat />}>
+                          <Kamus />
+                        </Suspense>
+                      }
+                    />
+                    <Route
+                      path="aksara/pedoman"
+                      element={
+                        <Suspense fallback={<Memuat />}>
+                          <Pedoman />
+                        </Suspense>
+                      }
+                    />
+                    <Route
+                      path="morse"
+                      element={
+                        <Suspense fallback={<Memuat />}>
+                          <Morse />
+                        </Suspense>
+                      }
+                    />
+                    <Route
+                      path="codec"
+                      element={
+                        <Suspense fallback={<Memuat />}>
+                          <Codec />
+                        </Suspense>
+                      }
+                    />
+                    <Route
+                      path="sandi"
+                      element={
+                        <Suspense fallback={<Memuat />}>
+                          <Sandi />
+                        </Suspense>
+                      }
+                    />
+                    <Route
+                      path="hash"
+                      element={
+                        <Suspense fallback={<Memuat />}>
+                          <HashPage />
+                        </Suspense>
+                      }
+                    />
+                    <Route
+                      path="kalkulator"
+                      element={
+                        <Suspense fallback={<Memuat />}>
+                          <Kalkulator />
+                        </Suspense>
+                      }
+                    />
+                    <Route
+                      path="gaya-teks"
+                      element={
+                        <Suspense fallback={<Memuat />}>
+                          <GayaTeks />
+                        </Suspense>
+                      }
+                    />
+                    <Route
+                      path="teks"
+                      element={
+                        <Suspense fallback={<Memuat />}>
+                          <Teks />
+                        </Suspense>
+                      }
+                    />
+                    <Route
+                      path="qr"
+                      element={
+                        <Suspense fallback={<Memuat />}>
+                          <QR />
+                        </Suspense>
+                      }
+                    />
+                    <Route
+                      path="kreasi"
+                      element={
+                        <Suspense fallback={<Memuat />}>
+                          <Kreasi />
+                        </Suspense>
+                      }
+                    />
+                    <Route
+                      path="modul-ajar/*"
+                      element={
+                        <Suspense fallback={<Memuat />}>
+                          <Apma />
+                        </Suspense>
+                      }
+                    />
+                    <Route
+                      path="keluarga"
+                      element={
+                        <Suspense fallback={<Memuat />}>
+                          <Keluarga />
+                        </Suspense>
+                      }
+                    />
+                    <Route
+                      path="pengaturan"
+                      element={
+                        <Suspense fallback={<Memuat />}>
+                          <Pengaturan />
+                        </Suspense>
+                      }
+                    />
+                    <Route
+                      path="*"
+                      element={
+                        <Suspense fallback={<Memuat />}>
+                          <TidakAda />
+                        </Suspense>
+                      }
+                    />
                   </Route>
                 </Routes>
               </Suspense>

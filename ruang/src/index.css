@@ -81,6 +81,10 @@
   max-height: calc(100dvh - 88px);
 }
 #isi { scroll-margin-top: 80px; }
+@media (min-width:1024px) {
+  .toolkit-shell[data-sidebar='compact'] .toolkit-brand .irsyads-navigation-name { display:none; }
+  .toolkit-shell[data-sidebar='compact'] .toolkit-brand .irsyads-navigation-brand summary { gap:4px; }
+}
 @media (max-width: 600px) {
   .toolkit-header .irsyads-navigation-name { font-size: 12px; line-height: 1.2; }
   .toolkit-header .irsyads-navigation-app { display: block; font-size: 17px; }
@@ -235,7 +239,18 @@
 }
 
 @media print {
+  body:has(.worksheet) { --ink:#111;--ink-2:#333;--ink-3:#444;--line:#aaa;--bg:#fff;--surface:#fff; }
   .no-print { display: none !important; }
   body { background: #fff; color: #000; }
   .card { border-color: #ddd; }
+}
+
+@media print {
+  body:has(.worksheet) header, body:has(.worksheet) aside,
+  body:has(.worksheet) nav, body:has(.worksheet) #isi > div > div > div:first-child { display:none!important; }
+  body:has(.worksheet) #isi { padding:0;max-width:none; }
+  body:has(.worksheet) .worksheet { border:0;padding:0;color:#111;background:white; }
+  body:has(.worksheet) .lg\:grid { display:block; }
+  .worksheet-question { break-inside:avoid; }
+  .worksheet-answers { break-before:page; }
 }

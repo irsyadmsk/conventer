@@ -90,6 +90,26 @@ export default function Beranda() {
         )}
       </header>
 
+      <section className="card p-5">
+        <div className="mb-4">
+          <h2 className="font-bold">Alat harian & belajar</h2>
+          <p className="mt-1 text-sm text-ink-3">Undi peserta, bagi kelompok, buka chat, dan jelajahi kode serta isyarat.</p>
+        </div>
+        <ul className="grid grid-cols-2 gap-3 lg:grid-cols-4">
+          {ALAT.filter(a => a.publik)
+            .sort((a, b) => (a.id === 'undian' ? 0 : a.id === 'klik-chat' ? 1 : 2) - (b.id === 'undian' ? 0 : b.id === 'klik-chat' ? 1 : 2))
+            .map(a => (
+              <li key={a.id}>
+                <Link to={a.path} className="flex h-full flex-col gap-2 rounded-xl border border-line p-4 transition-colors hover:bg-surface-2">
+                  <a.ikon className="size-5 text-accent-text" aria-hidden />
+                  <span className="text-sm font-semibold">{a.nama}</span>
+                  <span className="text-xs leading-relaxed text-ink-3">{a.ringkas}</span>
+                </Link>
+              </li>
+            ))}
+        </ul>
+      </section>
+
       {/* Statistik */}
       <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
         {[

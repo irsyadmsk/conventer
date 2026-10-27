@@ -6,7 +6,7 @@ Penerus web **Text Converter** (`../web`) dan **APMA**, dibangun ulang dengan Re
 
 | Area | Isi |
 |---|---|
-| Akun | Wajib masuk/daftar (email & sandi, opsional Google), lupa/atur ulang sandi, satu akun dengan irsyads.com |
+| Akun | Halaman pribadi wajib masuk lewat Irsyads ID; tujuh perkakas publik dapat dipakai tanpa akun |
 | Keluarga | Buat/gabung via kode 6 karakter, tautan, atau QR; peran Pemilik/Admin/Anggota/Anak; maks. 12 anggota; sinkron realtime |
 | Aksara Sunda | Pangalihtulis dua arah, papan ketik aksara, pemenggalan suku kata, lafal audio, Kamus + kuis kilat, Pedoman |
 | Kode & Sandi | Morse Studio (audio, osiloskop, senter kamera, strobo, kunci telegraf), Codec (deteksi format otomatis), Caesar/Vigenère + pemecah otomatis, Hash teks & berkas |
@@ -23,6 +23,39 @@ Penerus web **Text Converter** (`../web`) dan **APMA**, dibangun ulang dengan Re
 - Migrasi akses APMA: `supabase/migrations/20260924000002_ruang_akses_apma.sql`. Hak akses dibaca `src/lib/akses.ts` (terikat UID akun, gagal tertutup saat galat baca).
 - Edge Function: `supabase/functions/ruang-ai` — memakai secret yang sama dengan `ai-bantu` (`GEMINI_API_KEY`, `AI_API_KEY`), kuota harian per akun `RUANG_KUOTA_HARIAN` (bawaan 30). Kunci AI tidak pernah sampai ke peramban. **Saat ini dijeda:** `src/lib/ai.ts` (`panggilAI`) tidak memanggil cloud karena kuota gratis/tagihan belum terverifikasi. Jangan mengaktifkannya tanpa persetujuan pemilik.
 - Pelacakan aktivitas hanya menyimpan nama alat, aksi, dan jumlah karakter — **bukan isi teks**.
+
+## Perkakas publik — 27 Oktober 2026
+
+Tujuh alat lokal dapat dibuka tanpa akun: `/undian`, `/klik-chat`, `/semaphore`,
+`/sandi-pramuka`, `/braille`, `/ejaan-radio`, dan `/lembar-latihan`.
+Halaman akun, keluarga, koleksi, dan alat lama tetap mengikuti batas login sebelumnya.
+Sidebar desktop dapat dilipat; header menampilkan lokasi halaman aktif.
+
+- Undian: pemilihan individu tanpa pengulangan, kelompok seimbang, urutan presentasi,
+  dan ekspor CSV. Nama diproses di perangkat; tidak disimpan atau dikirim ke server.
+- Klik ke Chat: normalisasi nomor, username Telegram, pesan awal, label, pencarian,
+  dan hapus riwayat. WhatsApp biasa/Business mengikuti penanganan tautan perangkat.
+  Telegram lewat nomor mengikuti privasi penerima. Membuka tautan tidak mengirim pesan otomatis.
+- Riwayat tamu tersimpan lokal; tidak otomatis diimpor saat login. Riwayat akun memakai
+  cache dan antrean terpisah per UID, serta tabel pribadi `studio_chat_contacts`.
+  Isi pesan tidak disimpan. Label status membedakan lokal, tertunda, dan tersinkron.
+  Hapus riwayat lokal dapat menghilangkan antrean yang belum tersinkron.
+- **Migrasi akun belum diterapkan ke produksi**: `supabase/migrations/20261027111232_toolkit_chat_history.sql`.
+  Penerapannya dan deploy memerlukan persetujuan rilis pemilik. Sebelum itu, kegagalan
+  sinkronisasi ditampilkan sebagai tertunda dan perubahan dipertahankan lokal.
+- Semaphore mencakup A–Z, kartu referensi, langkah/putar pesan, dan kuis; belum mencakup
+  angka/protokol. Braille adalah lab huruf dasar A–Z tanpa kontraksi, angka, kapitalisasi,
+  atau keluaran timbul. Sandi koordinat menggabungkan I/J dan mendekode menjadi I.
+- Suara ejaan radio hanya diaktifkan bila suara Inggris lokal tersedia. Lembar latihan
+  menggunakan dialog cetak browser untuk PDF/cetak, dengan kunci jawaban opsional.
+
+Verifikasi lokal: `node --experimental-strip-types --test tests/*.test.mjs`,
+`npm run build`, dan pemeriksaan browser desktop/ponsel. Pengujian SQL/RLS tertanam
+opsional: pasang `@electric-sql/pglite@0.5.12` di folder uji, atur `PGLITE_MODULE`
+ke file URL `dist/index.js`, lalu jalankan `node tests/chat-history-rls.mjs`.
+Pengujian tertanam memakai stub `auth.uid()`; bukan penerimaan Supabase Auth/PostgREST
+produksi. Perangkat WhatsApp/Business/Telegram, cetak fisik, dan sinkronisasi akun nyata
+masih perlu penerimaan setelah rilis disetujui.
 
 ## Menjalankan
 
