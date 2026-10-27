@@ -40,9 +40,10 @@ Sidebar desktop dapat dilipat; header menampilkan lokasi halaman aktif.
   cache dan antrean terpisah per UID, serta tabel pribadi `studio_chat_contacts`.
   Isi pesan tidak disimpan. Label status membedakan lokal, tertunda, dan tersinkron.
   Hapus riwayat lokal dapat menghilangkan antrean yang belum tersinkron.
-- **Migrasi akun belum diterapkan ke produksi**: `supabase/migrations/20261027111232_toolkit_chat_history.sql`.
-  Penerapannya dan deploy memerlukan persetujuan rilis pemilik. Sebelum itu, kegagalan
-  sinkronisasi ditampilkan sebagai tertunda dan perubahan dipertahankan lokal.
+- Migrasi akun diterapkan ke produksi pada 27 Oktober 2026 atas persetujuan pemilik:
+  sumber `supabase/migrations/20261027111232_toolkit_chat_history.sql`, nama migrasi
+  `toolkit_chat_history`, versi tercatat di Supabase `20261027114624`.
+  Kegagalan sinkronisasi ditampilkan sebagai tertunda dan perubahan dipertahankan lokal.
 - Semaphore mencakup A–Z, kartu referensi, langkah/putar pesan, dan kuis; belum mencakup
   angka/protokol. Braille adalah lab huruf dasar A–Z tanpa kontraksi, angka, kapitalisasi,
   atau keluaran timbul. Sandi koordinat menggabungkan I/J dan mendekode menjadi I.
@@ -56,6 +57,20 @@ ke file URL `dist/index.js`, lalu jalankan `node tests/chat-history-rls.mjs`.
 Pengujian tertanam memakai stub `auth.uid()`; bukan penerimaan Supabase Auth/PostgREST
 produksi. Perangkat WhatsApp/Business/Telegram, cetak fisik, dan sinkronisasi akun nyata
 masih perlu penerimaan setelah rilis disetujui.
+
+Rilis produksi 27 Oktober 2026: kode `4d46d05`, Worker `ruang` versi
+`ece646f6-becf-4070-b6d6-4a0b73869337` di https://app.irsyads.com.
+Versi Worker sebelumnya untuk pemulihan: `df46927f-3ddb-4ef7-97e4-85cc31571d22`.
+Seluruh tujuh rute publik mengembalikan HTTP 200; hash aset JS/CSS, navigasi, dan
+service worker cocok dengan build yang diuji. HTML cocok setelah injeksi beacon
+analitik Cloudflare yang sudah ada dan whitespace antartag dikecualikan.
+RLS produksi lulus uji CRUD pemilik, penolakan akses akun lain, penolakan pemindahan
+pemilik, serta penolakan anonim melalui SQL dalam transaksi yang di-rollback.
+Pembacaan anonim lewat PostgREST ditolak HTTP 401. Tidak ada data contoh uji yang
+ditinggalkan. Ini belum menguji sesi Auth nyata, sinkronisasi lintas perangkat,
+atau pembukaan aplikasi chat di perangkat pengguna. Tampilan interaktif diuji
+sebelum rilis di browser lokal; browser produksi belum diperiksa karena fitur
+browser lokal dinonaktifkan di pengaturan Work.
 
 ## Menjalankan
 
