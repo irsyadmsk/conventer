@@ -3,7 +3,7 @@ import { motion } from 'framer-motion'
 import gsap from 'gsap'
 import { useGSAP } from '@gsap/react'
 import { ArrowLeft, BarChart3, GraduationCap, Languages, Users } from 'lucide-react'
-import { Logo } from '@/components/layout/Logo'
+import { Logo, LogoPena } from '@/components/layout/Logo'
 import { ecosystemUrl } from '@/lib/appearance'
 import { SharedNavigation } from '@/components/layout/SharedNavigation'
 import AppearancePreferences from '@/lib/appearance-preferences'
@@ -66,11 +66,14 @@ export function AuthLayout({ judul, sub, children, kaki }: { judul: string; sub:
             ))}
           </ul>
         </div>
-        <p className="relative text-[13px] text-ink-3">
-          Dikembangkan oleh Muhammad Irsyad Sirojul Khoeir ·{' '}
-          <a href={ecosystemUrl('site','https://irsyads.com',['id','en','ar'])} className="font-semibold text-ink-2 underline-offset-4 hover:underline">
-            irsyads.com
-          </a>
+        <p className="relative flex items-center gap-3 text-[13px] text-ink-3">
+          <LogoPena height={34} className="text-ink" />
+          <span>
+            Dikembangkan oleh Muhammad Irsyad Sirojul Khoeir ·{' '}
+            <a href={ecosystemUrl('site','https://irsyads.com',['id','en','ar'])} className="font-semibold text-ink-2 underline-offset-4 hover:underline">
+              irsyads.com
+            </a>
+          </span>
         </p>
       </div>
 

@@ -5,7 +5,7 @@ import { PrefsProvider } from '@/lib/prefs'
 import { FamilyProvider } from '@/lib/family'
 import { ToastProvider } from '@/components/ui/Toast'
 import { AppShell } from '@/components/layout/AppShell'
-import { LogoMark } from '@/components/layout/Logo'
+import { LogoPena } from '@/components/layout/Logo'
 import { PembaruanApp } from '@/components/layout/PembaruanApp'
 import { tujuanToolkit } from '@/lib/sso'
 
@@ -38,9 +38,7 @@ const TidakAda = lazy(() => import('@/pages/TidakAda'))
 function Memuat() {
   return (
     <div className="grid min-h-[60vh] place-items-center" role="status" aria-label="Memuat">
-      <div className="animate-pulse">
-        <LogoMark size={44} />
-      </div>
+      <LogoPena height={96} className="text-ink" />
     </div>
   )
 }

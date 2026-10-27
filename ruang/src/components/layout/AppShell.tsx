@@ -14,7 +14,7 @@ import { Avatar, Kbd } from '@/components/ui/Controls'
 import { IconButton } from '@/components/ui/Button'
 import { Dialog } from '@/components/ui/Dialog'
 import { CommandPalette } from './CommandPalette'
-import { Logo } from './Logo'
+import { Logo, LogoPena } from './Logo'
 import { SharedNavigation } from './SharedNavigation'
 import AppearancePreferences from '@/lib/appearance-preferences'
 
@@ -165,6 +165,7 @@ export function AppShell() {
           className="group mx-1 flex h-10 items-center gap-2 rounded-xl px-3 text-[13.5px] font-semibold text-ink-2 transition-colors hover:bg-surface-2 hover:text-ink"
         >
           <ArrowLeft className="size-4 transition-transform group-hover:-translate-x-0.5" aria-hidden />
+          <LogoPena height={22} />
           Kembali ke irsyads.com
         </a>
         <AkunMini />
