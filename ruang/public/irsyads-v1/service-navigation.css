@@ -100,3 +100,20 @@
 @media(max-width:600px){.irsyads-navigation .irsyads-navigation-utilities a{flex-basis:auto}.irsyads-spaces{gap:2px}}
 .irsyads-navigation .irsyads-navigation-logo-app{width:34px;height:34px}.irsyads-navigation-logo>.sublogo-terang,.irsyads-navigation-logo>.sublogo-gelap{width:100%;height:100%;display:block}.irsyads-navigation-logo>.sublogo-gelap{display:none}:is([data-theme=dark],.dark) .irsyads-navigation-logo>.sublogo-terang{display:none}:is([data-theme=dark],.dark) .irsyads-navigation-logo>.sublogo-gelap{display:block}
 .irsyads-navigation-logo>span{display:block;width:100%;height:100%}
+/* Logo pena beranimasi di semua subdomain (pemilik 27 Okt 2026), sama dengan header irsyads.com:
+   tetes jatuh memantul, badan tumbuh, mata pena naik memantul, lalu tetes berayun pelan. */
+.irsyads-navigation-logo svg path{transform-box:fill-box}
+.irsyads-navigation-logo svg path:nth-child(1){transform-origin:50% 100%}
+.irsyads-navigation-logo svg path:nth-child(2){transform-origin:50% 0}
+.irsyads-navigation-logo svg path:nth-child(3){transform-origin:50% 100%}
+@keyframes irsyads-logo-jatuh{0%{opacity:0;transform:translateY(-140%)}45%{opacity:1;transform:translateY(0)}62%{transform:translateY(-14%)}78%{transform:translateY(0)}90%{transform:translateY(-4%)}100%{opacity:1;transform:none}}
+@keyframes irsyads-logo-tumbuh{0%{opacity:0;transform:scaleY(0)}10%{opacity:1}70%{transform:scaleY(1.06)}100%{opacity:1;transform:none}}
+@keyframes irsyads-logo-naik{0%{opacity:0;transform:translateY(70%)}55%{opacity:1;transform:translateY(-9%)}75%{transform:translateY(3%)}100%{opacity:1;transform:none}}
+@keyframes irsyads-logo-ayun{0%,100%{transform:rotate(0)}25%{transform:rotate(-4deg)}75%{transform:rotate(4deg)}}
+@media (prefers-reduced-motion:no-preference){
+ :root:not([data-motion="reduce"]) .irsyads-navigation-logo:not(.irsyads-navigation-logo-app) svg path:nth-child(1){animation:irsyads-logo-jatuh 620ms cubic-bezier(.3,.7,.4,1) backwards,irsyads-logo-ayun 4.8s ease-in-out 1.6s infinite}
+ :root:not([data-motion="reduce"]) .irsyads-navigation-logo:not(.irsyads-navigation-logo-app) svg path:nth-child(2){animation:irsyads-logo-tumbuh 520ms cubic-bezier(.22,.9,.3,1.2) 380ms backwards}
+ :root:not([data-motion="reduce"]) .irsyads-navigation-logo:not(.irsyads-navigation-logo-app) svg path:nth-child(3){animation:irsyads-logo-naik 560ms cubic-bezier(.3,.8,.35,1) 840ms backwards}
+ /* Ikon layanan: tetes biru di puncaknya ikut jatuh dan berayun. */
+ :root:not([data-motion="reduce"]) .irsyads-navigation-logo-app svg>g>path:first-child{transform-box:fill-box;transform-origin:50% 100%;animation:irsyads-logo-jatuh 620ms cubic-bezier(.3,.7,.4,1) backwards,irsyads-logo-ayun 4.8s ease-in-out 1.6s infinite}
+}
