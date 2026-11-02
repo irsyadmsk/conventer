@@ -1,6 +1,7 @@
 {
   "version": "1.0.0",
-  "tokenSha256": "837f3f3361215e7ebc24650d86133b20a2540447e4b187b244d0fead76fb6797",
+  "preferenceContractVersion": 2,
+  "tokenSha256": "29b22545d3d1bd2cd9803fe43793f23b89349023cebf0919f9a3b34afbb7bdb0",
   "locales": [
     "id",
     "en",
@@ -23,22 +24,26 @@
     "karya": {
       "id": "Karya & belajar",
       "en": "Work & learning",
-      "ar": "الأعمال والتعلّم"
+      "ar": "الأعمال والتعلّم",
+      "zh": "作品与学习"
     },
     "aplikasi": {
       "id": "Aplikasi",
       "en": "Apps",
-      "ar": "التطبيقات"
+      "ar": "التطبيقات",
+      "zh": "应用"
     },
     "akun": {
       "id": "Akun & keaslian",
       "en": "Account & trust",
-      "ar": "الحساب والتوثيق"
+      "ar": "الحساب والتوثيق",
+      "zh": "账户与信任"
     },
     "pengelola": {
       "id": "Pengelola",
       "en": "Admin",
-      "ar": "الإدارة"
+      "ar": "الإدارة",
+      "zh": "管理"
     }
   },
   "apps": [
@@ -50,13 +55,15 @@
       "languages": [
         "id",
         "en",
-        "ar"
+        "ar",
+        "zh"
       ],
       "group": "karya",
       "description": {
         "id": "Karya, riset sosiologi, pemikiran, dan agenda",
-        "en": "Works, sociology research, ideas, and schedule",
-        "ar": "أعمال وبحوث سوسيولوجية وأفكار وأجندة"
+        "en": "Research, writing, ideas and events",
+        "ar": "أعمال وبحوث سوسيولوجية وأفكار وأجندة",
+        "zh": "研究、写作、思想与活动"
       },
       "launcher": true
     },
@@ -71,8 +78,9 @@
       "group": "akun",
       "description": {
         "id": "Pusat identitas, akses universal (SSO) & keamanan akun",
-        "en": "Universal identity, SSO access & account security",
-        "ar": "الهوية الموحدة، تسجيل الدخول الموحد وأمان الحساب"
+        "en": "One account for Irsyads apps",
+        "ar": "الهوية الموحدة، تسجيل الدخول الموحد وأمان الحساب",
+        "zh": "一个账户，使用 Irsyads 应用"
       },
       "launcher": true
     },
@@ -87,8 +95,9 @@
       "group": "karya",
       "description": {
         "id": "Kelas interaktif, modul Kurikulum Merdeka, dan CBT",
-        "en": "Interactive classes, curriculum modules, and CBT",
-        "ar": "الدروس التفاعلية ومسارات التعلم والاختبارات"
+        "en": "Courses, learning resources and assessments",
+        "ar": "الدروس التفاعلية ومسارات التعلم والاختبارات",
+        "zh": "课程、学习资源与测评"
       },
       "launcher": true
     },
@@ -103,14 +112,15 @@
       "group": "pengelola",
       "description": {
         "id": "Pusat komando ekosistem, manajemen KBM, dan analitik",
-        "en": "Ecosystem command center, learning & analytics",
-        "ar": "مركز قيادة المنظومة، إدارة المحتوى والتحليلات"
+        "en": "Manage site content, courses and learning reports",
+        "ar": "مركز قيادة المنظومة، إدارة المحتوى والتحليلات",
+        "zh": "管理网站内容、课程与学习报告"
       },
       "launcher": true
     },
     {
       "id": "ruang",
-      "name": "Ruang",
+      "name": "Irsyads Toolkit",
       "url": "https://app.irsyads.com",
       "status": "aktif",
       "languages": [
@@ -118,9 +128,10 @@
       ],
       "group": "aplikasi",
       "description": {
-        "id": "Ruang kerja keluarga: aksara Sunda, sandi, kalkulator & modul ajar AI",
-        "en": "Family workspace: Sundanese script, ciphers, calculators & AI lesson plans",
-        "ar": "مساحة عمل للعائلة: الخط السونداني والشيفرات والحاسبات وخطط الدروس بالذكاء الاصطناعي"
+        "id": "Aksara Sunda, kamus, sandi, konverter, dan perangkat ajar",
+        "en": "Sundanese script, dictionaries, ciphers and teaching tools",
+        "ar": "الخط السونداني والقواميس والشيفرات والمحولات وأدوات إعداد الدروس",
+        "zh": "巽他文字、词典、密码与教学工具"
       },
       "launcher": true
     },
@@ -136,7 +147,8 @@
       "description": {
         "id": "Manajemen finansial pribadi, arus kas & tabungan",
         "en": "Personal finance, cashflow & savings manager",
-        "ar": "الإدارة المالية الشخصية وتدفق السيولة والمدخرات"
+        "ar": "الإدارة المالية الشخصية وتدفق السيولة والمدخرات",
+        "zh": "个人财务、现金流与储蓄管理"
       },
       "launcher": true
     },
@@ -153,8 +165,9 @@
       "group": "akun",
       "description": {
         "id": "Validasi keaslian dokumen, ijazah digital & stempel TTD",
-        "en": "Document authenticity, digital certificate & signatures",
-        "ar": "التحقق من صحة الوثائق والشهادات الرقمية والأختام"
+        "en": "Check documents and electronic signatures",
+        "ar": "التحقق من صحة الوثائق والشهادات الرقمية والأختام",
+        "zh": "验证文档与电子签名"
       },
       "launcher": true
     },
@@ -170,8 +183,9 @@
       "group": "akun",
       "description": {
         "id": "Ajukan surat resmi bertanda tangan elektronik, tanpa akun",
-        "en": "Request official e-signed letters, no account needed",
-        "ar": "اطلب خطابات رسمية موقّعة إلكترونيًا دون حساب"
+        "en": "Request electronically signed letters without an account",
+        "ar": "اطلب خطابات رسمية موقّعة إلكترونيًا دون حساب",
+        "zh": "无需账户即可申请电子签名信函"
       },
       "launcher": true
     },
@@ -186,8 +200,60 @@
       "group": "aplikasi",
       "description": {
         "id": "Ujian resmi berbasis komputer dengan kartu ujian",
-        "en": "Official computer-based exams with exam cards",
-        "ar": "اختبارات رسمية حاسوبية ببطاقة الاختبار"
+        "en": "Scheduled computer-based exams with admission cards",
+        "ar": "اختبارات رسمية حاسوبية ببطاقة الاختبار",
+        "zh": "按计划开展计算机考试并提供准考证"
+      },
+      "launcher": false
+    },
+    {
+      "id": "smart",
+      "name": "SMART",
+      "url": "https://smart.irsyads.com",
+      "status": "segera",
+      "languages": [
+        "id"
+      ],
+      "group": "aplikasi",
+      "description": {
+        "id": "Formulir untuk pendaftaran, daftar hadir, survei & kebutuhan umum — dalam persiapan",
+        "en": "Forms for registrations, attendance, surveys & general use — coming soon",
+        "ar": "نماذج للتسجيل والحضور والاستبيانات والاستخدام العام — قريبًا",
+        "zh": "用于报名、签到、调查等的表单，即将推出"
+      },
+      "launcher": false
+    },
+    {
+      "id": "gate",
+      "name": "Gate",
+      "url": "https://gate.irsyads.com",
+      "status": "aktif",
+      "languages": [
+        "id"
+      ],
+      "group": "aplikasi",
+      "description": {
+        "id": "Pos satpam: catat tamu masuk-keluar dan cetak kartu tamu",
+        "en": "Security post: log visitors in and out and print visitor passes",
+        "ar": "نقطة الأمن: تسجيل دخول الزوار وخروجهم وطباعة البطاقات",
+        "zh": "门卫岗：登记访客进出并打印访客卡"
+      },
+      "launcher": false
+    },
+    {
+      "id": "nota",
+      "name": "Nota",
+      "url": "https://nota.irsyads.com",
+      "status": "aktif",
+      "languages": [
+        "id"
+      ],
+      "group": "aplikasi",
+      "description": {
+        "id": "Kuitansi dan struk: terbitkan, daftarkan ke Verify, cetak, dan kirim",
+        "en": "Receipts: issue, register with Verify, print and send",
+        "ar": "الإيصالات: إصدار وتسجيل في Verify وطباعة وإرسال",
+        "zh": "收据：开具、登记到 Verify、打印并发送"
       },
       "launcher": false
     },
@@ -203,13 +269,14 @@
       "description": {
         "id": "Manajemen kurikulum madrasah, silabus & jadwal KBM",
         "en": "Madrasah curriculum management, syllabus & schedule",
-        "ar": "إدارة مناهج المدرسة والخطة الدراسية والجدول"
+        "ar": "إدارة مناهج المدرسة والخطة الدراسية والجدول",
+        "zh": "学校课程、大纲与课表管理"
       },
       "launcher": true
     },
     {
       "id": "masjidku-tv",
-      "name": "MasjidKU TV",
+      "name": "Irsyads Mosque",
       "url": "https://mosque.irsyads.com",
       "status": "beta",
       "languages": [
@@ -218,12 +285,12 @@
       "group": "aplikasi",
       "description": {
         "id": "Layar informasi masjid untuk TV, dikelola lewat HP lokal",
-        "en": "Mosque information on TV, managed on a local phone",
-        "ar": "شاشة معلومات المسجد للتلفاز، تُدار بهاتف على الشبكة المحلية"
+        "en": "Mosque information on TV, managed from a phone on the same network",
+        "ar": "شاشة معلومات المسجد للتلفاز، تُدار بهاتف على الشبكة المحلية",
+        "zh": "在电视上显示清真寺信息，通过同一网络中的手机管理"
       },
       "launcher": true
     }
   ],
-  "auth": "No authentication data. UI preferences only.",
-  "preferenceContractVersion": 2
+  "auth": "No authentication data. UI preferences only."
 }

@@ -3,50 +3,50 @@
    Existing visitor-selected palettes remain available below. */
 
 :root {
-  /* Palet referensi pemilik 22 Okt 2026: measured ivory #F4EADF, ink #141720,
-     deep blue #2D3C57, paper #CFBEAF, powder blue #8BA2CE. Slate #586574
+  /* Palet mandat merek (pemilik 27 Okt 2026, selaras materi Instagram): ivory #F3EDE2,
+     navy #0B1D35, academic blue #376A9B, beige #D9CCB9, slate #586574. Slate #586574
      dipertahankan untuk teks muted/kompatibilitas; sumber pengukuran di design-system/irsyads/references/. Nama --color-gold
      dan --color-lilac dipertahankan demi kompatibilitas komponen; nilainya
      kini slate dan biru akademik yang lebih dalam. Semuanya cukup gelap
      untuk teks --color-on-brand (ivory). */
   /* Fixed editorial identity for illustrated scenes, independent of visitor palettes. */
-  --brand-ivory: #f4eadf;
-  --brand-navy: #141720;
-  --brand-academic-blue: #2d3c57;
-  --brand-beige: #cfbeaf;
+  --brand-ivory: #f3ede2;
+  --brand-navy: #0b1d35;
+  --brand-academic-blue: #376a9b;
+  --brand-beige: #d9ccb9;
   --brand-slate: #586574;
-  --brand-dusky-blue: #5b7199;
-  --brand-powder-blue: #8ba2ce;
-  --color-bg: #f4eadf;
-  --color-bg-2: #e8dccf;
-  --color-surface: #fcf8f3;
-  --color-surface-2: #eee2d6;
-  --color-ink: #141720;
-  --color-ink-2: #38455a;
+  --brand-dusky-blue: #5b7fa8;
+  --brand-powder-blue: #8fb3d9;
+  --color-bg: #f3ede2;
+  --color-bg-2: #e9e0d1;
+  --color-surface: #faf7f1;
+  --color-surface-2: #ece4d6;
+  --color-ink: #0b1d35;
+  --color-ink-2: #33445a;
   --color-muted: #586574;
-  --color-line: rgba(20, 23, 32, 0.12);
-  --color-line-2: rgba(20, 23, 32, 0.2);
-  --color-beige: #cfbeaf;
-  --color-accent: #2d3c57;
-  --color-accent-2: #243149;
+  --color-line: rgba(11, 29, 53, 0.12);
+  --color-line-2: rgba(11, 29, 53, 0.2);
+  --color-beige: #d9ccb9;
+  --color-accent: #376a9b;
+  --color-accent-2: #2c5a85;
   --color-gold: #586574;
   --color-gold-2: #475361;
-  --color-lilac: #243149;
-  /* Light actions use ivory text on deep blue/slate. Dark mode reverses
-     to dark ink on lighter accents; alternative visitor palettes set their own pair. */
-  --color-on-brand: #f4eadf;
+  --color-lilac: #2c5a85;
+  /* Light actions use ivory text on academic blue/slate. Dark mode reverses
+     to navy ink on lighter accents; alternative visitor palettes set their own pair. */
+  --color-on-brand: #f3ede2;
 
   /* Text/icon accents are separate from filled actions. Both combinations
      are measured against their actual paper or dark surface. */
-  --color-accent-ink: #243149;
+  --color-accent-ink: #2f5f8e;
   --color-gold-ink: #586574;
 
   --radius-md: 8px;
   --radius-lg: 12px;
   --radius-glass: 24px;
 
-  --shadow-1: 0 1px 3px rgba(20, 23, 32, 0.07);
-  --shadow-2: 0 6px 24px -6px rgba(20, 23, 32, 0.18);
+  --shadow-1: 0 1px 3px rgba(11, 29, 53, 0.07);
+  --shadow-2: 0 6px 24px -6px rgba(11, 29, 53, 0.16);
 
   --font-sans: "Plus Jakarta Sans", "Noto Sans Arabic", system-ui, -apple-system, sans-serif;
   --font-serif: "Playfair Display", "Noto Sans Arabic", "Noto Serif", Georgia, serif;
@@ -94,45 +94,45 @@
    namespace since they're translucency/blur values, consumed directly as
    CSS custom properties (var(--liquid-glass), etc.) by glass components. */
 :root {
-  --aqua-soft: rgba(45, 60, 87, 0.1);
-  --liquid-glass: rgba(252, 248, 243, 0.7);
-  --liquid-glass-strong: rgba(252, 248, 243, 0.88);
-  --liquid-border: rgba(20, 23, 32, 0.1);
-  --liquid-shadow: 0 18px 54px rgba(20, 23, 32, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.7);
-  --aqua-mesh: linear-gradient(135deg, #f4eadf 0%, #eee5d6 48%, #e6ddcc 78%, #e3ddd0 100%);
+  --aqua-soft: rgba(55, 106, 155, 0.1);
+  --liquid-glass: rgba(250, 247, 241, 0.72);
+  --liquid-glass-strong: rgba(250, 247, 241, 0.9);
+  --liquid-border: rgba(11, 29, 53, 0.1);
+  --liquid-shadow: 0 18px 54px rgba(11, 29, 53, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.7);
+  --aqua-mesh: linear-gradient(135deg, #f3ede2 0%, #eee6d8 48%, #e7decf 78%, #e4dccd 100%);
 }
 
 [data-theme="dark"] {
-  /* Mode gelap turunan palet merek: latar deep navy, teks ivory, aksen
+  /* Mode gelap turunan palet merek: latar deep navy #0B1D35, teks ivory, aksen
      academic blue yang dicerahkan agar terbaca di atas navy. Tinta di atas
      bidang aksen kembali navy (kontras >6:1). */
-  --color-bg: #141720;
-  --color-bg-2: #10131c;
-  --color-surface: #1b2331;
-  --color-surface-2: #263144;
-  --color-ink: #f4eadf;
-  --color-ink-2: #cfbeaf;
-  --color-muted: #b1bacb;
-  --color-line: rgba(244, 234, 223, 0.1);
-  --color-line-2: rgba(244, 234, 223, 0.18);
-  --color-beige: #cfbeaf;
-  --color-accent: #8ba2ce;
-  --color-accent-2: #7390bd;
+  --color-bg: #0b1d35;
+  --color-bg-2: #08172b;
+  --color-surface: #11264a;
+  --color-surface-2: #183259;
+  --color-ink: #f3ede2;
+  --color-ink-2: #d9ccb9;
+  --color-muted: #aab6c6;
+  --color-line: rgba(243, 237, 226, 0.1);
+  --color-line-2: rgba(243, 237, 226, 0.18);
+  --color-beige: #d9ccb9;
+  --color-accent: #8fb3d9;
+  --color-accent-2: #7aa2cc;
   --color-gold: #a3b0bd;
   --color-gold-2: #8e9cab;
-  --color-lilac: #b3c4e2;
-  --color-on-brand: #141720;
-  --color-accent-ink: #8ba2ce;
+  --color-lilac: #b3c9e4;
+  --color-on-brand: #0b1d35;
+  --color-accent-ink: #9dbde0;
   --color-gold-ink: #a3b0bd;
 
   --shadow-1: 0 1px 3px rgba(0, 0, 0, 0.4);
   --shadow-2: 0 6px 24px -6px rgba(0, 0, 0, 0.6);
 
-  --aqua-soft: rgba(139, 162, 206, 0.13);
-  --liquid-glass: rgba(27, 35, 49, 0.7);
-  --liquid-glass-strong: rgba(38, 49, 68, 0.88);
-  --liquid-border: rgba(244, 234, 223, 0.1);
-  --liquid-shadow: 0 22px 64px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(244, 234, 223, 0.06);
+  --aqua-soft: rgba(143, 179, 217, 0.13);
+  --liquid-glass: rgba(17, 38, 74, 0.72);
+  --liquid-glass-strong: rgba(24, 50, 89, 0.9);
+  --liquid-border: rgba(243, 237, 226, 0.1);
+  --liquid-shadow: 0 22px 64px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(243, 237, 226, 0.06);
 }
 
 /* ══ Palet pilihan pengunjung (kontrol di jam mengambang) ═════════════
