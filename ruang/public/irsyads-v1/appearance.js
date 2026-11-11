@@ -30,10 +30,11 @@
   const listeners = new Set();
   const scopeKey = () => key + ':' + (account ? 'account:' + encodeURIComponent(account) : 'guest');
   function apply() {
+    const fixedPalette = root.dataset.whiteCanvas !== undefined;
     const theme = state.values.theme === 'system' ? (dark.matches ? 'dark' : 'light') : state.values.theme;
     const motion = reduced.matches || state.values.motion === 'reduce' ? 'reduce' : state.values.motion;
     if (root.dataset.theme !== theme) root.dataset.theme = theme;
-    if (state.values.palette === 'krem') { if (root.dataset.palette !== undefined) delete root.dataset.palette; }
+    if (fixedPalette || state.values.palette === 'krem') { if (root.dataset.palette !== undefined) delete root.dataset.palette; }
     else if (root.dataset.palette !== state.values.palette) root.dataset.palette = state.values.palette;
     if (root.dataset.motion !== motion) root.dataset.motion = motion;
     // Content routes keep their language; UI adapters apply supported fallbacks.
@@ -102,8 +103,12 @@
     let storedTheme = state.values.theme;
     try { storedTheme = localStorage.getItem('irsyads-theme') || 'system'; } catch {}
     if (root.dataset.theme !== resolved || storedTheme !== state.values.theme) patch.theme = storedTheme === 'system' ? 'system' : root.dataset.theme;
-    const palette = root.dataset.palette || 'krem';
-    if (palette !== state.values.palette) patch.palette = palette;
+    if (root.dataset.whiteCanvas !== undefined) {
+      if (root.dataset.palette !== undefined) delete root.dataset.palette;
+    } else {
+      const palette = root.dataset.palette || 'krem';
+      if (palette !== state.values.palette) patch.palette = palette;
+    }
     change(patch);
   }).observe(root, { attributes: true, attributeFilter: ['data-theme', 'data-palette'] });
   dark.addEventListener('change', apply); reduced.addEventListener('change', apply);

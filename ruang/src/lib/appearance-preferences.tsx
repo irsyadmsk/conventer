@@ -14,7 +14,7 @@ const copy = {
 };
 const palettes = ['krem','forest','ocean','royal','aurora','earth'] as const;
 const swatches={krem:['#2d3c57','#f4eadf'],forest:['#277b61','#bee3cd'],ocean:['#277ca0','#bdddeb'],royal:['#7750a1','#ded0ec'],aurora:['#299c95','#b6e7da'],earth:['#a56b46','#e7d5b8']};
-export default function AppearancePreferences({ lang, compact = false }: { lang?: AppearanceValues['language']; compact?: boolean }) {
+export default function AppearancePreferences({ lang, compact = false, showLabel = false }: { lang?: AppearanceValues['language']; compact?: boolean; showLabel?: boolean }) {
   const root=useRef<HTMLDetailsElement>(null);
   const instance=useId();
   const [ready,setReady]=useState(false);
@@ -34,7 +34,7 @@ export default function AppearancePreferences({ lang, compact = false }: { lang?
   const language = lang ?? values.language, t = copy[language];
   const set = (patch: Partial<AppearanceValues>) => window.IrsyadsPreferences?.set(patch);
   return <details ref={root} className={`irsyads-appearance${compact ? ' irsyads-appearance-compact' : ''}`} onBlur={event => { if (event.relatedTarget && !event.currentTarget.contains(event.relatedTarget)) event.currentTarget.open = false; }} onKeyDown={event => { if (event.key === 'Escape' && event.currentTarget.open) {event.preventDefault();event.stopPropagation();event.currentTarget.open = false;event.currentTarget.querySelector('summary')?.focus();} }}>
-    <summary aria-label={t[0]} title={t[0]}>{values.theme==='dark'?<Moon size={18} aria-hidden="true"/>:values.theme==='light'?<Sun size={18} aria-hidden="true"/>:<Monitor size={18} aria-hidden="true"/>}</summary>
+    <summary aria-label={t[0]} title={t[0]}>{values.theme==='dark'?<Moon size={18} aria-hidden="true"/>:values.theme==='light'?<Sun size={18} aria-hidden="true"/>:<Monitor size={18} aria-hidden="true"/>}{showLabel && <span>{t[0]}</span>}</summary>
     <div className="irsyads-appearance-panel">
       <div className="appearance-heading"><span>{t[0]}</span><button type="button" className="appearance-close" aria-label={{en:'Close appearance',id:'Tutup tampilan',ar:'إغلاق المظهر',zh:'关闭外观'}[language]} onClick={()=>{if(root.current){root.current.open=false;root.current.querySelector('summary')?.focus();}}}><X size={16}/></button></div>
       <fieldset disabled={!ready}><legend>{t[1]}</legend><div className="appearance-segments">
